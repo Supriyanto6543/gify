@@ -2,40 +2,32 @@ package app.gify.co.id.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
+import java.util.Objects;
 
 import app.gify.co.id.R;
+import app.gify.co.id.baseurl.UrlJson;
 
 public class Pengaturan extends AppCompatActivity {
 
@@ -65,96 +57,78 @@ public class Pengaturan extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
-        currentUserID = mAuth.getCurrentUser().getUid();
+        currentUserID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
-        CheckList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                namadepan = NamaDepan.getText().toString().trim();
-                namabelakang = NamaBelakang.getText().toString().trim();
-                noHp = NoHp.getText().toString().trim();
-                email = Email.getText().toString().trim();
-                nama = namadepan + " " + namabelakang;
-                loadingBar = new ProgressDialog(Pengaturan.this);
-                loadingBar.setTitle("Mengubah Data...");
-                loadingBar.setMessage("Harap Tunggu...");
-                loadingBar.setCanceledOnTouchOutside(false);
-                loadingBar.show();
+        CheckList.setOnClickListener(v -> {
+            namadepan = NamaDepan.getText().toString().trim();
+            namabelakang = NamaBelakang.getText().toString().trim();
+            noHp = NoHp.getText().toString().trim();
+            email = Email.getText().toString().trim();
+            nama = namadepan + " " + namabelakang;
+            loadingBar = new ProgressDialog(Pengaturan.this);
+            loadingBar.setTitle("Mengubah Data...");
+            loadingBar.setMessage("Harap Tunggu...");
+            loadingBar.setCanceledOnTouchOutside(false);
+            loadingBar.show();
 
-                if (namadepan.isEmpty() || namabelakang.isEmpty() || noHp.isEmpty() || email.isEmpty()) {
-                    Toast.makeText(Pengaturan.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
-                    loadingBar.dismiss();
-                }
-                else {
-                    RootRef.child("Users").child(currentUserID).child("nama").setValue(nama)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    NamaDepan.setText("");
-                                    NamaBelakang.setText("");
-                                    loadingBar.dismiss();
-                                }
-                            });
-                    RootRef.child("Users").child(currentUserID).child("noHp").setValue(noHp)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    NoHp.setText("");
-                                    loadingBar.dismiss();
-                                }
-                            });
-                    RootRef.child("Users").child(currentUserID).child("email").setValue(email)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    Email.setText("");
-                                    loadingBar.dismiss();
-                                }
-                            });
-                    Intent intent = new Intent(getApplication(), MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
+            if (namadepan.isEmpty() || namabelakang.isEmpty() || noHp.isEmpty() || email.isEmpty()) {
+                Toast.makeText(Pengaturan.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
+                loadingBar.dismiss();
             }
-        });
-
-        Back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            else {
+                RootRef.child("Users").child(currentUserID).child("nama").setValue(nama)
+                        .addOnCompleteListener(task -> {
+                            NamaDepan.setText("");
+                            NamaBelakang.setText("");
+                            loadingBar.dismiss();
+                        });
+                RootRef.child("Users").child(currentUserID).child("noHp").setValue(noHp)
+                        .addOnCompleteListener(task -> {
+                            NoHp.setText("");
+                            loadingBar.dismiss();
+                        });
+                RootRef.child("Users").child(currentUserID).child("email").setValue(email)
+                        .addOnCompleteListener(task -> {
+                            Email.setText("");
+                            loadingBar.dismiss();
+                        });
                 Intent intent = new Intent(getApplication(), MainActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
 
+        Back.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplication(), MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
     }
 
     private void cobaOngkir() {
-        JsonObjectRequest objectRequest = new JsonObjectRequest("http://192.168.43.57/RajaOngkir/city.php", null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONObject jsonObject = response.getJSONObject("rajaongkir");
-                    JSONArray array = jsonObject.getJSONArray("results");
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, UrlJson.CITY, null, response -> {
+            try {
+                JSONObject jsonObject = response.getJSONObject("rajaongkir");
+                JSONArray array = jsonObject.getJSONArray("results");
 
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject object = array.getJSONObject(i);
-                        int city_id = object.getInt("city_id");
-                        int province_id = object.getInt("province_id");
-                        String province = object.getString("province");
-                        String type = object.getString("type");
-                        String city_name = object.getString("city_name");
-                        int postal_code = object.getInt("postal_code");
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject object = array.getJSONObject(i);
+                    int city_id = object.getInt("city_id");
+                    int province_id = object.getInt("province_id");
+                    String province = object.getString("province");
+                    String type = object.getString("type");
+                    String city_name = object.getString("city_name");
+                    int postal_code = object.getInt("postal_code");
 
-                        Log.d("cobaOngkir", "city_id: " + city_id + " " + "province_id: " + province_id + " " +
-                                "province: " + province + " " + "type: " + type + " " + "city_name: " + city_name + " " +
-                                "postal_code: " + postal_code);
-                    }
-
-                } catch (JSONException e) {
-                    Log.d("Onger", "OnResponse: ");
-                    e.printStackTrace();
+                    Log.d("cobaOngkir", "city_id: " + city_id + " " + "province_id: " + province_id + " " +
+                            "province: " + province + " " + "type: " + type + " " + "city_name: " + city_name + " " +
+                            "postal_code: " + postal_code);
                 }
+
+            } catch (JSONException e) {
+                Log.d("On   ger", "OnResponse: ");
+                e.printStackTrace();
             }
         }, error -> Log.d("error7", "Error: " + error.getMessage()));
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
