@@ -1,5 +1,7 @@
 package app.gify.co.id.activity;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +20,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -41,25 +42,31 @@ import app.gify.co.id.baseurl.UrlJson;
 
 public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    EditText NamaDepan, NamaBelakang, NoHp, Email;
+    EditText NamaDepan, NamaBelakang, NoHp, Email, GantiAlamat;
     LinearLayout changePicture;
     TextView Kelurahan, Kecamatan, Kota, Provinsi;
     String namadepan, namabelakang, noHp, email, currentUserID, nama;
-    ImageView CheckList, Back, gantiAlamat;
+    ImageView CheckList, ganti;
+    ImageView Back;
+    TextView gantiAlamat;
     ProgressDialog loadingBar;
     HintArrayAdapter hintAdapter, hintadapterku;
+
+    View viewTerserah;
 
     Spinner KotaS, ProvinsiS;
 
     FirebaseAuth mAuth;
     DatabaseReference RootRef;
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_pengaturan);
 
-        cobaOngkir();
+        cobaOngkir1();
+        cobaOngkir2();
 
         NamaDepan = findViewById(R.id.namaDepanPengaturan);
         NamaBelakang = findViewById(R.id.namaBelakangPengaturan);
@@ -70,6 +77,10 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         changePicture = findViewById(R.id.changePicturePengaturan);
         Kelurahan = findViewById(R.id.kelurahan);
         Kecamatan = findViewById(R.id.kecamatan);
+        gantiAlamat = (TextView) findViewById(R.id.textviewAlamatPengaturan);
+        GantiAlamat = findViewById(R.id.edittextAlamatPengaturan);
+        ganti = findViewById(R.id.gantiAlamatPengaturan);
+        viewTerserah = findViewById(R.id.viewTerserah);
 
         KotaS = (Spinner) findViewById(R.id.kota);
         ProvinsiS = (Spinner) findViewById(R.id.provinsi);
@@ -82,6 +93,15 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         mAuth = FirebaseAuth.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
         currentUserID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+
+        ganti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gantiAlamat.setVisibility(View.GONE);
+                GantiAlamat.setVisibility(View.VISIBLE);
+                viewTerserah.setVisibility(View.GONE);
+            }
+        });
 
         CheckList.setOnClickListener(v -> {
             namadepan = NamaDepan.getText().toString().trim();
@@ -129,7 +149,38 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     }
 
-    private void cobaOngkir() {
+    private void cobaOngkir2() {
+        JsonObjectRequest objectRequest = new JsonObjectRequest(UrlJson.PROVINCE, null, response -> {
+            try {
+                JSONObject jsonObject = response.getJSONObject("rajaongkir");
+                JSONArray array = jsonObject.getJSONArray("results");
+                for (int i = 0; i < array.length(); i++) {
+
+                    JSONObject object = array.getJSONObject(i);
+                    int province_id = object.getInt("province_id");
+                    String province = object.getString("province");
+
+                    hintadapterku.add(province);
+
+                    ProvinsiS.setAdapter(hintadapterku);
+
+                    ProvinsiS.setSelection(0, false);
+
+                    ProvinsiS.setOnItemSelectedListener(Pengaturan.this);
+
+                    Log.d("cobaProvince", "province_id: " + province_id + " " + "province: " + province);
+
+                }
+            } catch (JSONException e) {
+                Log.d("err10", "Response: ");
+                e.printStackTrace();
+            }
+        }, error -> Log.d("err2", "Error: " + error.getMessage()));
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        queue.add(objectRequest);
+    }
+
+    private void cobaOngkir1() {
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, UrlJson.CITY, null, response -> {
             try {
                 JSONObject jsonObject = response.getJSONObject("rajaongkir");
@@ -145,16 +196,12 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     int postal_code = object.getInt("postal_code");
 
                     hintAdapter.add(city_name);
-                    hintadapterku.add(province);
 
                     KotaS.setAdapter(hintAdapter);
-                    ProvinsiS.setAdapter(hintadapterku);
 
                     KotaS.setSelection(0, false);
-                    ProvinsiS.setSelection(0, false);
 
                     KotaS.setOnItemSelectedListener(Pengaturan.this);
-                    ProvinsiS.setOnItemSelectedListener(Pengaturan.this);
 
                     Log.d("cobaOngkir", "city_id: " + city_id + " " + "province_id: " + province_id + " " +
                             "province: " + province + " " + "type: " + type + " " + "city_name: " + city_name + " " +
