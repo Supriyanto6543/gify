@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -22,6 +23,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
@@ -38,6 +41,7 @@ import java.util.Calendar;
 
 import app.gify.co.id.R;
 import app.gify.co.id.activity.List_Kado;
+import app.gify.co.id.activity.MainActivity;
 
 import static app.gify.co.id.baseurl.UrlJson.GETACARA;
 import static app.gify.co.id.baseurl.UrlJson.GETKATEGORI;
@@ -51,6 +55,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     Spinner kadobuatsiapa, acarapa;
     private Calendar date;
     TextView tahun,hari, bulan;
+    ImageView navFragmentHome;
     HintArrayAdapter hintAdapter, hintadapterku;
     String[] kadolist;
     Boolean bulanbool=false, haribool=false, tahunbool=false;
@@ -73,6 +78,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             haribool = true;
             showdatedaypicker();
         });
+
+
+        navFragmentHome = root.findViewById(R.id.navFragmentHome);
+        navFragmentHome.setOnClickListener(v -> ((MainActivity) getActivity()).openDrawer());
 
         getkategori();
         getAcara();
@@ -187,6 +196,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         ((ViewGroup) datePickerDialog.getDatePicker()).findViewById(Resources.getSystem().getIdentifier("day", "id", "android")).setVisibility(View.GONE);
         ((ViewGroup) datePickerDialog.getDatePicker()).findViewById(Resources.getSystem().getIdentifier("month", "id", "android")).setVisibility(View.GONE);
         datePickerDialog.show();
+    }
+
+    private void akuGanteng(){
+        View view = getLayoutInflater().inflate(R.layout.activity_main, acarapa, false);
+
+
     }
 
 

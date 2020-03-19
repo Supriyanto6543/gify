@@ -1,4 +1,4 @@
-package app.gify.co.id.Fragment.pengaturan;
+package app.gify.co.id.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,13 +26,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import app.gify.co.id.R;
 import app.gify.co.id.activity.Pengaturan;
 
-public class PengaturanFragment extends Fragment {
+public class PengaturanFragment extends AppCompatActivity {
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_pengaturan, container, false);
-        return view;
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_pengaturan);
     }
 }

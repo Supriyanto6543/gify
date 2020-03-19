@@ -24,6 +24,7 @@
         <activity android:name=".activity.Pengaturan"/>
         <activity android:name=".activity.LupaSandi"/>
         <activity android:name=".activity.DetailKado"/>
+        <activity android:name=".activity.PengaturanFragment"/>
     </application>
 
 </manifest>

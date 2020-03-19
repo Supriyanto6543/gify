@@ -61,10 +61,10 @@ public class DetailKado extends AppCompatActivity {
 
 
 
-        dialog = builder.create();
+        /*dialog = builder.create();
         dialog.setView(view);
-        dialog.show();
-        */
+        dialog.show();*/
+
 
 
     }
