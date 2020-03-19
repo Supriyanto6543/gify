@@ -9,6 +9,52 @@
     android:gravity="center_horizontal"
     tools:context=".Fragment.home.HomeFragment">
 
+    <androidx.appcompat.widget.Toolbar
+        android:background="#fab60b"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="100"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/navFragmentHome"
+                android:layout_weight="10"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:padding="2dp"
+                android:src="@drawable/menu" />
+
+            <TextView
+                android:layout_weight="90"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="3dp"
+                android:gravity="start"
+                android:text="GIFY"
+                android:textStyle="bold"
+                android:textColor="#fff"
+                android:textSize="17dp"/>
+
+
+
+
+
+
+
+
+        </LinearLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
     <ImageView
         android:src="@drawable/home_ultah"
         android:layout_width="300dp"

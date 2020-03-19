@@ -2,6 +2,7 @@ package app.gify.co.id.Fragment.home;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -22,6 +24,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
@@ -38,6 +42,7 @@ import java.util.Calendar;
 
 import app.gify.co.id.R;
 import app.gify.co.id.activity.List_Kado;
+import app.gify.co.id.activity.MainActivity;
 
 import static app.gify.co.id.baseurl.UrlJson.GETACARA;
 import static app.gify.co.id.baseurl.UrlJson.GETKATEGORI;
@@ -51,10 +56,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     Spinner kadobuatsiapa, acarapa;
     private Calendar date;
     TextView tahun,hari, bulan;
+    ImageView navFragmentHome;
     HintArrayAdapter hintAdapter, hintadapterku;
     String[] kadolist;
     Boolean bulanbool=false, haribool=false, tahunbool=false;
     Button carikado;
+    ProgressDialog mDialog;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,6 +72,13 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         bulan=root.findViewById(R.id.bulanCari);
         tahun=root.findViewById(R.id.tahunCari);
         carikado=root.findViewById(R.id.cariKado);
+
+        mDialog = new ProgressDialog(getContext());
+        mDialog.setCancelable(false);
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.setMessage("Loading");
+        mDialog.show();
+
         hintAdapter = new HintArrayAdapter<String>(getContext(), 0);
         hintadapterku = new HintArrayAdapter<String>(getContext(), 0);
         hintAdapter.add("hint");
@@ -73,6 +87,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             haribool = true;
             showdatedaypicker();
         });
+
+
+        navFragmentHome = root.findViewById(R.id.navFragmentHome);
+        navFragmentHome.setOnClickListener(v -> ((MainActivity) getActivity()).openDrawer());
 
         getkategori();
         getAcara();
@@ -189,6 +207,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         datePickerDialog.show();
     }
 
+    private void akuGanteng(){
+        View view = getLayoutInflater().inflate(R.layout.activity_main, acarapa, false);
+
+
+    }
+
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -291,6 +315,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     acarapa.setSelection(0, false);
 
                 }
+                mDialog.dismiss();
             } catch (JSONException e) {
                 Log.d("acarakus", "onResponse: " );
                 e.printStackTrace();

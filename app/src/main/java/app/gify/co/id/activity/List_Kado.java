@@ -1,8 +1,11 @@
 package app.gify.co.id.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +40,8 @@ public class List_Kado extends AppCompatActivity {
     RecyclerView recycler;
     ArrayList<MadolKado> madolKados;
     GridLayoutManager glm;
+    ImageView backDetailKado;
+    ProgressDialog mDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,6 +49,19 @@ public class List_Kado extends AppCompatActivity {
         setContentView(R.layout.list_kado);
 
         recycler = findViewById(R.id.recycler);
+        backDetailKado = findViewById(R.id.backDetailKado);
+        backDetailKado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getApplicationContext()).openDrawer();
+            }
+        });
+
+        mDialog = new ProgressDialog(List_Kado.this);
+        mDialog.setMessage("Loading");
+        mDialog.setCancelable(false);
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.show();
 
         madolKados = new ArrayList<>();
         glm = new GridLayoutManager(getApplicationContext(), 2);
@@ -80,6 +98,7 @@ public class List_Kado extends AppCompatActivity {
                             madolKados.add(madolKado);
                             adapterListKado = new AdapterListKado(madolKados, getApplicationContext());
                             recycler.setAdapter(adapterListKado);
+                            mDialog.dismiss();
                             Log.d("listkadoharga", "onResponse: " + harga + tipe + " s " + idbarang);
                         }
 

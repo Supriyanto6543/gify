@@ -9,5 +9,6 @@ public class UrlJson {
     public static final String GETRANGE = ROOT + "range.php";
     public static final String GETFAV = ROOT + "favorit.php";
     public static final String REGISTER = ROOT + "register.php";
+    public static final String CITY = ROOT + "city.php";
 
 }

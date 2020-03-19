@@ -1,12 +1,15 @@
 package app.gify.co.id.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,7 +18,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -26,7 +28,6 @@ import app.gify.co.id.R;
 import app.gify.co.id.Fragment.favorit.FavoritFragment;
 import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.Fragment.keluar.KeluarFragment;
-import app.gify.co.id.Fragment.pengaturan.PengaturanFragment;
 import app.gify.co.id.Fragment.pembelian.PembelianFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     SharedPreferences sharedPreferences;
 
     private AppBarConfiguration mAppBarConfiguration;
+    ImageView navFragmentHome;
     private long bakPressedTime;
     TextView navigationheademail;
     TextView nama;
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String email = sharedPreferences.getString("email", "");
         navigationheademail.setText(email);
         nama.setText(sharedPreferences.getString("nama", ""));
+        loadFragment (new HomeFragment());
     }
 
     @Override
@@ -104,40 +107,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
+    @SuppressLint("WrongConstant")
+    public void openDrawer() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.openDrawer(Gravity.START);
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int userId = item.getItemId();
         Fragment f = null;
         DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         mDrawerLayout.closeDrawers();
 
         switch (userId) {
 
             case R.id.nav_belikado:
                 f = new HomeFragment();
-                mDrawerLayout.closeDrawer(GravityCompat.START);
                 break;
 
             case R.id.nav_favorit:
                 f = new FavoritFragment();
-                mDrawerLayout.closeDrawer(GravityCompat.START);
                 break;
 
             case R.id.nav_pembelian:
                 f = new PembelianFragment();
-                mDrawerLayout.closeDrawer(GravityCompat.START);
                 break;
 
             case R.id.nav_pengaturan:
-                f = new PengaturanFragment();
-                mDrawerLayout.closeDrawer(GravityCompat.START);
+                Intent intent = new Intent(getApplicationContext(), Pengaturan.class);
+                startActivity(intent);
                 break;
 
             case R.id.nav_keluar:
                 f = new KeluarFragment();
-                mDrawerLayout.closeDrawer(GravityCompat.START);
                 break;
 
 

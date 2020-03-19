@@ -2,7 +2,6 @@ package app.gify.co.id.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -13,8 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.synnapps.carouselview.CarouselView;
 
 import app.gify.co.id.R;
@@ -28,6 +25,8 @@ public class DetailKado extends AppCompatActivity {
     AlertDialog dialog;
     Button proses, batal;
     ImageView tambah, kurang;
+    int hargas;
+    int cingpai = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,7 +39,7 @@ public class DetailKado extends AppCompatActivity {
         harga = findViewById(R.id.hargadetail);
         desc = findViewById(R.id.descdetail);
 
-        int hargas;
+
         hargas = getIntent().getIntExtra("harga", -1);
 
         nama.setText(getIntent().getStringExtra("nama"));
@@ -54,78 +53,56 @@ public class DetailKado extends AppCompatActivity {
 
     private void popup() {
 
-       /* builder = new AlertDialog.Builder(getApplicationContext());
+        builder = new AlertDialog.Builder(this);
         View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.popup_beli_barang, null);
-        namapopup = view.findViewById(R.id.personal);
-        jumlah = view.findViewById(R.id.keluarga);
-        kelompok = view.findViewById(R.id.kelompok);
-        perbedaanPaketBelajar = view.findViewById(R.id.PerbedaanPaketBelajarKu);
+        namapopup = view.findViewById(R.id.nama);
+        jumlah = view.findViewById(R.id.jumlah);
+        hargapopuptop = view.findViewById(R.id.hargapopuptop);
+        hargapopupdown = view.findViewById(R.id.hargabrng);
+        proses = view.findViewById(R.id.buttonproses);
+        batal = view.findViewById(R.id.buttonbatal);
+        tambah = view.findViewById(R.id.tambahkuantitas);
+        kurang = view.findViewById(R.id.kurangkuantitas);
 
-        perbedaanPaketBelajar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), PerbedaanPaketBelajar.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+
+        namapopup.setText(getIntent().getStringExtra("nama"));
+        hargapopuptop.setText("Rp. " + hargas);
+        hargapopupdown.setText("Rp. " + hargas);
+
+        tambah.setOnClickListener(view1 -> {
+            if (cingpai==9){
+
+            }else {
+                cingpai = cingpai + 1;
             }
+            jumlah.setText(String.valueOf(cingpai));
+            hargapopupdown.setText("Rp. " + hargas*cingpai);;
+        });
+        kurang.setOnClickListener(view1 -> {
+            if (cingpai==1){
+
+            }else {
+                cingpai = cingpai - 1;
+            }
+
+            jumlah.setText(String.valueOf(cingpai));
+            hargapopupdown.setText("Rp. " + hargas*cingpai);;
         });
 
-
-        personal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), OrderGuru.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                editor = preferences.edit();
-                editor.putString("personal", "100000");
-                editor.putString("personalKu", "1");
-                editor.remove("keluarga");
-                editor.remove("kelompok");
-                editor.apply();
-                intent.putExtra("email", email);
-                startActivity(intent);
-            }
-        });
-
-        keluarga.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), OrderGuru.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                editor = preferences.edit();
-                editor.putString("keluarga", "150000");
-                editor.putString("keluargaKu", "2");
-                editor.remove("personal");
-                editor.remove("kelompok");
-                editor.apply();
-                intent.putExtra("email", email);
-                startActivity(intent);
-            }
-        });
-
-        kelompok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), OrderGuru.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                editor = preferences.edit();
-                editor.putString("kelompok", "200000");
-                editor.putString("kelompokKu", "3");
-                editor.remove("personal");
-                editor.remove("keluarga");
-                editor.apply();
-                intent.putExtra("email", email);
-                startActivity(intent);
-            }
+        batal.setOnClickListener(view1 -> dialog.dismiss());
+        proses.setOnClickListener(view1 -> {
+            Intent intent = new Intent(DetailKado.this, CartActivity.class);
+            intent.putExtra("nama", getIntent().getStringExtra("nama"));
+            intent.putExtra("gambar", getIntent().getStringExtra("gambar"));
+            intent.putExtra("idbarang", Integer.valueOf(getIntent().getStringExtra("idbarang")));
+            intent.putExtra("quantity", cingpai);
+            startActivity(intent);
         });
 
         dialog = builder.create();
         dialog.setView(view);
         dialog.show();
-        */
+
 
 
     }
