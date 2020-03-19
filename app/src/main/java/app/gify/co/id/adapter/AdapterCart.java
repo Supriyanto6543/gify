@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,8 +28,17 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     class MyCart extends RecyclerView.ViewHolder {
 
+        ImageView gambar, tambah, kurang;
+        TextView harga, nama, quantitas;
+
         public MyCart(@NonNull View itemView) {
             super(itemView);
+            gambar = itemView.findViewById(R.id.gambarcart);
+            tambah = itemView.findViewById(R.id.tambahcart);
+            kurang = itemView.findViewById(R.id.kurangcart);
+            harga = itemView.findViewById(R.id.hargacart);
+            nama = itemView.findViewById(R.id.namacart);
+            quantitas = itemView.findViewById(R.id.quantitas);
         }
     }
 
