@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#fab60b"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragment.favorit.FavoritFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:background="#fab60b"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="100"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/backtoMenuFavorit"
+                android:layout_weight="1"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="start"
+                android:padding="10dp"
+                android:src="@drawable/menu" />
+
+            <TextView
+                android:layout_weight="95"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="start"
+                android:text="FAVORIT"
+                android:textStyle="bold"
+                android:textColor="#fff"
+                android:textSize="17dp"/>
+
+            <ImageView
+                android:id="@+id/cariBarangFavorit"
+                android:layout_weight="2"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="start"
+                android:padding="10dp"
+                android:src="@drawable/magnifying_glass" />
+
+            <ImageView
+                android:id="@+id/chartBarangFavorit"
+                android:layout_weight="2"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="start"
+                android:layout_marginEnd="10dp"
+                android:padding="10dp"
+                android:src="@drawable/add_to_cart" />
+
+
+
+
+
+
+
+
+        </LinearLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_marginBottom="?attr/actionBarSize"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerfavorit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+</LinearLayout>

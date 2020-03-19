@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="#fab60b"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:background="#fab60b"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="30"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/backDetailKado"
+                android:layout_weight="2"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="start"
+                android:padding="10dp"
+                android:src="@drawable/reply" />
+
+            <TextView
+                android:layout_weight="28"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:gravity="start"
+                android:text="CHECKOUT"
+                android:textStyle="bold"
+                android:textColor="#fff"
+                android:textSize="17dp"/>
+
+
+        </LinearLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.cardview.widget.CardView
+                app:cardCornerRadius="5dp"
+                app:cardElevation="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="#fff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="Nama Penerima"
+                        android:textStyle="bold"
+                        android:textColor="#aa7a00"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <EditText
+                        android:id="@+id/namaPenerimaCheckout"
+                        android:hint="Nasrudin Nawawi"
+                        android:textColorHint="#b5a981"
+                        android:textColor="#aa7a00"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:text="No.HP Penerima"
+                        android:layout_marginTop="10dp"
+                        android:textStyle="bold"
+                        android:textColor="#aa7a00"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <EditText
+                        android:id="@+id/noHPPenerimaCheckout"
+                        android:hint="Nasrudin Nawawi"
+                        android:textColorHint="#b5a981"
+                        android:textColor="#aa7a00"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <TextView
+                            android:text="Alamat"
+                            android:textStyle="bold"
+                            android:textColor="#aa7a00"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                        <LinearLayout
+                            android:weightSum="100"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:src="@drawable/maps"
+                                android:tint="#dad9d5"
+                                android:layout_weight="5"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"/>
+
+                            <EditText
+                                android:id="@+id/edittextAlamatCheckout"
+                                android:visibility="gone"
+                                android:hint="nasrudin01@gmail.com"
+                                android:textColorHint="#b5a981"
+                                android:textStyle="bold"
+                                android:textSize="15dp"
+                                android:layout_marginStart="2dp"
+                                android:textColor="#fff"
+                                android:layout_weight="85"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:autofillHints="Nama depan" />
+
+
+                            <TextView
+                                android:id="@+id/textviewAlamatCheckout"
+                                android:hint="Jl."
+                                android:textColorHint="#b5a981"
+                                android:textStyle="bold"
+                                android:textColor="#b5a981"
+                                android:layout_marginStart="2dp"
+                                android:layout_weight="89"
+                                android:layout_width="0dp"
+                                android:textSize="15dp"
+                                android:layout_height="wrap_content"
+                                android:autofillHints="Nama depan" />
+
+                            <ImageView
+                                android:id="@+id/gantiAlamatCheckout"
+                                android:src="@drawable/edit"
+                                android:tint="#dad9d5"
+                                android:layout_weight="6"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"/>
+
+
+
+
+                        </LinearLayout>
+
+
+                        <View
+                            android:background="#b5a981"
+                            android:layout_marginTop="2dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="0.2dp"/>
+
+                        <LinearLayout
+                            android:id="@+id/pilihKelurahanCheckout"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="5dp"
+                            android:weightSum="100"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:text="Kelurahan"
+                                android:layout_gravity="center"
+                                android:textStyle="bold"
+                                android:textColor="#b5a981"
+                                android:textSize="15dp"
+                                android:layout_weight="30"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"/>
+
+                            <TextView
+                                android:id="@+id/kelurahanCheckout"
+                                android:text="-- pilih --"
+                                android:layout_gravity="center"
+                                android:textStyle="bold"
+                                android:textSize="15dp"
+                                android:layout_marginStart="5dp"
+                                android:textColor="#b5a981"
+                                android:layout_weight="30"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"/>
+
+                        </LinearLayout>
+
+                        <View
+                            android:background="#b5a981"
+                            android:layout_marginTop="2dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="0.2dp"/>
+
+                        <LinearLayout
+                            android:id="@+id/pilihKecamatanCheckout"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="5dp"
+                            android:weightSum="100"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:text="Kecamatan"
+                                android:layout_gravity="center"
+                                android:textStyle="bold"
+                                android:textColor="#b5a981"
+                                android:textSize="15dp"
+                                android:layout_weight="30"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"/>
+
+                            <TextView
+                                android:id="@+id/kecamatanCheckout"
+                                android:text="-- pilih --"
+                                android:layout_gravity="center"
+                                android:textStyle="bold"
+                                android:layout_marginStart="5dp"
+                                android:textColor="#b5a981"
+                                android:textSize="15dp"
+                                android:layout_weight="30"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"/>
+
+                        </LinearLayout>
+
+                        <View
+                            android:background="#b5a981"
+                            android:layout_marginTop="2dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="0.2dp"/>
+
+                        <LinearLayout
+                            android:id="@+id/pilihKotaCheckout"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="5dp"
+                            android:weightSum="100"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:text="Kota"
+                                android:layout_gravity="center"
+                                android:textStyle="bold"
+                                android:textSize="15dp"
+                                android:textColor="#b5a981"
+                                android:layout_weight="30"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"/>
+
+                            <TextView
+                                android:id="@+id/kotaCheckout"
+                                android:text="-- pilih --"
+                                android:layout_gravity="center"
+                                android:textSize="15dp"
+                                android:textStyle="bold"
+                                android:layout_marginStart="5dp"
+                                android:textColor="#b5a981"
+                                android:layout_weight="30"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"/>
+
+                        </LinearLayout>
+
+                        <View
+                            android:background="#b5a981"
+                            android:layout_marginTop="2dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="0.2dp"/>
+
+                        <LinearLayout
+                            android:id="@+id/pilihProvinsiCheckout"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="5dp"
+                            android:weightSum="100"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:text="Provinsi"
+                                android:layout_gravity="center"
+                                android:textStyle="bold"
+                                android:textColor="#b5a981"
+                                android:layout_weight="30"
+                                android:textSize="15dp"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"/>
+
+                            <TextView
+                                android:id="@+id/provinsiCheckout"
+                                android:text="-- pilih --"
+                                android:layout_gravity="center"
+                                android:textStyle="bold"
+                                android:layout_marginStart="5dp"
+                                android:textColor="#b5a981"
+                                android:layout_weight="30"
+                                android:textSize="15dp"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"/>
+
+                        </LinearLayout>
+
+                        <View
+                            android:background="#b5a981"
+                            android:layout_marginTop="2dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="0.2dp"/>
+
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:text="Ucapan"
+                        android:layout_marginTop="10dp"
+                        android:textStyle="bold"
+                        android:textColor="#aa7a00"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <EditText
+                        android:id="@+id/ucapanCheckout"
+                        android:hint=".................................................................................................................................................................................................................."
+                        android:backgroundTint="#fff"
+                        android:layout_marginBottom="30dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:ignore="LabelFor" />
+
+
+
+
+                </LinearLayout>
+
+
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/prorsesCheckout"
+                android:background="@drawable/tombol"
+                android:text="PROSES"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="#fab60b"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:src="@drawable/hadiah"
+        android:scaleType="centerCrop"
+        android:layout_gravity="center"
+        android:layout_width="140dp"
+        android:layout_height="140dp"/>
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        android:background="@drawable/edittext_login"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:src="@drawable/user"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:layout_weight="15"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/todo" />
+
+        <EditText
+            android:id="@+id/namaRegister"
+            android:singleLine="true"
+            android:textColor="#000"
+            android:hint="Nama kamu"
+            android:textColorHint="#818181"
+            android:autofillHints="Email"
+            android:paddingStart="10dp"
+            android:background="@drawable/login_email_password"
+            android:layout_weight="85"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        android:background="@drawable/edittext_login"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:src="@drawable/email"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:layout_weight="15"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/todo" />
+
+        <EditText
+            android:id="@+id/emailLogin"
+            android:singleLine="true"
+
+            android:hint="Email"
+            android:textColor="#000"
+            android:textColorHint="#818181"
+            android:autofillHints="Email"
+            android:paddingStart="10dp"
+            android:background="@drawable/login_email_password"
+            android:layout_weight="85"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        android:background="@drawable/edittext_login"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:src="@drawable/email"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:layout_weight="15"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/todo" />
+
+        <TextView
+            android:id="@+id/tanggalLahirRegister"
+            android:singleLine="true"
+            android:text="Tanggal lahir"
+            android:textSize="17dp"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:textColor="#818181"
+            android:autofillHints="Email"
+            android:paddingStart="10dp"
+            android:background="@drawable/login_email_password"
+            android:layout_weight="85"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        android:background="@drawable/edittext_login"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:src="@drawable/smartphone"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:layout_weight="15"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/todo" />
+
+        <EditText
+            android:id="@+id/noHPRegister"
+            android:singleLine="true"
+
+            android:hint="No. HP"
+            android:textColor="#000"
+            android:inputType="number"
+            android:textColorHint="#818181"
+            android:autofillHints="Email"
+            android:paddingStart="10dp"
+            android:background="@drawable/login_email_password"
+            android:layout_weight="85"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        android:background="@drawable/edittext_login"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:src="@drawable/lock"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:layout_weight="15"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/todo" />
+
+        <EditText
+            android:id="@+id/passwordRegister"
+            android:inputType="textPassword"
+            android:singleLine="true"
+
+            android:hint="Password"
+            android:textColorHint="#818181"
+            android:autofillHints="Email"
+            android:paddingStart="10dp"
+            android:textColor="#000"
+            android:background="@drawable/login_email_password"
+            android:layout_weight="85"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/masukRegister"
+        android:text="DAFTAR"
+        android:textStyle="bold"
+        android:textColor="#fff"
+        android:textSize="17dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/login_tombol"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:text="Dengan klik daftar, anda menyetujui"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="13dp"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:text="syarat dan ketentuan kami"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="13dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        app:cardCornerRadius="5dp"
+        app:cardElevation="10dp"
+        app:cardUseCompatPadding="true"
+        android:backgroundTint="#e0e0e0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_margin="20dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/hargapopuptop"
+                android:text="Rp 120.000,-"
+                android:textColor="#fd672c"
+                android:textStyle="bold"
+                android:textSize="19dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/nama"
+                android:text="Dompet Kulit Modern Pria"
+                android:textSize="19dp"
+                android:textColor="#868484"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+            <View
+                android:background="#aa7a00"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="0.2dp"/>
+
+            <LinearLayout
+                android:weightSum="100"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Quantity"
+                    android:textColor="#868484"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:textSize="30dp"
+                    android:layout_weight="69"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+                <ImageView
+                    android:id="@+id/tambahkuantitas"
+                    android:src="@drawable/minus"
+                    android:tint="#fab60b"
+                    android:layout_weight="10"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"/>
+
+                <TextView
+                    android:id="@+id/jumlah"
+                    android:text="1"
+                    android:textSize="30dp"
+                    android:textColor="#868484"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="10"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+                <ImageView
+                    android:id="@+id/kurangkuantitas"
+                    android:src="@drawable/add"
+                    android:tint="#fab60b"
+                    android:layout_weight="10"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"/>
+
+            </LinearLayout>
+
+            <View
+                android:background="#aa7a00"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="0.2dp"/>
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="100"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textStyle="bold"
+                    android:textSize="19dp"
+                    android:text="Subtotal"
+                    android:textColor="#868484"
+                    android:layout_weight="50"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/hargabrng"
+                    android:text="Rp 120.000,-"
+                    android:textColor="#fd672c"
+                    android:textStyle="bold"
+                    android:textSize="23dp"
+                    android:layout_gravity="end"
+                    android:gravity="end"
+                    android:layout_weight="50"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:weightSum="100"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/buttonbatal"
+                    android:text="BATAL"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:textColor="#fff"
+                    android:background="@drawable/tombol"
+                    android:layout_weight="45"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+                <View
+                    android:layout_weight="10"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+
+                <Button
+                    android:id="@+id/buttonproses"
+                    android:text="PROSES"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:textColor="#fff"
+                    android:background="@drawable/tombol"
+                    android:layout_weight="45"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

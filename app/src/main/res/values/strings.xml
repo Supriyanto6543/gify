@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name">gify</string>
+    <string name="todo">TODO</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <string name="home_second">Home Second</string>
+    <string name="my_cart">My Cart</string>
+    <string name="delete">DELETE</string>
+
+    <string-array name="kadolist">
+        <item>Adik Laki-Laki</item>
+        <item>Adik Perempuan</item>
+        <item>Kakak Laki-Laki</item>
+        <item>Kakak Perempuan</item>
+        <item>Anak Laki-Laki</item>
+        <item>Anak Perempuan</item>
+        <item>Ayah</item>
+        <item>Ibu</item>
+        <item>Suami</item>
+        <item>Istri</item>
+        <item>Pacar (Laki-Laki)</item>
+        <item>Pacar (Perempuan)</item>
+        <item>Kakek</item>
+        <item>Nenek</item>
+        <item>Om (Paman)</item>
+        <item>Tante (Bibi)</item>
+        <item>Guru</item>
+        <item>Atasan</item>
+        <item>Kerabat</item>
+    </string-array>
+    <string-array name="acaralist">
+        <item>Ulang tahun</item>
+        <item>Anniversary (Pernikahan)</item>
+        <item>New Born Baby</item>
+        <item>Graduation</item>
+        <item>Welcome Gift</item>
+    </string-array>
+    <string name="pick_date">Pick a Date</string>
+    <string-array name="months">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+    <string name="unknown">Unknown</string>
+</resources>

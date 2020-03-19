@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <group android:checkableBehavior="all">
+        <item
+            android:id="@+id/nav_belikado"
+            android:icon="@drawable/giftbox1"
+            android:iconTint="#FF0000"
+            android:iconTintMode="add"
+            android:title="Beli Kado Yuk!" />
+        <item
+            android:id="@+id/nav_favorit"
+            android:icon="@drawable/star"
+            android:iconTint="#FF0000"
+            android:title="Favorit" />
+        <item
+            android:id="@+id/nav_pembelian"
+            android:icon="@drawable/add_to_cart"
+            android:iconTint="#FF0000"
+            android:title="Pembelian" />
+
+    </group>
+
+    <item android:title="">
+        <menu>
+
+            <item
+                android:id="@+id/nav_pengaturan"
+                android:icon="@drawable/settings"
+                android:iconTint="#FF0000"
+                android:title="Pengaturan" />
+            <item
+                android:id="@+id/nav_keluar"
+                android:icon="@drawable/logout"
+                android:iconTint="#FF0000"
+                android:title="Keluar" />
+
+        </menu>
+
+
+    </item>
+</menu>

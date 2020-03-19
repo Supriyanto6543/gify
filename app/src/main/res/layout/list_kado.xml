@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:background="#fab60b"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="start"
+            android:weightSum="30"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/backDetailKado"
+                android:layout_weight="0"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="start"
+                android:padding="10dp"
+                android:src="@drawable/menu" />
+
+            <TextView
+                android:layout_weight="30"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:gravity="start"
+                android:text="LIST KADO"
+                android:textStyle="bold"
+                android:textColor="#fff"
+                android:textSize="17dp"/>
+
+            <ImageView
+                android:id="@+id/cariBarangListKado"
+                android:layout_weight="0"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="start"
+                android:padding="10dp"
+                android:src="@drawable/magnifying_glass" />
+
+            <ImageView
+                android:id="@+id/cartListKado"
+                android:layout_weight="0"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="15dp"
+                android:layout_gravity="start"
+                android:padding="10dp"
+                android:src="@drawable/add_to_cart" />
+
+
+
+
+
+
+
+
+
+        </LinearLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+
+
+
+</LinearLayout>

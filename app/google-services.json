@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "287303696097",
+    "firebase_url": "https://gify-8cd00.firebaseio.com",
+    "project_id": "gify-8cd00",
+    "storage_bucket": "gify-8cd00.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:287303696097:android:5dead942ddf9953ee781a0",
+        "android_client_info": {
+          "package_name": "app.gify.co.id"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "287303696097-7d9b79d5sa521f2mj6asisb484tkt2rg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCW7Ln_GsaYaZHAlIzPn6o6OigDIgDawVc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "287303696097-7d9b79d5sa521f2mj6asisb484tkt2rg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
