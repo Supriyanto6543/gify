@@ -1,14 +1,26 @@
 package app.gify.co.id.activity;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,20 +38,26 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.R;
 import app.gify.co.id.baseurl.UrlJson;
 
-public class Pengaturan extends AppCompatActivity {
+public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     EditText NamaDepan, NamaBelakang, NoHp, Email;
     LinearLayout changePicture;
+    TextView Kelurahan, Kecamatan, Kota, Provinsi;
     String namadepan, namabelakang, noHp, email, currentUserID, nama;
-    ImageView CheckList, Back;
+    ImageView CheckList, Back, gantiAlamat;
     ProgressDialog loadingBar;
+    HintArrayAdapter hintAdapter, hintadapterku;
+
+    Spinner KotaS, ProvinsiS;
 
     FirebaseAuth mAuth;
     DatabaseReference RootRef;
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +72,16 @@ public class Pengaturan extends AppCompatActivity {
         CheckList = findViewById(R.id.checklistPengaturan);
         Back = findViewById(R.id.backPengaturan);
         changePicture = findViewById(R.id.changePicturePengaturan);
+        Kelurahan = findViewById(R.id.kelurahan);
+        Kecamatan = findViewById(R.id.kecamatan);
+
+        KotaS = (Spinner) findViewById(R.id.kota);
+        ProvinsiS = (Spinner) findViewById(R.id.provinsi);
+
+        hintAdapter = new HintArrayAdapter<String>(getApplicationContext(), 0);
+        hintadapterku = new HintArrayAdapter<String>(getApplicationContext(), 0);
+        hintAdapter.add("hint");
+        hintadapterku.add("hint");
 
         mAuth = FirebaseAuth.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
@@ -101,7 +129,6 @@ public class Pengaturan extends AppCompatActivity {
         Back.setOnClickListener(v -> {
             Intent intent = new Intent(getApplication(), MainActivity.class);
             startActivity(intent);
-            finish();
         });
 
     }
@@ -121,6 +148,18 @@ public class Pengaturan extends AppCompatActivity {
                     String city_name = object.getString("city_name");
                     int postal_code = object.getInt("postal_code");
 
+                    hintAdapter.add(city_name);
+                    hintadapterku.add(province);
+
+                    KotaS.setAdapter(hintAdapter);
+                    ProvinsiS.setAdapter(hintadapterku);
+
+                    KotaS.setSelection(0, false);
+                    ProvinsiS.setSelection(0, false);
+
+                    KotaS.setOnItemSelectedListener(Pengaturan.this);
+                    ProvinsiS.setOnItemSelectedListener(Pengaturan.this);
+
                     Log.d("cobaOngkir", "city_id: " + city_id + " " + "province_id: " + province_id + " " +
                             "province: " + province + " " + "type: " + type + " " + "city_name: " + city_name + " " +
                             "postal_code: " + postal_code);
@@ -134,4 +173,62 @@ public class Pengaturan extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         queue.add(objectRequest);
     }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    private class HintArrayAdapter<T> extends ArrayAdapter<T> {
+
+        Context mContext;
+
+        public HintArrayAdapter(Context context, int resource) {
+            super(context, resource);
+            this.mContext = context;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.spinnner, parent, false);
+            TextView texview = (TextView) view.findViewById(android.R.id.text1);
+
+            if(position == 0) {
+                texview.setText("-- pilih --");
+                texview.setTextColor(Color.parseColor("#b4b3b3"));
+                texview.setHint(getItem(position).toString()); //"Hint to be displayed"
+            } else {
+                texview.setText(getItem(position).toString());
+            }
+
+            return view;
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+
+            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            View view;
+
+            if(position == 0){
+                view = inflater.inflate(R.layout.spinner_hint_list_item_layout, parent, false); // Hide first row
+            } else {
+                view = inflater.inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
+                TextView texview = (TextView) view.findViewById(android.R.id.text1);
+                texview.setText(getItem(position).toString());
+            }
+
+            return view;
+        }
+
+    }
+
+
 }
