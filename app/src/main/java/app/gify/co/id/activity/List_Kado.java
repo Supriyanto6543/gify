@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +40,7 @@ public class List_Kado extends AppCompatActivity {
     RecyclerView recycler;
     ArrayList<MadolKado> madolKados;
     GridLayoutManager glm;
+    ImageView backDetailKado;
     ProgressDialog mDialog;
 
     @Override
@@ -46,6 +49,13 @@ public class List_Kado extends AppCompatActivity {
         setContentView(R.layout.list_kado);
 
         recycler = findViewById(R.id.recycler);
+        backDetailKado = findViewById(R.id.backDetailKado);
+        backDetailKado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getApplicationContext()).openDrawer();
+            }
+        });
 
         mDialog = new ProgressDialog(List_Kado.this);
         mDialog.setMessage("Loading");
