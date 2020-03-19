@@ -54,7 +54,7 @@ public class DetailKado extends AppCompatActivity {
 
     private void popup() {
 
-        builder = new AlertDialog.Builder(getApplicationContext());
+       /* builder = new AlertDialog.Builder(getApplicationContext());
         View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.popup_beli_barang, null);
         /*namapopup = view.findViewById(R.id.personal);
         jumlah = view.findViewById(R.id.keluarga);*/
@@ -64,6 +64,7 @@ public class DetailKado extends AppCompatActivity {
         dialog = builder.create();
         dialog.setView(view);
         dialog.show();
+        */
 
 
     }
