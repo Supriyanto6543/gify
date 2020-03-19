@@ -41,7 +41,7 @@
                     android:layout_height="wrap_content"/>
 
                 <TextView
-                    android:text="Dompet Kulit Modern Pria SPP 509"
+                    android:text="Dompet Kulit Modern Pria"
                     android:textColor="#4a4a4a"
                     android:textStyle="bold"
                     android:textSize="20dp"
