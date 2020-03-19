@@ -2,6 +2,7 @@ package app.gify.co.id.Fragment.home;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -60,6 +61,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     String[] kadolist;
     Boolean bulanbool=false, haribool=false, tahunbool=false;
     Button carikado;
+    ProgressDialog mDialog;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,6 +72,13 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         bulan=root.findViewById(R.id.bulanCari);
         tahun=root.findViewById(R.id.tahunCari);
         carikado=root.findViewById(R.id.cariKado);
+
+        mDialog = new ProgressDialog(getContext());
+        mDialog.setCancelable(false);
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.setMessage("Loading");
+        mDialog.show();
+
         hintAdapter = new HintArrayAdapter<String>(getContext(), 0);
         hintadapterku = new HintArrayAdapter<String>(getContext(), 0);
         hintAdapter.add("hint");
@@ -306,6 +315,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     acarapa.setSelection(0, false);
 
                 }
+                mDialog.dismiss();
             } catch (JSONException e) {
                 Log.d("acarakus", "onResponse: " );
                 e.printStackTrace();

@@ -67,6 +67,7 @@ public class DetailKado extends AppCompatActivity {
 
         namapopup.setText(getIntent().getStringExtra("nama"));
         hargapopuptop.setText("Rp. " + hargas);
+        hargapopupdown.setText("Rp. " + hargas);
 
         tambah.setOnClickListener(view1 -> {
             if (cingpai==9){

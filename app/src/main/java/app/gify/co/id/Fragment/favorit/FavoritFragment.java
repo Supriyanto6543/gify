@@ -126,6 +126,8 @@ public class FavoritFragment extends Fragment {
                         id_barang = object.getString("id_barang");
                         Log.d("idbarangku", "getFavorit: " + id_tetap + uid + id_barang);
                         getBarang();
+                    }else {
+                        mDialog.dismiss();
                     }
                 }
             } catch (JSONException e) {
