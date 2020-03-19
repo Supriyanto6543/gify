@@ -82,7 +82,7 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/cariKadoPembeliam"
+                android:id="@+id/cariKadoPembelian"
                 android:text="CARI KADO"
                 android:textColor="#fff"
                 android:textSize="20dp"
