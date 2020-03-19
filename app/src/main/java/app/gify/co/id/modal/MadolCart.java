@@ -1,10 +1,10 @@
 package app.gify.co.id.modal;
 
 public class MadolCart {
-    private int harga;
-    private String namacart, kode, jumlah, gambar;
+    private int harga,jumlah, kode;
+    private String namacart, gambar;
 
-    public MadolCart(String gambar, int harga, String namacart, String kode, String jumlah) {
+    public MadolCart(String gambar, int harga, String namacart, int kode, int jumlah) {
         this.gambar = gambar;
         this.harga = harga;
         this.namacart = namacart;
@@ -36,19 +36,19 @@ public class MadolCart {
         this.namacart = nama;
     }
 
-    public String getKode() {
+    public int getKode() {
         return kode;
     }
 
-    public void setKode(String kode) {
+    public void setKode(int kode) {
         this.kode = kode;
     }
 
-    public String getJumlah() {
+    public int getJumlah() {
         return jumlah;
     }
 
-    public void setJumlah(String jumlah) {
+    public void setJumlah(int jumlah) {
         this.jumlah = jumlah;
     }
 }
