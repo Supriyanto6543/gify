@@ -1,7 +1,9 @@
 package app.gify.co.id.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -15,14 +17,22 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 
+import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.R;
 
 public class Pembelian extends AppCompatActivity {
+
+    Button carikadopembelian;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_pembelian);
+        carikadopembelian = findViewById(R.id.cariKadoPembeliam);
+        carikadopembelian.setOnClickListener(view -> {
+            Intent intent = new Intent(Pembelian.this, HomeFragment.class);
+            startActivity(intent);
+        });
     }
 
 
