@@ -99,8 +99,6 @@ public class Pengaturan extends AppCompatActivity {
         });
 
         Back.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplication(), MainActivity.class);
-            startActivity(intent);
             finish();
         });
 
