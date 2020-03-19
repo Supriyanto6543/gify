@@ -39,7 +39,7 @@
                 android:text="LIST KADO"
                 android:textStyle="bold"
                 android:textColor="#fff"
-                android:textSize="17dp"/>
+                android:textSize="25dp"/>
 
             <ImageView
                 android:id="@+id/cariBarangListKado"

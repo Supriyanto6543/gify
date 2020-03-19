@@ -1,7 +1,5 @@
 package app.gify.co.id.activity;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -38,7 +36,6 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
-import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.R;
 import app.gify.co.id.baseurl.UrlJson;
 
@@ -57,7 +54,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     FirebaseAuth mAuth;
     DatabaseReference RootRef;
 
-    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

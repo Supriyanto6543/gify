@@ -67,6 +67,7 @@ public class DetailKado extends AppCompatActivity {
 
         namapopup.setText(getIntent().getStringExtra("nama"));
         hargapopuptop.setText("Rp. " + hargas);
+        hargapopupdown.setText("Rp. " + hargas);
 
         tambah.setOnClickListener(view1 -> {
             if (cingpai==9){
@@ -91,6 +92,10 @@ public class DetailKado extends AppCompatActivity {
         batal.setOnClickListener(view1 -> dialog.dismiss());
         proses.setOnClickListener(view1 -> {
             Intent intent = new Intent(DetailKado.this, CartActivity.class);
+            intent.putExtra("nama", getIntent().getStringExtra("nama"));
+            intent.putExtra("gambar", getIntent().getStringExtra("gambar"));
+            intent.putExtra("idbarang", Integer.valueOf(getIntent().getStringExtra("idbarang")));
+            intent.putExtra("quantity", cingpai);
             startActivity(intent);
         });
 

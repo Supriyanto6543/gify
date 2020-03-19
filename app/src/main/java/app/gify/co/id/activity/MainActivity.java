@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_pengaturan:
-                Intent intent = new Intent(getApplicationContext(), PengaturanFragment.class);
+                Intent intent = new Intent(getApplicationContext(), Pengaturan.class);
                 startActivity(intent);
                 break;
 

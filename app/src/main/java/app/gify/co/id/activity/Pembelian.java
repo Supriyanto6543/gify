@@ -30,7 +30,7 @@ public class Pembelian extends AppCompatActivity {
         setContentView(R.layout.fragment_pembelian);
         carikadopembelian = findViewById(R.id.cariKadoPembeliam);
         carikadopembelian.setOnClickListener(view -> {
-            Intent intent = new Intent(Pembelian.this, HomeFragment.class);
+            Intent intent = new Intent(Pembelian.this, MainActivity.class);
             startActivity(intent);
         });
     }
