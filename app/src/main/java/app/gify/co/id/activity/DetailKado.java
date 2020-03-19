@@ -54,6 +54,78 @@ public class DetailKado extends AppCompatActivity {
 
     private void popup() {
 
+       /* builder = new AlertDialog.Builder(getApplicationContext());
+        View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.popup_beli_barang, null);
+        namapopup = view.findViewById(R.id.personal);
+        jumlah = view.findViewById(R.id.keluarga);
+        kelompok = view.findViewById(R.id.kelompok);
+        perbedaanPaketBelajar = view.findViewById(R.id.PerbedaanPaketBelajarKu);
+
+        perbedaanPaketBelajar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), PerbedaanPaketBelajar.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
+
+        personal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), OrderGuru.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                editor = preferences.edit();
+                editor.putString("personal", "100000");
+                editor.putString("personalKu", "1");
+                editor.remove("keluarga");
+                editor.remove("kelompok");
+                editor.apply();
+                intent.putExtra("email", email);
+                startActivity(intent);
+            }
+        });
+
+        keluarga.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), OrderGuru.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                editor = preferences.edit();
+                editor.putString("keluarga", "150000");
+                editor.putString("keluargaKu", "2");
+                editor.remove("personal");
+                editor.remove("kelompok");
+                editor.apply();
+                intent.putExtra("email", email);
+                startActivity(intent);
+            }
+        });
+
+        kelompok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), OrderGuru.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                editor = preferences.edit();
+                editor.putString("kelompok", "200000");
+                editor.putString("kelompokKu", "3");
+                editor.remove("personal");
+                editor.remove("keluarga");
+                editor.apply();
+                intent.putExtra("email", email);
+                startActivity(intent);
+            }
+        });
+
+        dialog = builder.create();
+        dialog.setView(view);
+        dialog.show();
+        */
 
 
     }
