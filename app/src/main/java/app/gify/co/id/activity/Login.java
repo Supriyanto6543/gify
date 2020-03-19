@@ -61,13 +61,10 @@ public class Login extends AppCompatActivity {
         Daftar = findViewById(R.id.daftar);
         lupaSandi = findViewById(R.id.lupaSandi);
 
-        Daftar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent registerIntent = new Intent(getApplication(), Register.class);
-                sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Login.this);
-                startActivity(registerIntent);
-            }
+        Daftar.setOnClickListener(v -> {
+            Intent registerIntent = new Intent(getApplication(), Register.class);
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Login.this);
+            startActivity(registerIntent);
         });
 
         sessionManager = new SessionManager(Login.this);
@@ -82,62 +79,50 @@ public class Login extends AppCompatActivity {
             finish();
         }
 
-        lupaSandi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplication(), LupaSandi.class);
-                startActivity(intent);
-            }
+        lupaSandi.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplication(), LupaSandi.class);
+            startActivity(intent);
         });
 
-        Masuk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        Masuk.setOnClickListener(v -> {
 
-                email = Email.getText().toString().trim();
-                password = Password.getText().toString().trim();
-                Masuk.setVisibility(View.GONE);
-                progressBar = new ProgressDialog(Login.this);
-                progressBar.setTitle("Sign In");
-                progressBar.setMessage("Harap Tunggu...");
-                progressBar.setCanceledOnTouchOutside(false);
-                progressBar.show();
-                //wajib di tambahkan untuk menghindari null
-                if (email.isEmpty() || password.isEmpty()){
-                    Toast.makeText(Login.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
-                    progressBar.dismiss();
-                    Masuk.setVisibility(View.VISIBLE);
-                }else {
-                    mAuth.signInWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (mAuth.getCurrentUser().isEmailVerified()) {
-                                                    Toast.makeText(Login.this, "Selamat Datang!", Toast.LENGTH_SHORT).show();
-                                                    SendUserToMainActivity();
-                                                } else {
-                                                    Toast.makeText(Login.this, "Silahkan cek email anda", Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        });
-                                        Toast.makeText(Login.this, "Selamat Datang!", Toast.LENGTH_SHORT).show();;
-                                        Masuk.setVisibility(View.VISIBLE);
-                                        progressBar.dismiss();
+            email = Email.getText().toString().trim();
+            password = Password.getText().toString().trim();
+            Masuk.setVisibility(View.GONE);
+            progressBar = new ProgressDialog(Login.this);
+            progressBar.setTitle("Sign In");
+            progressBar.setMessage("Harap Tunggu...");
+            progressBar.setCanceledOnTouchOutside(false);
+            progressBar.show();
+            //wajib di tambahkan untuk menghindari null
+            if (email.isEmpty() || password.isEmpty()){
+                Toast.makeText(Login.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
+                progressBar.dismiss();
+                Masuk.setVisibility(View.VISIBLE);
+            }else {
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(task1 -> {
+                                    if (mAuth.getCurrentUser().isEmailVerified()) {
+                                        Toast.makeText(Login.this, "Selamat Datang!", Toast.LENGTH_SHORT).show();
+                                        SendUserToMainActivity();
+                                    } else {
+                                        Toast.makeText(Login.this, "Silahkan cek email anda", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                Toast.makeText(Login.this, "Selamat Datang!", Toast.LENGTH_SHORT).show();
+                                Masuk.setVisibility(View.VISIBLE);
+                                progressBar.dismiss();
 
-                                    }
-                                    else {
-                                        String message = task.getException().toString();
-                                        Toast.makeText(Login.this, "Email / Sandi salah " , Toast.LENGTH_SHORT).show();
-                                        progressBar.dismiss();
-                                        Masuk.setVisibility(View.VISIBLE);
-                                    }
-                                }
-                            });
-                }
+                            }
+                            else {
+                                String message = task.getException().toString();
+                                Toast.makeText(Login.this, "Email / Sandi salah " , Toast.LENGTH_SHORT).show();
+                                progressBar.dismiss();
+                                Masuk.setVisibility(View.VISIBLE);
+                            }
+                        });
             }
         });
     }
