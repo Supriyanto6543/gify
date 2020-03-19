@@ -18,47 +18,71 @@
         <LinearLayout
             android:orientation="horizontal"
             android:gravity="center"
-            android:weightSum="100"
+            android:weightSum="55"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/backtoMenuFavorit"
-                android:layout_weight="1"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_gravity="start"
-                android:padding="10dp"
+                android:layout_weight="5"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:padding="3dp"
                 android:src="@drawable/menu" />
 
             <TextView
-                android:layout_weight="95"
+                android:id="@+id/textFavoriteFavorite"
+                android:layout_weight="40"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="start"
                 android:text="FAVORIT"
+                android:layout_marginStart="5dp"
                 android:textStyle="bold"
                 android:textColor="#fff"
-                android:textSize="17dp"/>
+                android:textSize="25dp"/>
+
+            <EditText
+                android:id="@+id/cariBarangEdittext"
+                android:background="#fff"
+                android:visibility="gone"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                android:hint="Cari barang"
+                android:padding="5dp"
+                android:textColorHint="#b5a981"
+                android:layout_weight="40"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/cariBarangFavoritYa"
+                android:layout_weight="5"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/checkmark" />
 
             <ImageView
                 android:id="@+id/cariBarangFavorit"
-                android:layout_weight="2"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_gravity="start"
-                android:padding="10dp"
+                android:layout_weight="5"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="10dp"
                 android:src="@drawable/magnifying_glass" />
 
             <ImageView
                 android:id="@+id/chartBarangFavorit"
-                android:layout_weight="2"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_gravity="start"
-                android:layout_marginEnd="10dp"
-                android:padding="10dp"
+                android:layout_weight="5"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="15dp"
                 android:src="@drawable/add_to_cart" />
 
 

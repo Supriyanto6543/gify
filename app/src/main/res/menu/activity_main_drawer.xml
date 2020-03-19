@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <group android:checkableBehavior="all">
+    <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_belikado"
             android:icon="@drawable/giftbox1"
@@ -22,7 +22,8 @@
 
     </group>
 
-    <item android:title="">
+    <group>
+
         <menu>
 
             <item
@@ -38,6 +39,5 @@
 
         </menu>
 
-
-    </item>
+    </group>
 </menu>

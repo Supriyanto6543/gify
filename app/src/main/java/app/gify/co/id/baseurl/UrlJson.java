@@ -11,4 +11,5 @@ public class UrlJson {
     public static final String REGISTER = ROOT + "register.php";
     public static final String CITY = ROOT + "city.php";
     public static final String PROVINCE = ROOT + "province.php";
+
 }
