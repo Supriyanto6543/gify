@@ -16,13 +16,14 @@ import androidx.fragment.app.FragmentTransaction;
 
 import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.R;
+import app.gify.co.id.activity.CartActivity;
 import app.gify.co.id.activity.MainActivity;
 import app.gify.co.id.activity.Pembelian;
 
 
 public class PembelianFragment extends Fragment {
 
-    ImageView navView;
+    ImageView navView, toChart;
     Button cariKadoPembelian;
     @Nullable
     @Override
@@ -38,7 +39,16 @@ public class PembelianFragment extends Fragment {
             }
         });
 
-        navView = view.findViewById(R.id.backDetailKado);
+        toChart = view.findViewById(R.id.cartPembelian);
+        toChart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CartActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        navView = view.findViewById(R.id.backPembelian);
         navView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

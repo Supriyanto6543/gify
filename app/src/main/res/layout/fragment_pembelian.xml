@@ -22,7 +22,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/backDetailKado"
+                android:id="@+id/backPembelian"
                 android:layout_weight="5"
                 android:padding="3dp"
                 android:layout_width="0dp"
@@ -43,7 +43,7 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/cariBarangDetailKado"
+                android:id="@+id/cartPembelian"
                 android:layout_weight="5"
                 android:layout_width="0dp"
                 android:layout_height="30dp"

@@ -2,6 +2,7 @@ package app.gify.co.id.Fragment.favorit;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -9,7 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +33,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import app.gify.co.id.R;
+import app.gify.co.id.activity.CartActivity;
 import app.gify.co.id.activity.MainActivity;
 import app.gify.co.id.adapter.AdapterFavorit;
 import app.gify.co.id.modal.MadolFavorit;
@@ -40,13 +44,15 @@ import static app.gify.co.id.baseurl.UrlJson.GETFAV;
 
 public class FavoritFragment extends Fragment {
 
-    ImageView navView;
+    ImageView navView, toChart, ya, cari;
     AdapterFavorit adapterFavorit;
+    TextView textView;
     RecyclerView recyclerView;
     ArrayList<MadolFavorit> kados;
     GridLayoutManager glm;
     SharedPreferences preferences;
     String uid, id_barang;
+    EditText cariBarang;
     ProgressDialog mDialog;
 
     @Nullable
@@ -54,6 +60,30 @@ public class FavoritFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_favorit, container, false);
         recyclerView = view.findViewById(R.id.recyclerfavorit);
+        ya = view.findViewById(R.id.cariBarangFavoritYa);
+        cariBarang = view.findViewById(R.id.cariBarangEdittext);
+        textView = view.findViewById(R.id.textFavoriteFavorite);
+        cari = view.findViewById(R.id.cariBarangFavorit);
+        cari.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ya.setVisibility(View.VISIBLE);
+                cari.setVisibility(View.GONE);
+                cariBarang.setVisibility(View.VISIBLE);
+                textView.setVisibility(View.GONE);
+            }
+        });
+
+
+
+        toChart = view.findViewById(R.id.chartBarangFavorit);
+        toChart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CartActivity.class);
+                startActivity(intent);
+            }
+        });
 
         mDialog = new ProgressDialog(getContext());
         mDialog.setMessage("Loading");

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -31,6 +32,7 @@ import static app.gify.co.id.baseurl.UrlJson.GETBARANG;
 public class CartActivity extends AppCompatActivity {
 
     Button Checkout;
+    ImageView backCart;
     TextView totalbelanjar, totalberat;
     AdapterCart adapterCart;
     ArrayList<MadolCart> madolCarts;
@@ -42,9 +44,19 @@ public class CartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cart);
 
+        backCart = findViewById(R.id.backCartNav);
+        backCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getApplicationContext()).openDrawer();
+            }
+        });
+
         Checkout = findViewById(R.id.checkoutChart);
         totalbelanjar = findViewById(R.id.totalBelanjaChart);
         totalberat = findViewById(R.id.totalBeratChart);
+
+
 
         madolCarts = new ArrayList<>();
         namacart = getIntent().getStringExtra("nama");
