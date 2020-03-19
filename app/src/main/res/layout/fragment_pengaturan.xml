@@ -351,26 +351,25 @@
 
                     <TextView
                         android:id="@+id/textviewAlamatPengaturan"
-                        android:hint="Jl."
-                        android:textColorHint="#b5a981"
-                        android:textStyle="bold"
-                        android:textColor="#b5a981"
+                        android:layout_width="299dp"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="2dp"
                         android:layout_weight="89"
-                        android:layout_width="0dp"
+                        android:autofillHints="Nama depan"
+                        android:hint="Jl."
+                        android:textColor="#b5a981"
+                        android:textColorHint="#b5a981"
                         android:textSize="15dp"
-                        android:layout_height="wrap_content"
-                        android:autofillHints="Nama depan" />
-
+                        android:textStyle="bold" />
 
 
                     <ImageView
                         android:id="@+id/gantiAlamatPengaturan"
-                        android:src="@drawable/edit"
-                        android:tint="#dad9d5"
+                        android:layout_width="35dp"
+                        android:layout_height="20dp"
                         android:layout_weight="6"
-                        android:layout_width="0dp"
-                        android:layout_height="20dp"/>
+                        android:src="@drawable/edit"
+                        android:tint="#dad9d5" />
 
 
 

@@ -35,10 +35,10 @@ import static app.gify.co.id.baseurl.UrlJson.GETBARANG;
 
 public class List_Kado extends AppCompatActivity {
 
-    int kado, acara, range;
     AdapterListKado adapterListKado;
     RecyclerView recycler;
     ArrayList<MadolKado> madolKados;
+    String kado, acara, range;
     GridLayoutManager glm;
     ImageView backDetailKado;
     ProgressDialog mDialog;
@@ -67,41 +67,36 @@ public class List_Kado extends AppCompatActivity {
         glm = new GridLayoutManager(getApplicationContext(), 2);
         recycler.setLayoutManager(glm);
 
-        kado = getIntent().getIntExtra("buat", -1);
-        acara = getIntent().getIntExtra("acara", -1);
-        range = getIntent().getIntExtra("range", -1);
+        kado = getIntent().getStringExtra("buat");
+        acara = getIntent().getStringExtra("acara");
+        range = getIntent().getStringExtra("range");
+        Log.d("rangesa", "onCreate: " + kado + " s " + acara + " s " + range + " s ");
 
         getBarang();
 
     }
 
     private void getBarang() {
-        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETBARANG, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETBARANG+"?buat="+kado+"&ranges="+range+"&acara="+acara, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray array = response.getJSONArray("YukNgaji");
+                    Log.d("array", "onResponse: " + array.toString() + response.toString());
                     for (int a = 0; a < array.length(); a++){
                         JSONObject object = array.getJSONObject(a);
-                        int buat = object.getInt("buat");
-                        int ranges = object.getInt("ranges");
-                        int acaraku = object.getInt("acara");
-                        Log.d("acara", "onResponse: " + buat + " s " + kado + " s " + ranges + " s " + range + " s " + acaraku + " s " + acara);
-                        if (buat == kado && ranges == range && acaraku == acara){
-                            String nama = object.getString("nama");
-                            int harga = object.getInt("harga");
-                            String gambar = object.getString("photo");
-                            String tipe = object.getString("kode_barang");
-                            String desc = object.getString("deskripsi");
-                            String idbarang = object.getString("id");
-                            MadolKado madolKado = new MadolKado(gambar, harga, nama, tipe, desc, idbarang);
-                            madolKados.add(madolKado);
-                            adapterListKado = new AdapterListKado(madolKados, getApplicationContext());
-                            recycler.setAdapter(adapterListKado);
-                            mDialog.dismiss();
-                            Log.d("listkadoharga", "onResponse: " + harga + tipe + " s " + idbarang);
-                        }
-
+                        String nama = object.getString("nama");
+                        int harga = object.getInt("harga");
+                        String gambar = object.getString("photo");
+                        String tipe = object.getString("kode_barang");
+                        String desc = object.getString("deskripsi");
+                        String idbarang = object.getString("id");
+                        MadolKado madolKado = new MadolKado(gambar, harga, nama, tipe, desc, idbarang);
+                        madolKados.add(madolKado);
+                        adapterListKado = new AdapterListKado(madolKados, getApplicationContext());
+                        recycler.setAdapter(adapterListKado);
+                        mDialog.dismiss();
+                        Log.d("listkadoharga", "onResponse: " + harga + tipe + " s " + idbarang);
                     }
                 } catch (JSONException e) {
                     Log.d("jsonbarangerror", "onResponse: " + e.getMessage());

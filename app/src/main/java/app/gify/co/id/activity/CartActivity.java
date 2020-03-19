@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -37,7 +39,9 @@ public class CartActivity extends AppCompatActivity {
     AdapterCart adapterCart;
     ArrayList<MadolCart> madolCarts;
     String namacart, gambarcart;
-    int idbarang, kuantitas;
+    int idbarang, kuantitas, harga;
+    GridLayoutManager glm;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,10 +59,12 @@ public class CartActivity extends AppCompatActivity {
         Checkout = findViewById(R.id.checkoutChart);
         totalbelanjar = findViewById(R.id.totalBelanjaChart);
         totalberat = findViewById(R.id.totalBeratChart);
+        recyclerView = findViewById(R.id.rvChart);
 
 
 
         madolCarts = new ArrayList<>();
+        harga = getIntent().getIntExtra("hargas", -1);
         namacart = getIntent().getStringExtra("nama");
         gambarcart = getIntent().getStringExtra("gambar");
         idbarang = getIntent().getIntExtra("idbarang", -1);
@@ -82,6 +88,11 @@ public class CartActivity extends AppCompatActivity {
                     if (idbarang==id_barang){
                         String berat = object.getString("berat");
                         Log.d("beratget", "getBerat: " + berat);
+                        glm = new GridLayoutManager(CartActivity.this, 1);
+                        MadolCart madolCart = new MadolCart(gambarcart, harga, namacart, idbarang, kuantitas);
+                        madolCarts.add(madolCart);
+                        recyclerView.setAdapter(adapterCart);
+                        recyclerView.setLayoutManager(glm);
                     }
                 }
             } catch (JSONException e) {

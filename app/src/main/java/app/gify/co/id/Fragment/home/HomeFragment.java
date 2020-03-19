@@ -50,9 +50,9 @@ import static app.gify.co.id.baseurl.UrlJson.GETRANGE;
 
 
 public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
-    String kadobuatsiapaku, acaraapaku, bulanku;
+    String kadobuatsiapaku, acaraapaku, bulanku, namas;
     NumberPicker numberpicker;
-    int hariku, tahunku, bulanserver, namas, acaraint, kadoint;
+    int hariku, tahunku, bulanserver, acaraint, kadoint;
     Spinner kadobuatsiapa, acarapa;
     private Calendar date;
     TextView tahun,hari, bulan;
@@ -344,12 +344,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                 if (hariku >= hari){
                                     Log.d("hari1", "onResponse: ");
                                     if (0 <= bulanend){
-                                        namas = object.getInt("id");
+                                        namas = object.getString("nama");
                                         Log.d("namakuobjek", "onResponse: " + namas);
                                         Intent intent = new Intent(getContext(), List_Kado.class);
                                         intent.putExtra("range", namas);
-                                        intent.putExtra("acara", acaraint);
-                                        intent.putExtra("buat", kadoint);
+                                        intent.putExtra("acara", acaraapaku);
+                                        intent.putExtra("buat", kadobuatsiapaku);
                                         startActivity(intent);
                                     }
                                 }
@@ -358,23 +358,23 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                             if (bulanserver == bulan){
                                 Log.d("bulan", "onResponse: ");
                                 if (hariku >= hari){
-                                    namas = object.getInt("id");
+                                    namas = object.getString("nama");
                                     Log.d("hariku", "onResponse: " + namas);
                                     Intent intent = new Intent(getContext(), List_Kado.class);
                                     intent.putExtra("range", namas);
-                                    intent.putExtra("acara", acaraint);
-                                    intent.putExtra("buat", kadoint);
+                                    intent.putExtra("acara", acaraapaku);
+                                    intent.putExtra("buat", kadobuatsiapaku);
                                     startActivity(intent);
                                 }
                             }else if (bulanserver == bulanend){
                                 Log.d("bulanku", "onResponse: ");
                                 if (hariku <= hariend){
-                                    namas = object.getInt("id");
+                                    namas = object.getString("nama");
                                     Log.d("hari", "onResponse: " + namas);
                                     Intent intent = new Intent(getContext(), List_Kado.class);
                                     intent.putExtra("range", namas);
-                                    intent.putExtra("acara", acaraint);
-                                    intent.putExtra("buat", kadoint);
+                                    intent.putExtra("acara", acaraapaku);
+                                    intent.putExtra("buat", kadobuatsiapaku);
                                     startActivity(intent);
                                 }
                             }
