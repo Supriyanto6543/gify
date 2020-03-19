@@ -20,6 +20,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/gambarcart"
                 android:src="@drawable/foto_barang"
                 android:layout_weight="25"
                 android:layout_width="0dp"
@@ -33,7 +34,8 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:text="Rp 120.00,-"
+                    android:id="@+id/hargacart"
+                    android:text="Rp 120.000,-"
                     android:textColor="#fd672c"
                     android:textStyle="bold"
                     android:textSize="19dp"
@@ -41,6 +43,7 @@
                     android:layout_height="wrap_content"/>
 
                 <TextView
+                    android:id="@+id/namacart"
                     android:text="Dompet Kulit Modern Pria"
                     android:textColor="#4a4a4a"
                     android:textStyle="bold"
@@ -51,14 +54,16 @@
             </LinearLayout>
 
             <ImageView
+                android:id="@+id/kurangcart"
                 android:src="@drawable/minus"
-                android:tint="#989898"
+                android:tint="#f1f1f1"
                 android:layout_gravity="center"
                 android:layout_weight="10"
                 android:layout_width="0dp"
                 android:layout_height="40dp"/>
 
             <TextView
+                android:id="@+id/quantitas"
                 android:text="1"
                 android:textSize="30dp"
                 android:textColor="#838181"
@@ -72,8 +77,9 @@
                 android:layout_height="wrap_content"/>
 
             <ImageView
+                android:id="@+id/tambahcart"
                 android:src="@drawable/add"
-                android:tint="#989898"
+                android:tint="#f1f1f1"
                 android:layout_gravity="center"
                 android:layout_weight="10"
                 android:layout_width="0dp"
