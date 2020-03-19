@@ -16,17 +16,17 @@
         <LinearLayout
             android:orientation="horizontal"
             android:gravity="center"
-            android:weightSum="30"
+            android:weightSum="50"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/backDetailKado"
-                android:layout_weight="0"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_gravity="start"
-                android:padding="10dp"
+                android:layout_weight="5"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:padding="3dp"
                 android:src="@drawable/menu" />
 
             <TextView
@@ -34,21 +34,20 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
-                android:layout_weight="28"
+                android:layout_weight="40"
                 android:gravity="start"
                 android:text="PEMBELIAN"
                 android:textColor="#fff"
-                android:textSize="17dp"
+                android:textSize="25dp"
                 android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/cariBarangDetailKado"
-                android:layout_weight="2"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_weight="5"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
                 android:layout_marginEnd="15dp"
-                android:layout_gravity="start"
-                android:padding="10dp"
+                android:layout_gravity="center"
                 android:src="@drawable/add_to_cart" />
 
 
