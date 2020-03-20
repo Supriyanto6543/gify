@@ -25,9 +25,9 @@ public class AdapterPembelian extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.context = context;
     }
 
-    class MyCart extends RecyclerView.ViewHolder {
+    class MyPembelian extends RecyclerView.ViewHolder {
 
-        public MyCart(@NonNull View itemView) {
+        public MyPembelian(@NonNull View itemView) {
             super(itemView);
         }
     }
@@ -36,7 +36,7 @@ public class AdapterPembelian extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_cart, parent, false);
-        return new MyCart(view);
+        return new MyPembelian(view);
     }
 
     @Override

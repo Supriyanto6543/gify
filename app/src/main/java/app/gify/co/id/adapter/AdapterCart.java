@@ -20,6 +20,7 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     ArrayList<MadolCart> carts;
     View view;
     Context context;
+    int kuantitas;
 
     public AdapterCart(ArrayList<MadolCart> carts, Context context) {
         this.carts = carts;
@@ -51,7 +52,24 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        kuantitas = carts.get(position).getJumlah();
+        int hargaku = carts.get(position).getHarga();
+        ((MyCart)holder).tambah.setOnClickListener(view1 -> {
+            ((MyCart)holder).quantitas.setText(kuantitas);
+            ((MyCart)holder).harga.setText(hargaku*kuantitas);
+            if (kuantitas<9){
+                kuantitas = kuantitas + 1;
+            }
 
+        });
+        ((MyCart)holder).kurang.setOnClickListener(view -> {
+            ((MyCart)holder).quantitas.setText(kuantitas);
+            ((MyCart)holder).harga.setText(hargaku*kuantitas);
+            if (kuantitas>1){
+                kuantitas = kuantitas - 1;
+            }
+
+        });
     }
 
     @Override
