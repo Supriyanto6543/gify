@@ -95,6 +95,7 @@ public class DetailKado extends AppCompatActivity {
             intent.putExtra("nama", getIntent().getStringExtra("nama"));
             intent.putExtra("gambar", getIntent().getStringExtra("gambar"));
             intent.putExtra("idbarang", Integer.valueOf(getIntent().getStringExtra("idbarang")));
+            intent.putExtra("hargas", hargas);
             intent.putExtra("quantity", cingpai);
             startActivity(intent);
         });

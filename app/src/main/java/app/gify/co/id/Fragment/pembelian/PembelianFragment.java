@@ -43,7 +43,7 @@ public class PembelianFragment extends Fragment {
         toChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CartActivity.class);
+                Intent intent = new Intent(getContext(), CartActivity.class);
                 startActivity(intent);
             }
         });
