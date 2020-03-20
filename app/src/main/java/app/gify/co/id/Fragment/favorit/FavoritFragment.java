@@ -1,5 +1,6 @@
 package app.gify.co.id.Fragment.favorit;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,6 +27,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
@@ -56,6 +60,7 @@ public class FavoritFragment extends Fragment {
     EditText cariBarang;
     ProgressDialog mDialog;
     NavigationView navigationView;
+    Dialog dialog;
 
 
     @Nullable
@@ -88,11 +93,18 @@ public class FavoritFragment extends Fragment {
             }
         });
 
-        mDialog = new ProgressDialog(getContext());
-        mDialog.setMessage("Loading");
-        mDialog.setCancelable(false);
-        mDialog.setCanceledOnTouchOutside(false);
-        mDialog.show();
+        dialog  = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.loading);
+        ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
+        GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(gifImageView);
+        Glide.with(getActivity())
+                .load(R.drawable.gifygif)
+                .placeholder(R.drawable.gifygif)
+                .centerCrop()
+                .into(imageViewTarget);
+        dialog.show();
 
         kados = new ArrayList<>();
         glm = new GridLayoutManager(getActivity(), 2);
@@ -137,7 +149,7 @@ public class FavoritFragment extends Fragment {
                             kados.add(madolFavorit);
                             adapterFavorit = new AdapterFavorit(kados, getContext());
                             recyclerView.setAdapter(adapterFavorit);
-                            mDialog.dismiss();
+                            dialog.dismiss();
                         }
                         Log.d("listkadoharga", "onResponse: " + harga + tipe + " s " + idbarang);
 
@@ -168,7 +180,7 @@ public class FavoritFragment extends Fragment {
                         Log.d("idbarangku", "getFavorit: " + id_tetap + uid + id_barang);
                         getBarang();
                     }else {
-                        mDialog.dismiss();
+                        dialog.dismiss();
                     }
                 }
             } catch (JSONException e) {

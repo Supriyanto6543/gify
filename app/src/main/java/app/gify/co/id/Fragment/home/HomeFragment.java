@@ -94,42 +94,16 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         mDialog.show();*/
         dialog  = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //...set cancelable false so that it's never get hidden
         dialog.setCancelable(false);
-        //...that's the layout i told you will inflate later
         dialog.setContentView(R.layout.loading);
-
-        //...initialize the imageView form infalted layout
         ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
-
-        /*
-        it was never easy to load gif into an ImageView before Glide or Others library
-        and for doing this we need DrawableImageViewTarget to that ImageView
-        */
         GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(gifImageView);
-
-        //...now load that gif which we put inside the drawble folder here with the help of Glide
-
         Glide.with(getActivity())
                 .load(R.drawable.gifygif)
                 .placeholder(R.drawable.gifygif)
                 .centerCrop()
                 .into(imageViewTarget);
-
-        //...finaly show it
         dialog.show();
-
-        /*alertadd = new AlertDialog.Builder(getActivity());
-        LayoutInflater factory = LayoutInflater.from(getActivity());
-        final View view = factory.inflate(R.layout.loading, null);
-        alertadd.setView(view);
-        LayoutInflater factory = LayoutInflater.from(context);
-        final View view = factory.inflate(R.layout.myphoto_layout, null);
-        Dialog dialog = new Dialog(context);
-        dialog.setContentView(view);
-        dialog.show();*/
-
-        /*alertadd.show();*/
 
         hintAdapter = new HintArrayAdapter<String>(getContext(), 0);
         hintadapterku = new HintArrayAdapter<String>(getContext(), 0);
