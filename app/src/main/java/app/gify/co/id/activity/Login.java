@@ -103,15 +103,14 @@ public class Login extends AppCompatActivity {
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(task1 -> {
                                     if (mAuth.getCurrentUser().isEmailVerified()) {
                                         Toast.makeText(Login.this, "Selamat Datang!", Toast.LENGTH_SHORT).show();
                                         SendUserToMainActivity();
                                     } else {
-                                        Toast.makeText(Login.this, "Silahkan cek email anda", Toast.LENGTH_SHORT).show();
+                                        mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(task1 -> {
+                                            Toast.makeText(Login.this, "Silahkan cek email anda", Toast.LENGTH_SHORT).show();
+                                        });
                                     }
-                                });
-                                Toast.makeText(Login.this, "Selamat Datang!", Toast.LENGTH_SHORT).show();
                                 Masuk.setVisibility(View.VISIBLE);
                                 progressBar.dismiss();
 
