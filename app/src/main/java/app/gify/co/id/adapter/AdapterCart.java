@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -58,7 +59,8 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         int hargaku = carts.get(position).getHarga();
         ((MyCart)holder).harga.setText(String.valueOf(hargaku*kuantitas));
         ((MyCart)holder).nama.setText(carts.get(position).getNamacart());
-        Picasso.get().load(carts.get(position).getGambar()).into(((MyCart)holder).gambar);
+        //Picasso.get().load(carts.get(position).getGambar()).into(((MyCart)holder).gambar);
+        Glide.with(view).load(carts.get(position).getGambar()).into(((MyCart)holder).gambar);
         ((MyCart)holder).tambah.setOnClickListener(view1 -> {
             ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
             ((MyCart)holder).harga.setText(String.valueOf(hargaku*kuantitas));

@@ -33,12 +33,19 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.security.ProviderInstaller;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
+
+import javax.net.ssl.SSLContext;
 
 import app.gify.co.id.R;
 import app.gify.co.id.activity.List_Kado;
@@ -115,6 +122,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
             }
         });
+
         return root;
     }
 

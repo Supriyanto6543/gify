@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -67,8 +68,8 @@ public class List_Kado extends AppCompatActivity {
         glm = new GridLayoutManager(getApplicationContext(), 2);
         recycler.setLayoutManager(glm);
 
-        kado = getIntent().getStringExtra("buat");
-        acara = getIntent().getStringExtra("acara");
+        kado = getIntent().getStringExtra("buat").replace(" ", "%20");
+        acara = getIntent().getStringExtra("acara").replace(" ", "%20");
         range = getIntent().getStringExtra("range");
         Log.d("rangesa", "onCreate: " + kado + " s " + acara + " s " + range + " s ");
 
@@ -82,12 +83,13 @@ public class List_Kado extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray array = response.getJSONArray("YukNgaji");
-                    Log.d("array", "onResponse: " + array.toString() + response.toString());
+                    mDialog.dismiss();
+                    Toast.makeText(getApplicationContext(), "Product Kosong", Toast.LENGTH_LONG).show();
                     for (int a = 0; a < array.length(); a++){
                         JSONObject object = array.getJSONObject(a);
                         String nama = object.getString("nama");
                         int harga = object.getInt("harga");
-                        String gambar = object.getString("photo");
+                        String gambar = object.getString("photo").replace(" ", "%20");
                         String tipe = object.getString("kode_barang");
                         String desc = object.getString("deskripsi");
                         String idbarang = object.getString("id");
@@ -96,7 +98,7 @@ public class List_Kado extends AppCompatActivity {
                         adapterListKado = new AdapterListKado(madolKados, getApplicationContext());
                         recycler.setAdapter(adapterListKado);
                         mDialog.dismiss();
-                        Log.d("listkadoharga", "onResponse: " + harga + tipe + " s " + idbarang);
+                        Log.d("listkadoharga", "onResponse: " + harga + tipe + " s " + idbarang + "\n" + gambar);
                     }
                 } catch (JSONException e) {
                     Log.d("jsonbarangerror", "onResponse: " + e.getMessage());

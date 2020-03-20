@@ -16,6 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ImageListener;
 
 import app.gify.co.id.R;
 
@@ -32,11 +33,13 @@ public class DetailKado extends AppCompatActivity {
     SharedPreferences.Editor editor;
     int hargas;
     int cingpai = 1;
+    CarouselView carouselView;
+    int sourceImg[] = {R.drawable.lupa_password_background, R.drawable.profile_image};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.detail_barang);
+        setContentView(R.layout.detail_barang_nocard);
 
         belikadodetail = findViewById(R.id.belikadodetail);
         slide = findViewById(R.id.carousel);
@@ -44,6 +47,10 @@ public class DetailKado extends AppCompatActivity {
         harga = findViewById(R.id.hargadetail);
         desc = findViewById(R.id.descdetail);
 
+        //carousel
+        carouselView = (CarouselView) findViewById(R.id.carousel);
+        carouselView.setPageCount(sourceImg.length);
+        carouselView.setImageListener(slideImage);
 
         hargas = getIntent().getIntExtra("harga", -1);
 
@@ -55,6 +62,13 @@ public class DetailKado extends AppCompatActivity {
             popup();
         });
     }
+
+    ImageListener slideImage = new ImageListener() {
+        @Override
+        public void setImageForPosition(int position, ImageView imageView) {
+            imageView.setImageResource(sourceImg[position]);
+        }
+    };
 
     private void popup() {
 
@@ -81,7 +95,7 @@ public class DetailKado extends AppCompatActivity {
                 cingpai = cingpai + 1;
             }
             jumlah.setText(String.valueOf(cingpai));
-            hargapopupdown.setText("Rp. " + hargas*cingpai);;
+            hargapopupdown.setText("Rp. " + hargas*cingpai);
         });
         kurang.setOnClickListener(view1 -> {
             if (cingpai==1){

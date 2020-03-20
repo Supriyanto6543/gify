@@ -20,6 +20,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -75,10 +76,13 @@ public class AdapterListKado extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ((MyKado)holder).nama.setText(kados.get(position).getNama()+"("+kados.get(position).getKode()+")");
         ((MyKado)holder).harga.setText("Rp. " + kados.get(position).getHarga());
+
         if (kados.get(position).getGambar().isEmpty()){
             Toast.makeText(context, "tydac ada gambar", Toast.LENGTH_SHORT).show();
         }else {
-            Picasso.get().load(kados.get(position).getGambar()).into(((MyKado)holder).photo);
+            Glide.with(view).load(kados.get(position).getGambar()).into(((MyKado)holder).photo);
+
+            Log.d("udin", kados.get(position).getGambar() + "");
         }
         ((MyKado)holder).linear.setOnClickListener(view1 -> {
             Intent intent = new Intent(context.getApplicationContext(), DetailKado.class);
