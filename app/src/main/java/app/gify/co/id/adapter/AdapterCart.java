@@ -16,12 +16,14 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import app.gify.co.id.R;
+import app.gify.co.id.activity.CartActivity;
 import app.gify.co.id.modal.MadolCart;
 
 public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     ArrayList<MadolCart> carts;
     View view;
+    View viewku;
     Context context;
     int kuantitas;
 
@@ -50,6 +52,7 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_cart, parent, false);
+        viewku = LayoutInflater.from(parent.getContext()).inflate(R.layout.cart, parent, false);
         return new MyCart(view);
     }
 
@@ -62,18 +65,19 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         //Picasso.get().load(carts.get(position).getGambar()).into(((MyCart)holder).gambar);
         Glide.with(view).load(carts.get(position).getGambar()).into(((MyCart)holder).gambar);
         ((MyCart)holder).tambah.setOnClickListener(view1 -> {
-            ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
-            ((MyCart)holder).harga.setText(String.valueOf(hargaku*kuantitas));
             if (kuantitas<9){
                 kuantitas = kuantitas + 1;
+                ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
+                ((MyCart)holder).harga.setText(String.valueOf(hargaku*kuantitas));
             }
 
         });
         ((MyCart)holder).kurang.setOnClickListener(view -> {
-            ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
-            ((MyCart)holder).harga.setText(String.valueOf(hargaku*kuantitas));
+
             if (kuantitas>1){
                 kuantitas = kuantitas - 1;
+                ((MyCart)holder).harga.setText(String.valueOf(hargaku*kuantitas));
+                ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
             }
 
         });
