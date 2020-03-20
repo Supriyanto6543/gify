@@ -1,7 +1,10 @@
 package app.gify.co.id.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +28,8 @@ public class DetailKado extends AppCompatActivity {
     AlertDialog dialog;
     Button proses, batal;
     ImageView tambah, kurang;
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
     int hargas;
     int cingpai = 1;
 

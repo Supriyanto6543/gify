@@ -327,11 +327,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:src="@drawable/maps"
-                        android:tint="#dad9d5"
+                        android:layout_width="21dp"
+                        android:layout_height="20dp"
                         android:layout_weight="5"
-                        android:layout_width="0dp"
-                        android:layout_height="20dp"/>
+                        android:src="@drawable/maps"
+                        android:tint="#dad9d5" />
 
                     <EditText
                         android:id="@+id/edittextAlamatPengaturan"
@@ -342,7 +342,7 @@
                         android:textStyle="bold"
                         android:textSize="15dp"
                         android:layout_marginStart="2dp"
-                        android:textColor="#fff"
+                        android:textColor="#000"
                         android:layout_weight="85"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -404,6 +404,21 @@
                         android:textSize="15dp"
                         android:textStyle="bold" />
 
+                    <EditText
+                        android:id="@+id/edittextkelurahan"
+                        android:visibility="gone"
+                        android:background="@drawable/dbjadjahdja"
+                        android:hint="Sukajadi"
+                        android:textColorHint="#b5a981"
+                        android:textStyle="bold"
+                        android:textSize="15dp"
+                        android:layout_marginStart="2dp"
+                        android:textColor="#000"
+                        android:layout_weight="85"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="Nama depan" />
+
                     <TextView
                         android:id="@+id/kelurahan"
                         android:layout_width="0dp"
@@ -420,6 +435,7 @@
                 </LinearLayout>
 
                 <View
+                    android:id="@+id/Viewkelurahan"
                     android:background="#fae59d"
                     android:layout_marginTop="2dp"
                     android:layout_width="match_parent"
@@ -445,6 +461,21 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
 
+                    <EditText
+                        android:id="@+id/edittextkecamatan"
+                        android:visibility="gone"
+                        android:background="@drawable/dbjadjahdja"
+                        android:hint="Tenjolaya"
+                        android:textColorHint="#b5a981"
+                        android:textStyle="bold"
+                        android:textSize="15dp"
+                        android:layout_marginStart="2dp"
+                        android:textColor="#000"
+                        android:layout_weight="85"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="Nama depan" />
+
                     <TextView
                         android:id="@+id/kecamatan"
                         android:text="-- pilih --"
@@ -461,6 +492,7 @@
                 </LinearLayout>
 
                 <View
+                    android:id="@+id/Viewkecamatan"
                     android:background="#fae59d"
                     android:layout_marginTop="2dp"
                     android:layout_width="match_parent"
@@ -477,7 +509,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:text="Kota"
+                        android:text="Provinsi"
                         android:layout_gravity="center"
                         android:textStyle="bold"
                         android:textSize="15dp"
@@ -487,7 +519,7 @@
                         android:layout_height="wrap_content"/>
 
                     <Spinner
-                        android:id="@+id/kota"
+                        android:id="@+id/provinsi"
                         android:text="-- pilih --"
                         android:layout_gravity="center"
                         android:gravity="center"
@@ -518,7 +550,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:text="Provinsi"
+                        android:text="Kota"
                         android:layout_gravity="center"
                         android:textStyle="bold"
                         android:textColor="#b5a981"
@@ -528,7 +560,7 @@
                         android:layout_height="wrap_content"/>
 
                     <Spinner
-                        android:id="@+id/provinsi"
+                        android:id="@+id/kota"
                         android:text="-- pilih --"
                         android:gravity="center"
                         android:layout_gravity="center"

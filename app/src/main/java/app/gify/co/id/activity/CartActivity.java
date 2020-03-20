@@ -80,8 +80,9 @@ public class CartActivity extends AppCompatActivity {
         gambarcart = getIntent().getStringExtra("gambar");
         idbarang = getIntent().getIntExtra("idbarang", -1);
         kuantitas = getIntent().getIntExtra("quantity", -1);
-
         getBerat();
+        glm = new GridLayoutManager(CartActivity.this, 1);
+        recyclerView.setLayoutManager(glm);
 
         Checkout.setOnClickListener(view -> {
             Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
@@ -99,11 +100,10 @@ public class CartActivity extends AppCompatActivity {
                     if (idbarang==id_barang){
                         String berat = object.getString("berat");
                         Log.d("beratget", "getBerat: " + berat);
-                        glm = new GridLayoutManager(CartActivity.this, 1);
                         MadolCart madolCart = new MadolCart(gambarcart, harga, namacart, idbarang, kuantitas);
                         madolCarts.add(madolCart);
+                        adapterCart = new AdapterCart(madolCarts, CartActivity.this);
                         recyclerView.setAdapter(adapterCart);
-                        recyclerView.setLayoutManager(glm);
                     }
                 }
             } catch (JSONException e) {

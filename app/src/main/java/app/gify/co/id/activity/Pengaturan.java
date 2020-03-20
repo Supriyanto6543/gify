@@ -41,17 +41,17 @@ import app.gify.co.id.baseurl.UrlJson;
 
 public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    EditText NamaDepan, NamaBelakang, NoHp, Email, GantiAlamat;
+    EditText NamaDepan, NamaBelakang, NoHp, Email, GantiAlamat, editTextKecamatan, editTextKelurahan;
     LinearLayout changePicture;
-    TextView Kelurahan, Kecamatan, Kota, Provinsi;
-    String namadepan, namabelakang, noHp, email, currentUserID, nama;
+    TextView Kelurahan, Kecamatan;
+    String namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi;
     ImageView CheckList, ganti;
     ImageView Back;
     TextView gantiAlamat;
     ProgressDialog loadingBar;
     HintArrayAdapter hintAdapter, hintadapterku;
 
-    View viewTerserah;
+    View viewTerserah, viewKecamatan, viewKelurahan;
 
     Spinner KotaS, ProvinsiS;
 
@@ -62,9 +62,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_pengaturan);
-
-        cobaOngkir1();
-        cobaOngkir2();
 
         NamaDepan = findViewById(R.id.namaDepanPengaturan);
         NamaBelakang = findViewById(R.id.namaBelakangPengaturan);
@@ -79,9 +76,13 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         GantiAlamat = findViewById(R.id.edittextAlamatPengaturan);
         ganti = findViewById(R.id.gantiAlamatPengaturan);
         viewTerserah = findViewById(R.id.viewTerserah);
+        viewKecamatan = findViewById(R.id.Viewkecamatan);
+        viewKelurahan = findViewById(R.id.Viewkelurahan);
+        editTextKelurahan = findViewById(R.id.edittextkelurahan);
+        editTextKecamatan = findViewById(R.id.edittextkecamatan);
 
-        KotaS = (Spinner) findViewById(R.id.kota);
-        ProvinsiS = (Spinner) findViewById(R.id.provinsi);
+        KotaS = findViewById(R.id.kota);
+        ProvinsiS = findViewById(R.id.provinsi);
 
         hintAdapter = new HintArrayAdapter<String>(getApplicationContext(), 0);
         hintadapterku = new HintArrayAdapter<String>(getApplicationContext(), 0);
@@ -92,13 +93,21 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         RootRef = FirebaseDatabase.getInstance().getReference();
         currentUserID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
-        ganti.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gantiAlamat.setVisibility(View.GONE);
-                GantiAlamat.setVisibility(View.VISIBLE);
-                viewTerserah.setVisibility(View.GONE);
-            }
+        cobaOngkir1();
+        cobaOngkir2();
+
+        ganti.setOnClickListener(v -> {
+            gantiAlamat.setVisibility(View.GONE);
+            Kelurahan.setVisibility(View.GONE);
+            Kecamatan.setVisibility(View.GONE);
+
+            editTextKecamatan.setVisibility(View.VISIBLE);
+            editTextKelurahan.setVisibility(View.VISIBLE);
+            GantiAlamat.setVisibility(View.VISIBLE);
+
+            viewKecamatan.setVisibility(View.GONE);
+            viewKelurahan.setVisibility(View.GONE);
+            viewTerserah.setVisibility(View.GONE);
         });
 
         CheckList.setOnClickListener(v -> {
@@ -106,7 +115,13 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             namabelakang = NamaBelakang.getText().toString().trim();
             noHp = NoHp.getText().toString().trim();
             email = Email.getText().toString().trim();
+            kelurahan = editTextKelurahan.getText().toString().trim();
+            kecamatan = editTextKecamatan.getText().toString().trim();
+            gAlamat = GantiAlamat.getText().toString().trim();
+            kota = String.valueOf(KotaS.getSelectedItem());
+            provinsi = String.valueOf(ProvinsiS.getSelectedItem());
             nama = namadepan + " " + namabelakang;
+            alamat = gAlamat + "," + " " + kelurahan + "," + " " + kecamatan + "," + " " + kota + "," + " " + provinsi;
             loadingBar = new ProgressDialog(Pengaturan.this);
             loadingBar.setTitle("Mengubah Data...");
             loadingBar.setMessage("Harap Tunggu...");
@@ -132,6 +147,19 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 RootRef.child("Users").child(currentUserID).child("email").setValue(email)
                         .addOnCompleteListener(task -> {
                             Email.setText("");
+                            loadingBar.dismiss();
+                        });
+                RootRef.child("Users").child(currentUserID).child("alamat").setValue(alamat)
+                        .addOnCompleteListener(task -> {
+                            editTextKelurahan.setText("");
+                            editTextKecamatan.setText("");
+
+                            editTextKelurahan.setVisibility(View.GONE);
+                            editTextKecamatan.setVisibility(View.GONE);
+
+                            viewKecamatan.setVisibility(View.VISIBLE);
+                            viewKelurahan.setVisibility(View.VISIBLE);
+
                             loadingBar.dismiss();
                         });
                 Intent intent = new Intent(getApplication(), MainActivity.class);
