@@ -18,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,7 +34,7 @@ import static app.gify.co.id.baseurl.UrlJson.GETBARANG;
 
 public class CartActivity extends AppCompatActivity {
 
-    Button Checkout;
+    Button Checkout, lanjutBelanja;
     ImageView backCart;
     TextView totalbelanjar, totalberat;
     AdapterCart adapterCart;
@@ -42,17 +43,27 @@ public class CartActivity extends AppCompatActivity {
     int idbarang, kuantitas, harga;
     GridLayoutManager glm;
     RecyclerView recyclerView;
+    MainActivity mainActivity;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cart);
+        lanjutBelanja = findViewById(R.id.lanjutBelanjaChart);
+        lanjutBelanja.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), List_Kado.class);
+                startActivity(intent);
+            }
+        });
 
         backCart = findViewById(R.id.backCartNav);
         backCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getApplicationContext()).openDrawer();
+                finish();
             }
         });
 

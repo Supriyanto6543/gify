@@ -43,6 +43,7 @@ import java.util.Calendar;
 import app.gify.co.id.R;
 import app.gify.co.id.activity.List_Kado;
 import app.gify.co.id.activity.MainActivity;
+import app.gify.co.id.activity.ViewDialog;
 
 import static app.gify.co.id.baseurl.UrlJson.GETACARA;
 import static app.gify.co.id.baseurl.UrlJson.GETKATEGORI;

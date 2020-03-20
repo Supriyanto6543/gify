@@ -100,6 +100,7 @@ public class List_Kado extends AppCompatActivity {
                     }
                 } catch (JSONException e) {
                     Log.d("jsonbarangerror", "onResponse: " + e.getMessage());
+                    mDialog.dismiss();
                     e.printStackTrace();
                 }
 

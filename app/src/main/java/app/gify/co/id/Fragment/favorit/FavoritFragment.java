@@ -25,6 +25,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,6 +55,8 @@ public class FavoritFragment extends Fragment {
     String uid, id_barang;
     EditText cariBarang;
     ProgressDialog mDialog;
+    NavigationView navigationView;
+
 
     @Nullable
     @Override
@@ -101,7 +104,15 @@ public class FavoritFragment extends Fragment {
         getFavorit();
 
         navView = view.findViewById(R.id.backtoMenuFavorit);
-        navView.setOnClickListener(v -> ((MainActivity) getActivity()).openDrawer());
+        navView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ((MainActivity)getActivity()).openDrawer();
+
+
+            }
+        });
         return view;
     }
 
