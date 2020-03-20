@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 import app.gify.co.id.R;
@@ -54,17 +56,20 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         kuantitas = carts.get(position).getJumlah();
         int hargaku = carts.get(position).getHarga();
+        ((MyCart)holder).harga.setText(String.valueOf(hargaku*kuantitas));
+        ((MyCart)holder).nama.setText(carts.get(position).getNamacart());
+        Picasso.get().load(carts.get(position).getGambar()).into(((MyCart)holder).gambar);
         ((MyCart)holder).tambah.setOnClickListener(view1 -> {
-            ((MyCart)holder).quantitas.setText(kuantitas);
-            ((MyCart)holder).harga.setText(hargaku*kuantitas);
+            ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
+            ((MyCart)holder).harga.setText(String.valueOf(hargaku*kuantitas));
             if (kuantitas<9){
                 kuantitas = kuantitas + 1;
             }
 
         });
         ((MyCart)holder).kurang.setOnClickListener(view -> {
-            ((MyCart)holder).quantitas.setText(kuantitas);
-            ((MyCart)holder).harga.setText(hargaku*kuantitas);
+            ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
+            ((MyCart)holder).harga.setText(String.valueOf(hargaku*kuantitas));
             if (kuantitas>1){
                 kuantitas = kuantitas - 1;
             }
