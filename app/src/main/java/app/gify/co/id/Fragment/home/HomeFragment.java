@@ -5,7 +5,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -27,9 +26,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
@@ -37,26 +33,18 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.security.ProviderInstaller;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
-
-import javax.net.ssl.SSLContext;
 
 import app.gify.co.id.R;
 import app.gify.co.id.activity.List_Kado;
 import app.gify.co.id.activity.MainActivity;
-import app.gify.co.id.activity.ViewDialog;
 
 import static app.gify.co.id.baseurl.UrlJson.GETACARA;
 import static app.gify.co.id.baseurl.UrlJson.GETKATEGORI;
@@ -104,7 +92,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.loading);
         ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
-        GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(gifImageView);
+        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
         Glide.with(getActivity())
                 .load(R.drawable.gifygif)
                 .placeholder(R.drawable.gifygif)
