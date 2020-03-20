@@ -1,10 +1,12 @@
 package app.gify.co.id.activity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -19,6 +21,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -42,12 +46,24 @@ public class List_Kado extends AppCompatActivity {
     String kado, acara, range;
     GridLayoutManager glm;
     ImageView backDetailKado;
-    ProgressDialog mDialog;
+    Dialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_kado);
+        dialog  = new Dialog(List_Kado.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.loading);
+        ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
+        GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(gifImageView);
+        Glide.with(List_Kado.this)
+                .load(R.drawable.gifygif)
+                .placeholder(R.drawable.gifygif)
+                .centerCrop()
+                .into(imageViewTarget);
+        dialog.show();
 
         recycler = findViewById(R.id.recycler);
         backDetailKado = findViewById(R.id.backDetailKado);
@@ -58,11 +74,6 @@ public class List_Kado extends AppCompatActivity {
             }
         });
 
-        mDialog = new ProgressDialog(List_Kado.this);
-        mDialog.setMessage("Loading");
-        mDialog.setCancelable(false);
-        mDialog.setCanceledOnTouchOutside(false);
-        mDialog.show();
 
         madolKados = new ArrayList<>();
         glm = new GridLayoutManager(getApplicationContext(), 2);
@@ -83,8 +94,7 @@ public class List_Kado extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray array = response.getJSONArray("YukNgaji");
-                    mDialog.dismiss();
-                    Toast.makeText(getApplicationContext(), "Product Kosong", Toast.LENGTH_LONG).show();
+                    Log.d("array", "onResponse: " + array.toString() + response.toString());
                     for (int a = 0; a < array.length(); a++){
                         JSONObject object = array.getJSONObject(a);
                         String nama = object.getString("nama");
@@ -97,12 +107,12 @@ public class List_Kado extends AppCompatActivity {
                         madolKados.add(madolKado);
                         adapterListKado = new AdapterListKado(madolKados, getApplicationContext());
                         recycler.setAdapter(adapterListKado);
-                        mDialog.dismiss();
+                        dialog.dismiss();
                         Log.d("listkadoharga", "onResponse: " + harga + tipe + " s " + idbarang + "\n" + gambar);
                     }
                 } catch (JSONException e) {
                     Log.d("jsonbarangerror", "onResponse: " + e.getMessage());
-                    mDialog.dismiss();
+                    dialog.dismiss();
                     e.printStackTrace();
                 }
 
