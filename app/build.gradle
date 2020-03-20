@@ -55,7 +55,6 @@ dependencies {
     /*implementation "com.mikepenz:materialdrawer:v6.1.2"
     implementation "com.mikepenz:materialdrawer-nav:v6.1.2"
     implementation "com.mikepenz:materialdrawer-iconics:v6.1.2"*/
-    implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'com.code-troopers.betterpickers:library:3.1.0'
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
