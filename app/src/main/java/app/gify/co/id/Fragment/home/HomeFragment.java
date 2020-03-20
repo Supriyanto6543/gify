@@ -2,8 +2,10 @@ package app.gify.co.id.Fragment.home;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,6 +27,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -36,6 +40,8 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +56,7 @@ import javax.net.ssl.SSLContext;
 import app.gify.co.id.R;
 import app.gify.co.id.activity.List_Kado;
 import app.gify.co.id.activity.MainActivity;
+import app.gify.co.id.activity.ViewDialog;
 
 import static app.gify.co.id.baseurl.UrlJson.GETACARA;
 import static app.gify.co.id.baseurl.UrlJson.GETKATEGORI;
@@ -69,6 +76,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     Boolean bulanbool=false, haribool=false, tahunbool=false;
     Button carikado;
     ProgressDialog mDialog;
+    Dialog alertadd;
+    Dialog dialog;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,11 +89,28 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         tahun=root.findViewById(R.id.tahunCari);
         carikado=root.findViewById(R.id.cariKado);
 
-        mDialog = new ProgressDialog(getContext());
+        /*mDialog = new ProgressDialog(getContext());
+        LayoutInflater inflaterku = getLayoutInflater();
+        View dialogLayout = inflaterku.inflate(R.layout.loading, null);
+        *//*LayoutInflater factory = LayoutInflater.from(getActivity());
+        final View viewku = factory.inflate(R.layout.loading, null);
+        alertadd.setView(viewku);*//*
+        mDialog.setView(dialogLayout);
         mDialog.setCancelable(false);
         mDialog.setCanceledOnTouchOutside(false);
-        mDialog.setMessage("Loading");
-        mDialog.show();
+        mDialog.show();*/
+        dialog  = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.loading);
+        ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
+        GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(gifImageView);
+        Glide.with(getActivity())
+                .load(R.drawable.gifygif)
+                .placeholder(R.drawable.gifygif)
+                .centerCrop()
+                .into(imageViewTarget);
+        dialog.show();
 
         hintAdapter = new HintArrayAdapter<String>(getContext(), 0);
         hintadapterku = new HintArrayAdapter<String>(getContext(), 0);
@@ -122,7 +148,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
             }
         });
-
         return root;
     }
 
@@ -323,7 +348,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     acarapa.setSelection(0, false);
 
                 }
-                mDialog.dismiss();
+                dialog.dismiss();
             } catch (JSONException e) {
                 Log.d("acarakus", "onResponse: " );
                 e.printStackTrace();

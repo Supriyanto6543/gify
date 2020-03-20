@@ -128,7 +128,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             loadingBar.setCanceledOnTouchOutside(false);
             loadingBar.show();
 
-            if (namadepan.isEmpty() || namabelakang.isEmpty() || noHp.isEmpty() || email.isEmpty()) {
+            if (namadepan.isEmpty() || namabelakang.isEmpty() || noHp.isEmpty() || email.isEmpty() || gAlamat.isEmpty() || kelurahan.isEmpty() || kecamatan.isEmpty() || kota.isEmpty() || provinsi.isEmpty()) {
                 Toast.makeText(Pengaturan.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
                 loadingBar.dismiss();
             }
