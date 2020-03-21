@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -40,9 +41,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.R;
+import app.gify.co.id.adapter.AdapterFavorit;
 
 import static app.gify.co.id.baseurl.UrlJson.GETCART;
+import static app.gify.co.id.baseurl.UrlJson.GETFAV;
 import static app.gify.co.id.baseurl.UrlJson.SENDCART;
+import static app.gify.co.id.baseurl.UrlJson.SENDFAV;
 
 public class DetailKado extends AppCompatActivity {
 
@@ -52,7 +56,7 @@ public class DetailKado extends AppCompatActivity {
     AlertDialog.Builder builder;
     AlertDialog dialog;
     Button proses, batal;
-    ImageView tambah, kurang;
+    ImageView tambah, kurang, favorit, unfavorit;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
     int hargas;
@@ -60,8 +64,10 @@ public class DetailKado extends AppCompatActivity {
     CarouselView carouselView;
     String uid;
     int id_barang;
+    String idbarang;
     String idbarangku;
     int sourceImg[] = {R.drawable.lupa_password_background, R.drawable.profile_image};
+    Boolean faforit;
     ImageView buatJadiWistlist, back;
 
     @Override
@@ -77,21 +83,13 @@ public class DetailKado extends AppCompatActivity {
             }
         });
 
-        buatJadiWistlist = findViewById(R.id.buatJadiWistlist);
-        buatJadiWistlist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm = getSupportFragmentManager();
-                FavoritFragment fragment = new FavoritFragment();
-                fm.beginTransaction().add(R.id.frameFavorite,fragment).commit();
-            }
-        });
-
         belikadodetail = findViewById(R.id.belikadodetail);
         slide = findViewById(R.id.carousel);
         nama = findViewById(R.id.namadetail);
         harga = findViewById(R.id.hargadetail);
         desc = findViewById(R.id.descdetail);
+        favorit = findViewById(R.id.favoritdeta);
+        unfavorit = findViewById(R.id.unfavoritdet);
 
         //carousel
         carouselView = (CarouselView) findViewById(R.id.carousel);
@@ -100,7 +98,20 @@ public class DetailKado extends AppCompatActivity {
 
         idbarangku = getIntent().getStringExtra("idbarang");
         preferences = PreferenceManager.getDefaultSharedPreferences(DetailKado.this);
+        faforit = getIntent().getBooleanExtra("favorit", false);
+        if (faforit){
+            favorit.setVisibility(View.VISIBLE);
+        }else {
+            favorit.setVisibility(View.GONE);
+            unfavorit.setVisibility(View.VISIBLE);
+        }
+
+        getFavo();
+
         uid = preferences.getString("uid", "");
+
+        unfavorit.setOnClickListener(view -> getFav());
+
         hargas = getIntent().getIntExtra("harga", -1);
         nama.setText(getIntent().getStringExtra("nama"));
         harga.setText("Rp. " + hargas);
@@ -112,14 +123,6 @@ public class DetailKado extends AppCompatActivity {
     }
 
     ImageListener slideImage = (position, imageView) -> imageView.setImageResource(sourceImg[position]);
-
-    public void replaceFragment(Fragment someFragment) {
-        assert getFragmentManager() != null;
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frameFavorite, someFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
 
     private void popup() {
 
@@ -212,14 +215,15 @@ public class DetailKado extends AppCompatActivity {
                     if (uid.equalsIgnoreCase(id_tetapku)){
                         id_barang = object.getInt("id_barang");
                         Log.d("testgetcartif", "getCart: ");
+                        if (id_barang == Integer.parseInt(idbarangku)){
+                            Toast.makeText(this, "Barang sudah ada di keranjang", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Log.d("testgetcartelse", "getCart: ");
+                            sendtocart(String.valueOf(idbarangku));
+                        }
                     }
                 }
-                if (id_barang == Integer.parseInt(idbarangku)){
-                    Toast.makeText(this, "Barang sudah ada di keranjang", Toast.LENGTH_SHORT).show();
-                }else {
-                    Log.d("testgetcartelse", "getCart: ");
-                    sendtocart(String.valueOf(idbarangku));
-                }
+
 
             } catch (JSONException e) {
                 Log.d("exceptioncart", "getCart: " + e.getMessage());
@@ -231,4 +235,95 @@ public class DetailKado extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(DetailKado.this);
         queue.add(objectRequest);
     }
+
+    private void sendFavorit(){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, SENDFAV, response -> {
+            try {
+                if (response.equalsIgnoreCase("bisa")){
+                    Log.d("masuksendf", "getFav: " + response );
+                    Toast.makeText(this, "Sudah di tambahkan di List Favorit", Toast.LENGTH_SHORT).show();
+                    favorit.setVisibility(View.VISIBLE);
+                    unfavorit.setVisibility(View.GONE);
+                    getIntent().removeExtra("favorit");
+                    Intent intent = new Intent(DetailKado.this, List_Kado.class);
+                    intent.putExtra("favorit", true);
+                    startActivity(intent);
+                    finish();
+                }
+            }catch (Exception e) {
+                Log.d("sendexceptione", "sendFavorit: " + e.getMessage());
+            }
+        }, error -> {
+            Log.d("errorsend", "sendFavorit: " + error.getMessage());
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("id_tetap", uid);
+                params.put("id_barang", idbarangku);
+                return params;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(DetailKado.this);
+        queue.add(stringRequest);
+    }
+
+    private void getFav(){
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETFAV, null, response -> {
+            try {
+                JSONArray array = response.getJSONArray("YukNgaji");
+                for (int a = 0; a < array.length(); a++){
+                    JSONObject object = array.getJSONObject(a);
+                    String id_tetap = object.getString("id_tetap");
+                    Log.d("masukgetfav", "getFav: " + id_tetap + " s " + uid);
+                    if (id_tetap.contains(uid)){
+                        String id_barang = object.getString("id_barang");
+                        Log.d("uidgetfav", "getFav: " + id_barang + " s " + idbarangku);
+                        if (id_barang.equalsIgnoreCase(idbarangku)){
+
+                            Log.d("idbarangequalfav", "getFav: " + id_barang + " s " + idbarangku);
+                        }else {
+                            sendFavorit();
+                        }
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, error -> {
+            Log.d("errordetailkado", "getFav: " + error.getMessage());
+        });
+        RequestQueue queue = Volley.newRequestQueue(DetailKado.this);
+        queue.add(objectRequest);
+    }
+
+    private void getFavo(){
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETFAV, null, response -> {
+            try {
+                JSONArray array = response.getJSONArray("YukNgaji");
+                for (int a = 0; a < array.length(); a++){
+                    JSONObject object = array.getJSONObject(a);
+                    String id_tetap = object.getString("id_tetap");
+                    Log.d("masukgetfav", "getFav: " + id_tetap + " s " + uid);
+                    if (id_tetap.contains(uid)){
+                        String id_barang = object.getString("id_barang");
+                        Log.d("uidgetfav", "getFav: " + id_barang + " s " + idbarangku);
+                        if (id_barang.equalsIgnoreCase(idbarangku)){
+                            favorit.setVisibility(View.VISIBLE);
+                            unfavorit.setVisibility(View.GONE);
+                            Log.d("idbarangequalfav", "getFav: " + id_barang + " s " + idbarangku);
+                        }
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, error -> {
+            Log.d("errordetailkado", "getFav: " + error.getMessage());
+        });
+        RequestQueue queue = Volley.newRequestQueue(DetailKado.this);
+        queue.add(objectRequest);
+    }
+
+
 }
