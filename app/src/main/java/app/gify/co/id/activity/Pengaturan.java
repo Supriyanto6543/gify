@@ -60,7 +60,9 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     EditText NamaDepan, NamaBelakang, NoHp, Email, GantiAlamat, editTextKecamatan, editTextKelurahan;
     LinearLayout changePicture, changeCover;
     TextView Kelurahan, Kecamatan;
-    String namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi, Lemail, LID;
+    String namadepan, namabelakang, noHp, email, currentUserID, nama,
+            alamat, kelurahan, kecamatan, gAlamat, kota, provinsi
+            , Lemail, Lemail2, LID, LAlamat, LNoHp, LNama, Ltanggal;
     ImageView CheckList, ganti;
     CircleImageView  profileImage, coverImage;
     ImageView Back;
@@ -128,6 +130,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 LID = dataSnapshot.getKey();
                 Lemail = dataSnapshot.child("email").getValue().toString();
+
                 Log.d("cobaL", "email: " + Lemail + " " + "LID: " + LID);
                 Email.setText(Lemail);
             }
@@ -225,6 +228,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             Intent intent = new Intent(getApplication(), MainActivity.class);
             startActivity(intent);
         });
+
+        lemparMysql();
 
     }
 
@@ -391,6 +396,25 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             return view;
         }
 
+    }
+
+    private void lemparMysql() {
+        RootRef.child("Users").child(currentUserID)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        LNama = dataSnapshot.child("nama").getValue().toString();
+                        Lemail2 = dataSnapshot.child("email").getValue().toString();
+                        LNoHp = dataSnapshot.child("noHp").getValue().toString();
+                        LAlamat = dataSnapshot.child("alamat").getValue().toString();
+                        Ltanggal = dataSnapshot.child("tanggal").getValue().toString();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
 
