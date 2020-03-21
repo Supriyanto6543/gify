@@ -59,6 +59,7 @@ public class DetailKado extends AppCompatActivity {
     int cingpai = 1;
     CarouselView carouselView;
     String uid;
+    int id_barang;
     String idbarangku;
     int sourceImg[] = {R.drawable.lupa_password_background, R.drawable.profile_image};
     ImageView buatJadiWistlist, back;
@@ -161,11 +162,15 @@ public class DetailKado extends AppCompatActivity {
         batal.setOnClickListener(view1 -> dialog.dismiss());
         proses.setOnClickListener(view1 -> {
             getCart();
+
         });
+
+
 
         dialog = builder.create();
         dialog.setView(view);
         dialog.show();
+
     }
 
     private void sendtocart(final String idbarang){
@@ -205,19 +210,17 @@ public class DetailKado extends AppCompatActivity {
                     String id_tetapku = object.getString("id_tetap");
                     Log.d("testgetcart", "getCart: " + uid + " s " + id_tetapku);
                     if (uid.equalsIgnoreCase(id_tetapku)){
-                        int id_barang = object.getInt("id_barang");
+                        id_barang = object.getInt("id_barang");
                         Log.d("testgetcartif", "getCart: ");
-                        if (id_barang == Integer.parseInt(idbarangku)){
-                            Toast.makeText(this, "Barang sudah ada di keranjang", Toast.LENGTH_SHORT).show();
-                        }else {
-                            Log.d("testgetcartelse", "getCart: ");
-                            sendtocart(String.valueOf(idbarangku));
-                        }
-                    }else {
-                        sendtocart(String.valueOf(idbarangku));
                     }
-
                 }
+                if (id_barang == Integer.parseInt(idbarangku)){
+                    Toast.makeText(this, "Barang sudah ada di keranjang", Toast.LENGTH_SHORT).show();
+                }else {
+                    Log.d("testgetcartelse", "getCart: ");
+                    sendtocart(String.valueOf(idbarangku));
+                }
+
             } catch (JSONException e) {
                 Log.d("exceptioncart", "getCart: " + e.getMessage());
                 e.printStackTrace();
