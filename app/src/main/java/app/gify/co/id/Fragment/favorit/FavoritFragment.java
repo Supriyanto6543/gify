@@ -28,7 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
@@ -98,7 +98,7 @@ public class FavoritFragment extends Fragment {
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.loading);
         ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
-        GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(gifImageView);
+        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
         Glide.with(getActivity())
                 .load(R.drawable.gifygif)
                 .placeholder(R.drawable.gifygif)
