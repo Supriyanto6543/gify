@@ -91,7 +91,8 @@
                 android:layout_height="wrap_content">
 
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/ProfileImage"
                     android:tint="#dad9d5"
                     android:src="@drawable/image"
                     android:layout_width="50dp"
@@ -124,7 +125,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content">
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/photo"
                     android:src="@drawable/photo"
                     android:layout_width="50dp"
                     android:layout_height="90dp"/>
@@ -370,8 +372,6 @@
                         android:layout_weight="6"
                         android:src="@drawable/edit"
                         android:tint="#dad9d5" />
-
-
 
 
                 </LinearLayout>
