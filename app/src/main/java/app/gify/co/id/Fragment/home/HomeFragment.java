@@ -66,9 +66,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     String[] kadolist;
     Boolean bulanbool=false, haribool=false, tahunbool=false;
     Button carikado;
-    ProgressDialog mDialog;
     Dialog alertadd;
     Dialog dialog;
+    Boolean kategoris = false, acaras = false;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
 
@@ -310,6 +310,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     kadobuatsiapa.setSelection(0, false); //use this if don't want to onItemClick called for the hint
 
                     kadobuatsiapa.setOnItemSelectedListener(HomeFragment.this);
+                    Log.d("makansamaale", "onResponse: "+tes+" "+ku);
+                    kategoris = true;
+                    dismissdialog();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -332,10 +335,11 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
                     acarapa.setAdapter(hintadapterku);
 
+                    acaras = true;
                     acarapa.setSelection(0, false);
-
+                    dismissdialog();
                 }
-                dialog.dismiss();
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -361,6 +365,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                 if (hariku >= hari){
                                     if (0 <= bulanend){
                                         namas = object.getString("nama");
+                                        namas = object.getString("nama");
+                                        Log.d("namakuobjek", "onResponse: " + namas);
                                         Intent intent = new Intent(getContext(), List_Kado.class);
                                         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
                                         editor = preferences.edit();
@@ -416,5 +422,11 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         }, error -> Log.d("rangeerror", "onResponse: " + error.getMessage()));
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(objectRequest);
+    }
+
+    private void dismissdialog(){
+        if (kategoris&&acaras){
+            dialog.dismiss();
+        }
     }
 }

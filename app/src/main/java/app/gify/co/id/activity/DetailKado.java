@@ -3,19 +3,35 @@ package app.gify.co.id.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import app.gify.co.id.Fragment.favorit.FavoritFragment;
 
@@ -24,6 +40,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.R;
+
+import static app.gify.co.id.baseurl.UrlJson.GETCART;
+import static app.gify.co.id.baseurl.UrlJson.SENDCART;
 
 public class DetailKado extends AppCompatActivity {
 
@@ -39,6 +58,8 @@ public class DetailKado extends AppCompatActivity {
     int hargas;
     int cingpai = 1;
     CarouselView carouselView;
+    String uid;
+    String idbarangku;
     int sourceImg[] = {R.drawable.lupa_password_background, R.drawable.profile_image};
     ImageView buatJadiWistlist, back;
 
@@ -76,8 +97,10 @@ public class DetailKado extends AppCompatActivity {
         carouselView.setPageCount(sourceImg.length);
         carouselView.setImageListener(slideImage);
 
+        idbarangku = getIntent().getStringExtra("idbarang");
+        preferences = PreferenceManager.getDefaultSharedPreferences(DetailKado.this);
+        uid = preferences.getString("uid", "");
         hargas = getIntent().getIntExtra("harga", -1);
-
         nama.setText(getIntent().getStringExtra("nama"));
         harga.setText("Rp. " + hargas);
         desc.setText(getIntent().getStringExtra("desc"));
@@ -87,13 +110,7 @@ public class DetailKado extends AppCompatActivity {
         });
     }
 
-
-    ImageListener slideImage = new ImageListener() {
-        @Override
-        public void setImageForPosition(int position, ImageView imageView) {
-            imageView.setImageResource(sourceImg[position]);
-        }
-    };
+    ImageListener slideImage = (position, imageView) -> imageView.setImageResource(sourceImg[position]);
 
     public void replaceFragment(Fragment someFragment) {
         assert getFragmentManager() != null;
@@ -143,20 +160,72 @@ public class DetailKado extends AppCompatActivity {
 
         batal.setOnClickListener(view1 -> dialog.dismiss());
         proses.setOnClickListener(view1 -> {
-            Intent intent = new Intent(DetailKado.this, CartActivity.class);
-            intent.putExtra("nama", getIntent().getStringExtra("nama"));
-            intent.putExtra("gambar", getIntent().getStringExtra("gambar"));
-            intent.putExtra("idbarang", Integer.valueOf(getIntent().getStringExtra("idbarang")));
-            intent.putExtra("hargas", hargas);
-            intent.putExtra("quantity", cingpai);
-            startActivity(intent);
+            getCart();
         });
 
         dialog = builder.create();
         dialog.setView(view);
         dialog.show();
+    }
 
+    private void sendtocart(final String idbarang){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, SENDCART, response -> {
+            try {
+                if (response.equalsIgnoreCase("bisa")){
+                    Intent intent = new Intent(DetailKado.this, CartActivity.class);
+                    startActivity(intent);
+                    Log.d("sendtocartif", "getCart: ");
+                }
+            }catch (Exception e){
+                Log.d("elil", "sendtocart: " + e.getMessage());
+            }
+        }, error -> {
+            Log.d("errorsendtocart", "sendtocart: " + error.getMessage());
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("id_tetap", uid);
+                params.put("id_barang", idbarang);
+                params.put("jumlah", String.valueOf(cingpai));
+                return params;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(DetailKado.this);
+        queue.add(stringRequest);
+    }
 
+    private void getCart(){
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETCART, null, response -> {
+            try {
+                JSONArray array = response.getJSONArray("YukNgaji");
+                Log.d("trycart", "getCart: " + response + array.length());
+                for (int a = 0; a < array.length(); a++){
+                    JSONObject object = array.getJSONObject(a);
+                    String id_tetapku = object.getString("id_tetap");
+                    Log.d("testgetcart", "getCart: " + uid + " s " + id_tetapku);
+                    if (uid.equalsIgnoreCase(id_tetapku)){
+                        int id_barang = object.getInt("id_barang");
+                        Log.d("testgetcartif", "getCart: ");
+                        if (id_barang == Integer.parseInt(idbarangku)){
+                            Toast.makeText(this, "Barang sudah ada di keranjang", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Log.d("testgetcartelse", "getCart: ");
+                            sendtocart(String.valueOf(idbarangku));
+                        }
+                    }else {
+                        sendtocart(String.valueOf(idbarangku));
+                    }
 
+                }
+            } catch (JSONException e) {
+                Log.d("exceptioncart", "getCart: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }, error -> {
+            Log.d("errordetail", "getCart: " + error.getMessage());
+        });
+        RequestQueue queue = Volley.newRequestQueue(DetailKado.this);
+        queue.add(objectRequest);
     }
 }
