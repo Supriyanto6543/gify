@@ -28,6 +28,7 @@
                 android:src="@drawable/reply" />
 
             <TextView
+                android:id="@+id/tulisanListKado"
                 android:layout_weight="30"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -55,10 +56,10 @@
 
             <ImageView
                 android:id="@+id/cariBarangListKado"
-                android:layout_weight="0"
                 android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_height="37dp"
                 android:layout_gravity="start"
+                android:layout_weight="0"
                 android:padding="10dp"
                 android:src="@drawable/magnifying_glass" />
 

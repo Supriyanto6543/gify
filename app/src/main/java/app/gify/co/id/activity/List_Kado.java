@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -54,9 +55,10 @@ public class List_Kado extends AppCompatActivity {
     ArrayList<MadolKado> madolKados;
     String kado, acara, range;
     GridLayoutManager glm;
-    ImageView backDetailKado, cartListKado;
+    ImageView backDetailKado, cartListKado, cariBarangListKado;
     Dialog dialog;
     EditText searchView;
+    TextView tulisanListKado;
     SharedPreferences preferences;
 
 
@@ -65,8 +67,15 @@ public class List_Kado extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_kado);
 
-
-
+        tulisanListKado = findViewById(R.id.tulisanListKado);
+        cariBarangListKado = findViewById(R.id.cariBarangListKado);
+        cariBarangListKado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.setVisibility(View.VISIBLE);
+                tulisanListKado.setVisibility(View.GONE);
+            }
+        });
         dialog  = new Dialog(List_Kado.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);

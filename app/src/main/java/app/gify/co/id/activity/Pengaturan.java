@@ -434,7 +434,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 Map<String, String> params = new HashMap<>();
                 params.put("photo", getStringImage(Photo));
                 params.put("cover_foto", getStringImage(Cover));
-                Log.d("Hasil Gambar", getStringImage(Cover) + " aakuuu " + getStringImage(Photo) + "");
+                Log.d("Hasil Gambar", getStringImage(Photo) + "");
                 return params;
             }
         };
