@@ -4,11 +4,17 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -26,11 +32,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
@@ -38,13 +49,22 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.util.FileUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import app.gify.co.id.R;
@@ -56,19 +76,19 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     EditText NamaDepan, NamaBelakang, NoHp, Email, GantiAlamat, editTextKecamatan, editTextKelurahan;
     LinearLayout changePicture, changeCover;
     TextView Kelurahan, Kecamatan;
-    String namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi;
-    ImageView CheckList, ganti;
-    CircleImageView  profileImage, coverImage;
+    String namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi, namaUser, emailnama, idku, namanama;
+    ImageView CheckList, ganti,profileImage, coverImage;
     ImageView Back;
     TextView gantiAlamat;
     ProgressDialog loadingBar;
     HintArrayAdapter hintAdapter, hintadapterku;
 
-    private static final int GALLERY_REQUEST = 1;
-    private static final int CAMERA_REQUEST = 2;
-    public static final String UPLOAD_URL = "";
+    private static final int GALLERY_PHOTO = 1;
+    private static final int GALLERY_COVER = 2;
+    private static final int PICK_IMAGE_GALLERY_REQUEST_CODE = 3;
+    public static final String UPLOAD_URL = UrlJson.IMAGE;
 
-    Bitmap Photo, Cover;
+    Bitmap Photo, Cover, decoded, decoded1;
 
     View viewTerserah, viewKecamatan, viewKelurahan;
 
@@ -78,35 +98,26 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     DatabaseReference RootRef;
 
     Dialog dialog;
+    SharedPreferences sharedPreferences;
+    Uri cover, profile;
+    RequestQueue queue;
+    int bitmap_size = 60;
+    int max_resolution_image = 800;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_pengaturan);
 
-        NamaDepan = findViewById(R.id.namaDepanPengaturan);
-        NamaBelakang = findViewById(R.id.namaBelakangPengaturan);
-        NoHp = findViewById(R.id.noHpPengaturan);
-        Email = findViewById(R.id.emailPengaturan);
-        CheckList = findViewById(R.id.checklistPengaturan);
-        Back = findViewById(R.id.backPengaturan);
-        changePicture = findViewById(R.id.changePicturePengaturan);
-        Kelurahan = findViewById(R.id.kelurahan);
-        Kecamatan = findViewById(R.id.kecamatan);
-        gantiAlamat = (TextView) findViewById(R.id.textviewAlamatPengaturan);
-        GantiAlamat = findViewById(R.id.edittextAlamatPengaturan);
-        ganti = findViewById(R.id.gantiAlamatPengaturan);
-        viewTerserah = findViewById(R.id.viewTerserah);
-        viewKecamatan = findViewById(R.id.Viewkecamatan);
-        viewKelurahan = findViewById(R.id.Viewkelurahan);
-        editTextKelurahan = findViewById(R.id.edittextkelurahan);
-        editTextKecamatan = findViewById(R.id.edittextkecamatan);
-        profileImage = findViewById(R.id.ProfileImage);
-        coverImage = findViewById(R.id.photo);
-        changeCover = findViewById(R.id.changeCoverPengaturan);
 
-        KotaS = findViewById(R.id.kota);
-        ProvinsiS = findViewById(R.id.provinsi);
+
+        callMethos();
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        namaUser = sharedPreferences.getString("nama", "");
+        Log.d("nama", namaUser);
+
+
 
         hintAdapter = new HintArrayAdapter<String>(getApplicationContext(), 0);
         hintadapterku = new HintArrayAdapter<String>(getApplicationContext(), 0);
@@ -119,15 +130,34 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
         cobaOngkir1();
         cobaOngkir2();
+        cekprofile();
+
+        dialog  = new Dialog(Pengaturan.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.loading);
+        ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
+        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
+        Glide.with(Pengaturan.this)
+                .load(R.drawable.gifygif)
+                .placeholder(R.drawable.gifygif)
+                .centerCrop()
+                .into(imageViewTarget);
+
+        dialog.show();
 
         changePicture.setOnClickListener(v -> {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent, CAMERA_REQUEST);
+            Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+            startActivityForResult(galleryIntent, GALLERY_PHOTO);
         });
 
         changeCover.setOnClickListener(v -> {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent, GALLERY_REQUEST);
+            Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+            startActivityForResult(galleryIntent, GALLERY_COVER);
         });
 
         ganti.setOnClickListener(v -> {
@@ -154,34 +184,31 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             gAlamat = GantiAlamat.getText().toString().trim();
             kota = String.valueOf(KotaS.getSelectedItem());
             provinsi = String.valueOf(ProvinsiS.getSelectedItem());
-            nama = namadepan + " " + namabelakang;
-            alamat = gAlamat + "," + " " + kelurahan + "," + " " + kecamatan + "," + " " + kota + "," + " " + provinsi;
-            loadingBar = new ProgressDialog(Pengaturan.this);
-            loadingBar.setTitle("Mengubah Data...");
-            loadingBar.setMessage("Harap Tunggu...");
-            loadingBar.setCanceledOnTouchOutside(false);
-            loadingBar.show();
+
+            AkuGantengBanget();
+            dialog.show();
+
 
             if (namadepan.isEmpty() || namabelakang.isEmpty() || noHp.isEmpty() || email.isEmpty() || gAlamat.isEmpty() || kelurahan.isEmpty() || kecamatan.isEmpty() || kota.isEmpty() || provinsi.isEmpty()) {
-                Toast.makeText(Pengaturan.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
-                loadingBar.dismiss();
+                /*Toast.makeText(Pengaturan.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();*/
             }
             else {
                 RootRef.child("Users").child(currentUserID).child("nama").setValue(nama)
                         .addOnCompleteListener(task -> {
                             NamaDepan.setText("");
                             NamaBelakang.setText("");
-                            loadingBar.dismiss();
+                            dialog.dismiss();
                         });
                 RootRef.child("Users").child(currentUserID).child("noHp").setValue(noHp)
                         .addOnCompleteListener(task -> {
                             NoHp.setText("");
-                            loadingBar.dismiss();
+                            dialog.dismiss();
                         });
                 RootRef.child("Users").child(currentUserID).child("email").setValue(email)
                         .addOnCompleteListener(task -> {
                             Email.setText("");
-                            loadingBar.dismiss();
+                            dialog.dismiss();
                         });
                 RootRef.child("Users").child(currentUserID).child("alamat").setValue(alamat)
                         .addOnCompleteListener(task -> {
@@ -194,14 +221,13 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                             viewKecamatan.setVisibility(View.VISIBLE);
                             viewKelurahan.setVisibility(View.VISIBLE);
 
-                            loadingBar.dismiss();
+                            dialog.dismiss();
                         });
-                //uploadImage();
-                Intent intent = new Intent(getApplication(), MainActivity.class);
-                startActivity(intent);
-                finish();
+
+
             }
         });
+
 
         Back.setOnClickListener(v -> {
             Intent intent = new Intent(getApplication(), MainActivity.class);
@@ -210,38 +236,178 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     }
 
-    private void uploadImage() {
-        class UploadImage extends AsyncTask<Bitmap,Void,String> {
-
-            private RequestHandler rh = new RequestHandler();
-
-            @Override
-            protected String doInBackground(Bitmap... bitmaps) {
-                Bitmap bitmap = bitmaps[0];
-                String uploadImage = getStringImage(bitmap);
-
-                HashMap<String,String> data = new HashMap<>();
-                data.put("nama_image", uploadImage);
-
-                String result = rh.postRequest(UPLOAD_URL, data);
-                return result;
-            }
-        }
+    private void callMethos(){
+        NamaDepan = findViewById(R.id.namaDepanPengaturan);
+        NamaBelakang = findViewById(R.id.namaBelakangPengaturan);
+        NoHp = findViewById(R.id.noHpPengaturan);
+        Email = findViewById(R.id.emailPengaturan);
+        CheckList = findViewById(R.id.checklistPengaturan);
+        Back = findViewById(R.id.backPengaturan);
+        changePicture = findViewById(R.id.changePicturePengaturan);
+        Kelurahan = findViewById(R.id.kelurahan);
+        Kecamatan = findViewById(R.id.kecamatan);
+        gantiAlamat = (TextView) findViewById(R.id.textviewAlamatPengaturan);
+        GantiAlamat = findViewById(R.id.edittextAlamatPengaturan);
+        ganti = findViewById(R.id.gantiAlamatPengaturan);
+        viewTerserah = findViewById(R.id.viewTerserah);
+        viewKecamatan = findViewById(R.id.Viewkecamatan);
+        viewKelurahan = findViewById(R.id.Viewkelurahan);
+        editTextKelurahan = findViewById(R.id.edittextkelurahan);
+        editTextKecamatan = findViewById(R.id.edittextkecamatan);
+        profileImage = findViewById(R.id.profileimage);
+        coverImage = findViewById(R.id.photo);
+        changeCover = findViewById(R.id.changeCoverPengaturan);
+        queue = Volley.newRequestQueue(getApplication());
+        KotaS = findViewById(R.id.kota);
+        ProvinsiS = findViewById(R.id.provinsi);
     }
+
+    /*String currentPhotoPath = "";
+    private File getImageFile() {
+        String imageFileName = "JPEG_" + System.currentTimeMillis() + "_";
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
+        File file = null;
+        try {
+            file = File.createTempFile(imageFileName, ".jpg", storageDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        currentPhotoPath = "file:" + file.getAbsolutePath();
+        return file;
+    }*/
+
+    /*private void showImage(Uri imageUri) {
+        File file = new File(FileUtils.getPath(getApplicationContext(), imageUri));
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+        profileImage.setImageBitmap(bitmap);
+    }*/
+
+    /*private void openCropActivity(Uri sourceUri, Uri destinationUri) {
+        UCrop.of(sourceUri, destinationUri).withMaxResultSize(16, 9).withAspectRatio(5f, 5f).start(Pengaturan.this);
+    }*/
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-            Photo = (Bitmap) data.getExtras().get("data");
-            profileImage.setImageBitmap(Photo);
+        if (resultCode == Activity.RESULT_CANCELED) {
+            return;
         }
-        if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
-            Cover = (Bitmap) data.getExtras().get("data");
-            coverImage.setImageBitmap(Cover);
+
+        /*if(requestCode == GALLERY_PHOTO && resultCode == RESULT_OK) {
+            Uri uri = Uri.parse(currentPhotoPath);
+            openCropActivity(uri, uri);
+        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
+            Uri uri = UCrop.getOutput(data);
+            showImage(uri);
+        } else if (requestCode == PICK_IMAGE_GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            Uri sourceUri = data.getData(); // 1
+            File file = getImageFile(); // 2
+            Uri destinationUri = Uri.fromFile(file);  // 3
+            openCropActivity(sourceUri, destinationUri);  // 4
+        }*/
+
+        if (data != null){
+            if (requestCode == GALLERY_PHOTO && resultCode == Activity.RESULT_OK) {
+                profile = data.getData();
+                try {
+                    Photo = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), profile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                profileImage.setImageBitmap(Photo);
+            }
+        }
+
+        if (data != null){
+            if (requestCode == GALLERY_COVER && resultCode == Activity.RESULT_OK) {
+                cover = data.getData();
+                try {
+                    Cover = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), profile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                coverImage.setImageBitmap(Cover);
+            }
         }
     }
+
+
+
+    /*private File getImageFile() {
+        String imageFileName = "JPEG_" + System.currentTimeMillis() + "_";
+        File storageDir = new File(
+                Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_DCIM
+                ), "Camera"
+        );
+        File file = null;
+        String fullName = imageFileName + ".jpg";
+        File fileku = new File (fullName);
+        currentPhotoPath = "file:" + file.getAbsolutePath();
+        return file;
+    }
+
+    private void showImage(Uri imageUri) {
+        File file = new File(FileUtils.getPath(getApplication(), imageUri));
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+        coverImage.setImageBitmap(bitmap);
+    }
+
+    private void openCropActivity(Uri sourceUri, Uri destinationUri) {
+        UCrop.Options options = new UCrop.Options();
+        options.setCircleDimmedLayer(true);
+        options.setCropFrameColor(ContextCompat.getColor(this, R.color.colorAccent));
+        UCrop.of(sourceUri, destinationUri)
+                .withMaxResultSize(100, 100)
+                .withAspectRatio(5f, 5f)
+                .start(this);
+    }*/
+
+
+    public void cekprofile(){
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA +"?nama=" + "firdaus", null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray array = response.getJSONArray("YukNgaji");
+                    for (int i = 0; i < array.length(); i++){
+                        JSONObject object = array.getJSONObject(i);
+                        idku = object.getString("id_tetap");
+                        Log.d("namalagi", idku);
+                        emailnama = object.getString("email");
+                        dialog.dismiss();
+
+
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(request);
+    }
+
 
     public String getStringImage(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -250,6 +416,46 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
     }
+
+
+
+    private void AkuGantengBanget(){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, UPLOAD_URL +"?id_tetap = " + idku, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    if (response.equals("bisa")){
+                        Intent intentku = new Intent(getApplication(), MainActivity.class);
+                        startActivity(intentku);
+                        finish();
+                    }
+                }catch (Exception e){
+                    e.getMessage();
+                    Toast.makeText(Pengaturan.this, "isi semua kolom", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                error.getMessage();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("photo", Photo.toString());
+                params.put("cover_foto", Cover.toString());
+                return params;
+            }
+        };
+        queue.add(stringRequest);
+    }
+
+
+
+
 
     private void cobaOngkir2() {
         JsonObjectRequest objectRequest = new JsonObjectRequest(UrlJson.PROVINCE, null, response -> {
@@ -270,7 +476,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
                     ProvinsiS.setOnItemSelectedListener(Pengaturan.this);
 
-                    Log.d("cobaProvince", "province_id: " + province_id + " " + "province: " + province);
 
                 }
             } catch (JSONException e) {
@@ -281,6 +486,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         queue.add(objectRequest);
     }
+
+
 
     private void cobaOngkir1() {
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, UrlJson.CITY, null, response -> {
@@ -305,9 +512,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
                     KotaS.setOnItemSelectedListener(Pengaturan.this);
 
-                    Log.d("cobaOngkir", "city_id: " + city_id + " " + "province_id: " + province_id + " " +
-                            "province: " + province + " " + "type: " + type + " " + "city_name: " + city_name + " " +
-                            "postal_code: " + postal_code);
+
                 }
 
             } catch (JSONException e) {
@@ -329,7 +534,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     }
 
-    private class HintArrayAdapter<T> extends ArrayAdapter<T> {
+    class HintArrayAdapter<T> extends ArrayAdapter<T> {
 
         Context mContext;
 

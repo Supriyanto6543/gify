@@ -93,7 +93,6 @@ public class List_Kado extends AppCompatActivity {
         kado = preferences.getString("buat", "").replace(" ", "%20");
         acara = preferences.getString("acara", "").replace(" ", "%20");
         range = preferences.getString("range", "");
-        Log.d("rangesa", "onCreate: " + kado + " s " + acara + " s " + range + " s ");
 
         getBarang();
 
