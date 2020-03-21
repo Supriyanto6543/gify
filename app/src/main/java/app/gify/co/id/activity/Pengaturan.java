@@ -188,17 +188,23 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         });
 
         changePicture.setOnClickListener(v -> {
-            Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            Intent intent = new Intent();
 
-            startActivityForResult(galleryIntent, GALLERY_PHOTO);
+            intent.setType("image/*");
+
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+
+            startActivityForResult(Intent.createChooser(intent, "Select Image From Gallery"), GALLERY_PHOTO);
         });
 
         changeCover.setOnClickListener(v -> {
-            Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            Intent intent = new Intent();
 
-            startActivityForResult(galleryIntent, GALLERY_COVER);
+            intent.setType("image/*");
+
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+
+            startActivityForResult(Intent.createChooser(intent, "Select Image From Gallery"), GALLERY_COVER);
         });
 
         ganti.setOnClickListener(v -> {
@@ -309,30 +315,32 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == GALLERY_PHOTO && resultCode == Activity.RESULT_OK) {
+        if (requestCode == GALLERY_PHOTO && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             profile = data.getData();
             try {
                 Photo = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), profile);
+                profileImage.setImageBitmap(Photo);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            profileImage.setImageBitmap(Photo);
+
         }
 
-        if (requestCode == GALLERY_COVER && resultCode == Activity.RESULT_OK) {
+        if (requestCode == GALLERY_COVER && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             cover = data.getData();
             try {
                 Cover = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), cover);
+                coverImage.setImageBitmap(Cover);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            coverImage.setImageBitmap(Cover);
+
         }
     }
 
 
     public void cekprofile(){
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA +"?nama=" + "firdaus", null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA +"?nama=" + namaUser, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -372,7 +380,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
 
     private void AkuGantengBanget(){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, UPLOAD_URL +"?id_tetap = " + idku, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE +"?id_tetap=" + idku, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d("mmakan bang",response + "");
@@ -403,6 +411,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 Map<String, String> params = new HashMap<>();
                 params.put("photo", getStringImage(Photo));
                 params.put("cover_foto", getStringImage(Cover));
+                Log.d("Hasil Gambar", getStringImage(Cover) + " " + getStringImage(Photo) + "");
                 return params;
             }
         };

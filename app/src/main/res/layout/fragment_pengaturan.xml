@@ -122,6 +122,7 @@
             <LinearLayout
                 android:id="@+id/changeCoverPengaturan"
                 android:gravity="center"
+                android:padding="@dimen/padd_10"
                 android:layout_gravity="center"
                 android:orientation="vertical"
                 android:layout_weight="49.5"
@@ -134,7 +135,6 @@
                     android:layout_marginStart="@dimen/padd_10"
                     android:layout_marginEnd="@dimen/padd_10"
                     android:padding="@dimen/padd_10"
-                    android:tint="#fff"
                     android:layout_width="match_parent"
                     android:layout_height="90dp"/>
 
