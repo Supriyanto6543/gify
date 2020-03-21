@@ -199,7 +199,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"/>
 
-                            <TextView
+                            <EditText
                                 android:id="@+id/kelurahanCheckout"
                                 android:text="-- pilih --"
                                 android:layout_gravity="center"
@@ -239,7 +239,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"/>
 
-                            <TextView
+                            <EditText
                                 android:id="@+id/kecamatanCheckout"
                                 android:text="-- pilih --"
                                 android:layout_gravity="center"
@@ -279,7 +279,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"/>
 
-                            <TextView
+                            <Spinner
                                 android:id="@+id/kotaCheckout"
                                 android:text="-- pilih --"
                                 android:layout_gravity="center"
@@ -319,7 +319,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"/>
 
-                            <TextView
+                            <Spinner
                                 android:id="@+id/provinsiCheckout"
                                 android:text="-- pilih --"
                                 android:layout_gravity="center"
