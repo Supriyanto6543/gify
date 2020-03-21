@@ -25,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -36,8 +37,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,7 +60,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     EditText NamaDepan, NamaBelakang, NoHp, Email, GantiAlamat, editTextKecamatan, editTextKelurahan;
     LinearLayout changePicture, changeCover;
     TextView Kelurahan, Kecamatan;
-    String namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi;
+    String namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi, Lemail, LID;
     ImageView CheckList, ganti;
     CircleImageView  profileImage, coverImage;
     ImageView Back;
@@ -76,9 +80,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     FirebaseAuth mAuth;
     DatabaseReference RootRef;
-
-    Dialog dialog;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +94,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         changePicture = findViewById(R.id.changePicturePengaturan);
         Kelurahan = findViewById(R.id.kelurahan);
         Kecamatan = findViewById(R.id.kecamatan);
-        gantiAlamat = (TextView) findViewById(R.id.textviewAlamatPengaturan);
+        gantiAlamat = findViewById(R.id.textviewAlamatPengaturan);
         GantiAlamat = findViewById(R.id.edittextAlamatPengaturan);
         ganti = findViewById(R.id.gantiAlamatPengaturan);
         viewTerserah = findViewById(R.id.viewTerserah);
@@ -108,6 +109,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         KotaS = findViewById(R.id.kota);
         ProvinsiS = findViewById(R.id.provinsi);
 
+
         hintAdapter = new HintArrayAdapter<String>(getApplicationContext(), 0);
         hintadapterku = new HintArrayAdapter<String>(getApplicationContext(), 0);
         hintAdapter.add("hint");
@@ -117,8 +119,24 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         RootRef = FirebaseDatabase.getInstance().getReference();
         currentUserID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
+
         cobaOngkir1();
         cobaOngkir2();
+
+        RootRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                LID = dataSnapshot.getKey();
+                Lemail = dataSnapshot.child("email").getValue().toString();
+                Log.d("cobaL", "email: " + Lemail + " " + "LID: " + LID);
+                Email.setText(Lemail);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         changePicture.setOnClickListener(v -> {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
