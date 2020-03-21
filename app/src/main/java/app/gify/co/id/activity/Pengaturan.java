@@ -1,15 +1,21 @@
 package app.gify.co.id.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -26,6 +32,9 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -34,22 +43,32 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
 import java.util.Objects;
 
 import app.gify.co.id.R;
 import app.gify.co.id.baseurl.UrlJson;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     EditText NamaDepan, NamaBelakang, NoHp, Email, GantiAlamat, editTextKecamatan, editTextKelurahan;
-    LinearLayout changePicture;
+    LinearLayout changePicture, changeCover;
     TextView Kelurahan, Kecamatan;
     String namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi;
     ImageView CheckList, ganti;
+    CircleImageView  profileImage, coverImage;
     ImageView Back;
     TextView gantiAlamat;
     ProgressDialog loadingBar;
     HintArrayAdapter hintAdapter, hintadapterku;
+
+    private static final int GALLERY_REQUEST = 1;
+    private static final int CAMERA_REQUEST = 2;
+    public static final String UPLOAD_URL = "";
+
+    Bitmap Photo, Cover;
 
     View viewTerserah, viewKecamatan, viewKelurahan;
 
@@ -57,6 +76,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     FirebaseAuth mAuth;
     DatabaseReference RootRef;
+
+    Dialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,6 +101,9 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         viewKelurahan = findViewById(R.id.Viewkelurahan);
         editTextKelurahan = findViewById(R.id.edittextkelurahan);
         editTextKecamatan = findViewById(R.id.edittextkecamatan);
+        profileImage = findViewById(R.id.ProfileImage);
+        coverImage = findViewById(R.id.photo);
+        changeCover = findViewById(R.id.changeCoverPengaturan);
 
         KotaS = findViewById(R.id.kota);
         ProvinsiS = findViewById(R.id.provinsi);
@@ -95,6 +119,16 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
         cobaOngkir1();
         cobaOngkir2();
+
+        changePicture.setOnClickListener(v -> {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, CAMERA_REQUEST);
+        });
+
+        changeCover.setOnClickListener(v -> {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, GALLERY_REQUEST);
+        });
 
         ganti.setOnClickListener(v -> {
             gantiAlamat.setVisibility(View.GONE);
@@ -162,6 +196,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
                             loadingBar.dismiss();
                         });
+                //uploadImage();
                 Intent intent = new Intent(getApplication(), MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -173,6 +208,47 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             startActivity(intent);
         });
 
+    }
+
+    private void uploadImage() {
+        class UploadImage extends AsyncTask<Bitmap,Void,String> {
+
+            private RequestHandler rh = new RequestHandler();
+
+            @Override
+            protected String doInBackground(Bitmap... bitmaps) {
+                Bitmap bitmap = bitmaps[0];
+                String uploadImage = getStringImage(bitmap);
+
+                HashMap<String,String> data = new HashMap<>();
+                data.put("nama_image", uploadImage);
+
+                String result = rh.postRequest(UPLOAD_URL, data);
+                return result;
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            Photo = (Bitmap) data.getExtras().get("data");
+            profileImage.setImageBitmap(Photo);
+        }
+        if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
+            Cover = (Bitmap) data.getExtras().get("data");
+            coverImage.setImageBitmap(Cover);
+        }
+    }
+
+    public String getStringImage(Bitmap bmp) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
     }
 
     private void cobaOngkir2() {
@@ -267,7 +343,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.spinnner, parent, false);
-            TextView texview = (TextView) view.findViewById(android.R.id.text1);
+            TextView texview = view.findViewById(android.R.id.text1);
 
             if(position == 0) {
                 texview.setText("-- pilih --");
