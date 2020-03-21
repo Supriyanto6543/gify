@@ -80,7 +80,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     EditText NamaDepan, NamaBelakang, NoHp, Email, GantiAlamat, editTextKecamatan, editTextKelurahan;
     LinearLayout changePicture, changeCover;
     TextView Kelurahan, Kecamatan;
-    String namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi, Lemail, LID, namaUser, emailnama, idku, namanama;
+    String namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi, Lemail, LID, namaUser, emailnama, idku, namanama,
+    LNama, LEmail2, Lalamat, LNoHp, Ltanggal;
     ImageView CheckList, ganti,profileImage, coverImage;
     ImageView Back;
     TextView gantiAlamat;
@@ -280,6 +281,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             Intent intent = new Intent(getApplication(), MainActivity.class);
             startActivity(intent);
         });
+
+        lemparMysql();
 
     }
 
@@ -543,6 +546,25 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             return view;
         }
 
+    }
+
+    private void lemparMysql(){
+        RootRef.child("Users").child(currentUserID)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        LID = dataSnapshot.getKey();
+                        LNama = dataSnapshot.child("nama").getValue().toString();
+                        Ltanggal = dataSnapshot.child("tanggal").getValue().toString();
+                        Lalamat = dataSnapshot.child("alamat").getValue().toString();
+                        LNoHp = dataSnapshot.child("noHp").getValue().toString();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
 
