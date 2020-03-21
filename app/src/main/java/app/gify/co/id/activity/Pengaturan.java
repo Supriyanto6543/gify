@@ -81,8 +81,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     LinearLayout changePicture, changeCover;
     TextView Kelurahan, Kecamatan;
     String namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi, Lemail, LID, namaUser, emailnama, idku, namanama;
-    ImageView CheckList, ganti;
-    CircleImageView  profileImage, coverImage;
+    ImageView CheckList, ganti,profileImage, coverImage;
     ImageView Back;
     TextView gantiAlamat;
     ProgressDialog loadingBar;
@@ -131,7 +130,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         viewKelurahan = findViewById(R.id.Viewkelurahan);
         editTextKelurahan = findViewById(R.id.edittextkelurahan);
         editTextKecamatan = findViewById(R.id.edittextkecamatan);
-        profileImage = findViewById(R.id.ProfileImage);
+        profileImage = findViewById(R.id.profileimage);
         coverImage = findViewById(R.id.photo);
         changeCover = findViewById(R.id.changeCoverPengaturan);
 
@@ -304,121 +303,32 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         ProvinsiS = findViewById(R.id.provinsi);
     }
 
-    /*String currentPhotoPath = "";
-    private File getImageFile() {
-        String imageFileName = "JPEG_" + System.currentTimeMillis() + "_";
-        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
-        File file = null;
-        try {
-            file = File.createTempFile(imageFileName, ".jpg", storageDir);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        currentPhotoPath = "file:" + file.getAbsolutePath();
-        return file;
-    }*/
-
-    /*private void showImage(Uri imageUri) {
-        File file = new File(FileUtils.getPath(getApplicationContext(), imageUri));
-        InputStream inputStream = null;
-        try {
-            inputStream = new FileInputStream(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-        profileImage.setImageBitmap(bitmap);
-    }*/
-
-    /*private void openCropActivity(Uri sourceUri, Uri destinationUri) {
-        UCrop.of(sourceUri, destinationUri).withMaxResultSize(16, 9).withAspectRatio(5f, 5f).start(Pengaturan.this);
-    }*/
-
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == Activity.RESULT_CANCELED) {
-            return;
-        }
-
-        /*if(requestCode == GALLERY_PHOTO && resultCode == RESULT_OK) {
-            Uri uri = Uri.parse(currentPhotoPath);
-            openCropActivity(uri, uri);
-        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
-            Uri uri = UCrop.getOutput(data);
-            showImage(uri);
-        } else if (requestCode == PICK_IMAGE_GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            Uri sourceUri = data.getData(); // 1
-            File file = getImageFile(); // 2
-            Uri destinationUri = Uri.fromFile(file);  // 3
-            openCropActivity(sourceUri, destinationUri);  // 4
-        }*/
-
-        if (data != null){
-            if (requestCode == GALLERY_PHOTO && resultCode == Activity.RESULT_OK) {
-                profile = data.getData();
-                try {
-                    Photo = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), profile);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                profileImage.setImageBitmap(Photo);
+        if (requestCode == GALLERY_PHOTO && resultCode == Activity.RESULT_OK) {
+            profile = data.getData();
+            try {
+                Photo = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), profile);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            profileImage.setImageBitmap(Photo);
         }
 
-        if (data != null){
-            if (requestCode == GALLERY_COVER && resultCode == Activity.RESULT_OK) {
-                cover = data.getData();
-                try {
-                    Cover = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), profile);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                coverImage.setImageBitmap(Cover);
+        if (requestCode == GALLERY_COVER && resultCode == Activity.RESULT_OK) {
+            cover = data.getData();
+            try {
+                Cover = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), cover);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            coverImage.setImageBitmap(Cover);
         }
     }
-
-
-
-    /*private File getImageFile() {
-        String imageFileName = "JPEG_" + System.currentTimeMillis() + "_";
-        File storageDir = new File(
-                Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_DCIM
-                ), "Camera"
-        );
-        File file = null;
-        String fullName = imageFileName + ".jpg";
-        File fileku = new File (fullName);
-        currentPhotoPath = "file:" + file.getAbsolutePath();
-        return file;
-    }
-
-    private void showImage(Uri imageUri) {
-        File file = new File(FileUtils.getPath(getApplication(), imageUri));
-        InputStream inputStream = null;
-        try {
-            inputStream = new FileInputStream(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-        coverImage.setImageBitmap(bitmap);
-    }
-
-    private void openCropActivity(Uri sourceUri, Uri destinationUri) {
-        UCrop.Options options = new UCrop.Options();
-        options.setCircleDimmedLayer(true);
-        options.setCropFrameColor(ContextCompat.getColor(this, R.color.colorAccent));
-        UCrop.of(sourceUri, destinationUri)
-                .withMaxResultSize(100, 100)
-                .withAspectRatio(5f, 5f)
-                .start(this);
-    }*/
 
 
     public void cekprofile(){
@@ -465,11 +375,15 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         StringRequest stringRequest = new StringRequest(Request.Method.POST, UPLOAD_URL +"?id_tetap = " + idku, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Log.d("mmakan bang",response + "");
                 try {
                     if (response.equals("bisa")){
                         Intent intentku = new Intent(getApplication(), MainActivity.class);
                         startActivity(intentku);
                         finish();
+                    }else if (response.equals("gagal")){
+                        Toast.makeText(getApplicationContext(), "Gagal Coba Lagi", Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
                     }
                 }catch (Exception e){
                     e.getMessage();
@@ -487,8 +401,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("photo", Photo.toString());
-                params.put("cover_foto", Cover.toString());
+                params.put("photo", getStringImage(Photo));
+                params.put("cover_foto", getStringImage(Cover));
                 return params;
             }
         };
