@@ -8,9 +8,12 @@ import android.content.SharedPreferences;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -53,6 +56,7 @@ public class List_Kado extends AppCompatActivity {
     GridLayoutManager glm;
     ImageView backDetailKado, cartListKado;
     Dialog dialog;
+    EditText searchView;
     SharedPreferences preferences;
 
 
@@ -75,6 +79,24 @@ public class List_Kado extends AppCompatActivity {
                 .centerCrop()
                 .into(imageViewTarget);
         dialog.show();
+
+        searchView = findViewById(R.id.listKadoEdittext);
+        searchView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                filter(editable.toString());
+            }
+        });
 
         recycler = findViewById(R.id.recycler);
         cartListKado = findViewById(R.id.cartListKado);
@@ -145,5 +167,14 @@ public class List_Kado extends AppCompatActivity {
         });
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         queue.add(objectRequest);
+    }
+
+    private void filter(String text){
+        ArrayList<MadolKado> filterKu = new ArrayList<>();
+        for (MadolKado item : madolKados){
+            if (item.getNama().toLowerCase().contains(text.toLowerCase()))
+                filterKu.add(item);
+        }
+        adapterListKado.filterList(filterKu);
     }
 }

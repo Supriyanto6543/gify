@@ -131,4 +131,9 @@ public class AdapterFavorit extends RecyclerView.Adapter<RecyclerView.ViewHolder
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(objectRequest);
     }
+
+    public void filterList(ArrayList<MadolFavorit> filteredList){
+        kados = filteredList;
+        notifyDataSetChanged();
+    }
 }

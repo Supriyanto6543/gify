@@ -39,6 +39,20 @@
                 android:textColor="#fff"
                 android:textSize="25dp"/>
 
+            <EditText
+                android:id="@+id/listKadoEdittext"
+                android:visibility="gone"
+                android:background="@drawable/detailkado1"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                android:hint="Cari barang"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:textColorHint="#b5a981"
+                android:layout_weight="30"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
             <ImageView
                 android:id="@+id/cariBarangListKado"
                 android:layout_weight="0"

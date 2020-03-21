@@ -171,7 +171,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 .centerCrop()
                 .into(imageViewTarget);
 
-        dialog.show();
 
         RootRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
@@ -341,9 +340,28 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         }
     }
 
+    private void lemparMysql(){
+        RootRef.child("Users").child(currentUserID)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        LID = dataSnapshot.getKey();
+                        LNama = dataSnapshot.child("nama").getValue().toString();
+                        Ltanggal = dataSnapshot.child("tanggal").getValue().toString();
+                        Lalamat = dataSnapshot.child("alamat").getValue().toString();
+                        LNoHp = dataSnapshot.child("noHp").getValue().toString();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
 
     public void cekprofile(){
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA +"?nama=" + namaUser, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA +"?nama=" + LNama, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -382,6 +400,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
 
 
+
+
     private void AkuGantengBanget(){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE +"?id_tetap=" + idku, new Response.Listener<String>() {
             @Override
@@ -414,7 +434,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 Map<String, String> params = new HashMap<>();
                 params.put("photo", getStringImage(Photo));
                 params.put("cover_foto", getStringImage(Cover));
-                Log.d("Hasil Gambar", getStringImage(Cover) + " " + getStringImage(Photo) + "");
+                Log.d("Hasil Gambar", getStringImage(Cover) + " aakuuu " + getStringImage(Photo) + "");
                 return params;
             }
         };
@@ -548,24 +568,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     }
 
-    private void lemparMysql(){
-        RootRef.child("Users").child(currentUserID)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        LID = dataSnapshot.getKey();
-                        LNama = dataSnapshot.child("nama").getValue().toString();
-                        Ltanggal = dataSnapshot.child("tanggal").getValue().toString();
-                        Lalamat = dataSnapshot.child("alamat").getValue().toString();
-                        LNoHp = dataSnapshot.child("noHp").getValue().toString();
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-    }
 
 
 }
