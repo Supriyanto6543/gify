@@ -34,6 +34,10 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.security.ProviderInstaller;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
@@ -98,7 +102,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 .placeholder(R.drawable.gifygif)
                 .centerCrop()
                 .into(imageViewTarget);
-        dialog.show();
+        //dialog.show();
 
         hintAdapter = new HintArrayAdapter<String>(getContext(), 0);
         hintadapterku = new HintArrayAdapter<String>(getContext(), 0);
@@ -310,8 +314,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
                     kadobuatsiapa.setOnItemSelectedListener(HomeFragment.this);
                     Log.d("makansamaale", "onResponse: "+tes+" "+ku);
-                    kategoris = true;
-                    dismissdialog();
                 }
             } catch (JSONException e) {
                 Log.d("ejson", "onResponse: " + e.getMessage());
@@ -368,7 +370,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                 if (hariku >= hari){
                                     Log.d("hari1", "onResponse: ");
                                     if (0 <= bulanend){
-                                        namas = object.getString("nama");
                                         namas = object.getString("nama");
                                         Log.d("namakuobjek", "onResponse: " + namas);
                                         Intent intent = new Intent(getContext(), List_Kado.class);

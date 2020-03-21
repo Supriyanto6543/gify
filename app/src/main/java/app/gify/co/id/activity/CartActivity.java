@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import app.gify.co.id.R;
 import app.gify.co.id.adapter.AdapterCart;
 import app.gify.co.id.modal.MadolCart;
-import app.gify.co.id.modal.MadolTotal;
 
 import static app.gify.co.id.baseurl.UrlJson.GETBARANG;
 import static app.gify.co.id.baseurl.UrlJson.GETCART;
@@ -44,18 +43,17 @@ public class CartActivity extends AppCompatActivity {
 
     Button Checkout, lanjutBelanja;
     ImageView backCart;
-    public TextView totalbelanjar, totalberat;
+    TextView totalbelanjar, totalberat;
     AdapterCart adapterCart;
     ArrayList<MadolCart> madolCarts;
     String namacart, gambarcart, uidku;
-    int kuantitas, qty1,qty2, qty3, qty4, qty5, harga1, harga2, harga3, harga4, harga5;
+    int kuantitas;
     GridLayoutManager glm;
     RecyclerView recyclerView;
     MainActivity mainActivity;
     NavigationView navigationView;
     public int hargaku, beratku;
     SharedPreferences preferences;
-    public int madolTotal;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,71 +85,17 @@ public class CartActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        Log.d("madoloption", "onCreate: " + madolTotal);
-        totalbelanjar.setText(String.valueOf(madolTotal));
-
-//        if (madolCarts.size() == 5){
-//            LocalBroadcastManager.getInstance(this).registerReceiver(item5,
-//                    new IntentFilter("barang5"));
-//            LocalBroadcastManager.getInstance(this).registerReceiver(item4,
-//                    new IntentFilter("barang4"));
-//            LocalBroadcastManager.getInstance(this).registerReceiver(item3,
-//                    new IntentFilter("barang3"));
-//            LocalBroadcastManager.getInstance(this).registerReceiver(item2,
-//                    new IntentFilter("barang2"));
-//            LocalBroadcastManager.getInstance(this).registerReceiver(item1,
-//                    new IntentFilter("barang1"));
-//            int hasil5 = harga5 * qty5;
-//            int hasil4 = harga4 * qty4;
-//            int hasil3 = harga3 * qty3;
-//            int hasil2 = harga2 * qty2;
-//            int hasil1 = harga1 * qty1;
-//            int total = hasil1 + hasil2 + hasil3 + hasil4 + hasil5;
-//            totalbelanjar.setText("Rp " + total);
-//        }else if (madolCarts.size() == 4){
-//            LocalBroadcastManager.getInstance(this).registerReceiver(item4,
-//                    new IntentFilter("barang4"));
-//            LocalBroadcastManager.getInstance(this).registerReceiver(item3,
-//                    new IntentFilter("barang3"));
-//            LocalBroadcastManager.getInstance(this).registerReceiver(item2,
-//                    new IntentFilter("barang2"));
-//            LocalBroadcastManager.getInstance(this).registerReceiver(item1,
-//                    new IntentFilter("barang1"));
-//            int hasil4 = harga4 * qty4;
-//            int hasil3 = harga3 * qty3;
-//            int hasil2 = harga2 * qty2;
-//            int hasil1 = harga1 * qty1;
-//            int total = hasil1 + hasil2 + hasil3 + hasil4;
-//            totalbelanjar.setText("Rp " + total);
-//        }else if (madolCarts.size() == 3){
-//            LocalBroadcastManager.getInstance(this).registerReceiver(item3,
-//                    new IntentFilter("barang3"));
-//            LocalBroadcastManager.getInstance(this).registerReceiver(item2,
-//                    new IntentFilter("barang2"));
-//            LocalBroadcastManager.getInstance(this).registerReceiver(item1,
-//                    new IntentFilter("barang1"));
-//            int hasil3 = harga3 * qty3;
-//            int hasil2 = harga2 * qty2;
-//            int hasil1 = harga1 * qty1;
-//            int total = hasil1 + hasil2 + hasil3;
-//            totalbelanjar.setText("Rp " + total);
-//        }else if (madolCarts.size() == 2){
-//            LocalBroadcastManager.getInstance(this).registerReceiver(item2,
-//                    new IntentFilter("barang2"));
-//            LocalBroadcastManager.getInstance(this).registerReceiver(item1,
-//                    new IntentFilter("barang1"));
-//            int hasil2 = harga2 * qty2;
-//            int hasil1 = harga1 * qty1;
-//            int total = hasil1 + hasil2;
-//            totalbelanjar.setText("Rp " + total);
-//        }else if (madolCarts.size() == 1){
-//            LocalBroadcastManager.getInstance(this).registerReceiver(item1,
-//                    new IntentFilter("barang1"));
-//            int hasil1 = harga1 * qty1;
-//            totalbelanjar.setText("Rp " + hasil1);
-//        }
-
+        LocalBroadcastManager.getInstance(this).registerReceiver(passValue, new IntentFilter("message_subject_intent"));
     }
+
+    public BroadcastReceiver passValue = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String name = intent.getStringExtra("name");
+            totalbelanjar.setText(name + "");
+            Toast.makeText(getApplicationContext(), name, Toast.LENGTH_LONG).show();
+        }
+    };
 
     private void getCart(){
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETCART, null, response -> {
@@ -195,9 +139,8 @@ public class CartActivity extends AppCompatActivity {
                         Log.d("idbarangkuas", "getCart: " + gambar + " s "  + harga + " s " + namacart + " s " + berat);
                         MadolCart madolCart = new MadolCart(gambar, harga, namacart, idbarang, kuantitas, berat);
                         madolCarts.add(madolCart);
-                        adapterCart = new AdapterCart(madolCarts, CartActivity.this, totalberat, totalbelanjar);
+                        adapterCart = new AdapterCart(madolCarts, CartActivity.this);
                         recyclerView.setAdapter(adapterCart);
-
                     }
                 }
             } catch (JSONException e) {
@@ -210,45 +153,4 @@ public class CartActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(CartActivity.this);
         queue.add(objectRequest);
     }
-
-    public BroadcastReceiver item1 = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // Get extra data included in the Intent
-            harga1 = intent.getIntExtra("harga1", -1);
-            qty1 = intent.getIntExtra("quantity", -1);
-        }
-    };
-    public BroadcastReceiver item2 = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // Get extra data included in the Intent
-            harga2 = intent.getIntExtra("harga2", -1);
-            qty2 = intent.getIntExtra("quantity", -1);
-        }
-    };
-    public BroadcastReceiver item3 = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // Get extra data included in the Intent
-            harga3 = intent.getIntExtra("harga3", -1);
-            qty3 = intent.getIntExtra("quantity", -1);
-        }
-    };
-    public BroadcastReceiver item4 = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // Get extra data included in the Intent
-            harga4 = intent.getIntExtra("harga4", -1);
-            qty4 = intent.getIntExtra("quantity", -1);
-        }
-    };
-    public BroadcastReceiver item5 = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // Get extra data included in the Intent
-            harga5 = intent.getIntExtra("harga5", -1);
-            qty5 = intent.getIntExtra("quantity", -1);
-        }
-    };
 }
