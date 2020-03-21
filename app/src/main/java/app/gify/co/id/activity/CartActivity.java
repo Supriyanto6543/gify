@@ -2,7 +2,9 @@ package app.gify.co.id.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +33,7 @@ import app.gify.co.id.adapter.AdapterCart;
 import app.gify.co.id.modal.MadolCart;
 
 import static app.gify.co.id.baseurl.UrlJson.GETBARANG;
+import static app.gify.co.id.baseurl.UrlJson.GETCART;
 
 public class CartActivity extends AppCompatActivity {
 
@@ -39,48 +42,37 @@ public class CartActivity extends AppCompatActivity {
     TextView totalbelanjar, totalberat;
     AdapterCart adapterCart;
     ArrayList<MadolCart> madolCarts;
-    String namacart, gambarcart;
-    int idbarang, kuantitas, harga;
+    String namacart, gambarcart, uidku;
+    int kuantitas;
     GridLayoutManager glm;
     RecyclerView recyclerView;
     MainActivity mainActivity;
     NavigationView navigationView;
+    public int hargaku, beratku;
+    SharedPreferences preferences;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cart);
         lanjutBelanja = findViewById(R.id.lanjutBelanjaChart);
-        lanjutBelanja.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), List_Kado.class);
-                startActivity(intent);
-            }
+        lanjutBelanja.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), List_Kado.class);
+            startActivity(intent);
         });
 
         backCart = findViewById(R.id.backCartNav);
-        backCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        backCart.setOnClickListener(v -> finish());
 
         Checkout = findViewById(R.id.checkoutChart);
         totalbelanjar = findViewById(R.id.totalBelanjaChart);
         totalberat = findViewById(R.id.totalBeratChart);
         recyclerView = findViewById(R.id.rvChart);
 
-
-
+        preferences = PreferenceManager.getDefaultSharedPreferences(CartActivity.this);
+        uidku = preferences.getString("uid", "");
         madolCarts = new ArrayList<>();
-        harga = getIntent().getIntExtra("hargas", -1);
-        namacart = getIntent().getStringExtra("nama");
-        gambarcart = getIntent().getStringExtra("gambar");
-        idbarang = getIntent().getIntExtra("idbarang", -1);
-        kuantitas = getIntent().getIntExtra("quantity", -1);
-        getBerat();
+        getCart();
         glm = new GridLayoutManager(CartActivity.this, 1);
         recyclerView.setLayoutManager(glm);
 
@@ -90,17 +82,47 @@ public class CartActivity extends AppCompatActivity {
         });
     }
 
-    private void getBerat(){
+    private void getCart(){
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETCART, null, response -> {
+            try {
+                JSONArray array = response.getJSONArray("YukNgaji");
+                for (int a = 0; a < array.length(); a++){
+                    JSONObject object = array.getJSONObject(a);
+                    String id_tetap = object.getString("id_tetap");
+                    Log.d("uidsa", "getCart: " + uidku + " s "  + id_tetap);
+                    if (id_tetap.equalsIgnoreCase(uidku)){
+                        kuantitas = object.getInt("jumlah");
+                        int idbarang = object.getInt("id_barang");
+                        Log.d("tagku", "getCart: " + kuantitas + " s "  + idbarang);
+                        getBerat(idbarang);
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, error -> {
+            Log.d("getcart", "getCart: " + error.getMessage());
+        });
+        RequestQueue queue = Volley.newRequestQueue(CartActivity.this);
+        queue.add(objectRequest);
+    }
+
+    private void getBerat(int idbarang){
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETBARANG, null, response -> {
             try {
                 JSONArray array = response.getJSONArray("YukNgaji");
                 for (int a = 0; a < array.length(); a++){
                     JSONObject object = array.getJSONObject(a);
                     int id_barang = object.getInt("id");
+                    Log.d("idbarangkudal", "getCart: " + idbarang + " s "  + id_barang);
                     if (idbarang==id_barang){
-                        String berat = object.getString("berat");
+                        String gambar = object.getString("photo");
+                        int harga = object.getInt("harga");
+                        String namacart = object.getString("nama");
+                        int berat = object.getInt("berat");
                         Log.d("beratget", "getBerat: " + berat);
-                        MadolCart madolCart = new MadolCart(gambarcart, harga, namacart, idbarang, kuantitas);
+                        Log.d("idbarangkuas", "getCart: " + gambar + " s "  + harga + " s " + namacart + " s " + berat);
+                        MadolCart madolCart = new MadolCart(gambar, harga, namacart, idbarang, kuantitas, berat);
                         madolCarts.add(madolCart);
                         adapterCart = new AdapterCart(madolCarts, CartActivity.this);
                         recyclerView.setAdapter(adapterCart);

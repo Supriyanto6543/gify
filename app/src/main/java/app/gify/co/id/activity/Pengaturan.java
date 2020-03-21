@@ -1,15 +1,21 @@
 package app.gify.co.id.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -19,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,30 +33,46 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
 import java.util.Objects;
 
 import app.gify.co.id.R;
 import app.gify.co.id.baseurl.UrlJson;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     EditText NamaDepan, NamaBelakang, NoHp, Email, GantiAlamat, editTextKecamatan, editTextKelurahan;
-    LinearLayout changePicture;
+    LinearLayout changePicture, changeCover;
     TextView Kelurahan, Kecamatan;
-    String namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi;
+    String namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi, Lemail, LID;
     ImageView CheckList, ganti;
+    CircleImageView  profileImage, coverImage;
     ImageView Back;
     TextView gantiAlamat;
     ProgressDialog loadingBar;
     HintArrayAdapter hintAdapter, hintadapterku;
+
+    private static final int GALLERY_REQUEST = 1;
+    private static final int CAMERA_REQUEST = 2;
+    public static final String UPLOAD_URL = "";
+
+    Bitmap Photo, Cover;
 
     View viewTerserah, viewKecamatan, viewKelurahan;
 
@@ -57,7 +80,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     FirebaseAuth mAuth;
     DatabaseReference RootRef;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +94,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         changePicture = findViewById(R.id.changePicturePengaturan);
         Kelurahan = findViewById(R.id.kelurahan);
         Kecamatan = findViewById(R.id.kecamatan);
-        gantiAlamat = (TextView) findViewById(R.id.textviewAlamatPengaturan);
+        gantiAlamat = findViewById(R.id.textviewAlamatPengaturan);
         GantiAlamat = findViewById(R.id.edittextAlamatPengaturan);
         ganti = findViewById(R.id.gantiAlamatPengaturan);
         viewTerserah = findViewById(R.id.viewTerserah);
@@ -80,9 +102,13 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         viewKelurahan = findViewById(R.id.Viewkelurahan);
         editTextKelurahan = findViewById(R.id.edittextkelurahan);
         editTextKecamatan = findViewById(R.id.edittextkecamatan);
+        profileImage = findViewById(R.id.ProfileImage);
+        coverImage = findViewById(R.id.photo);
+        changeCover = findViewById(R.id.changeCoverPengaturan);
 
         KotaS = findViewById(R.id.kota);
         ProvinsiS = findViewById(R.id.provinsi);
+
 
         hintAdapter = new HintArrayAdapter<String>(getApplicationContext(), 0);
         hintadapterku = new HintArrayAdapter<String>(getApplicationContext(), 0);
@@ -93,8 +119,34 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         RootRef = FirebaseDatabase.getInstance().getReference();
         currentUserID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
+
         cobaOngkir1();
         cobaOngkir2();
+
+        RootRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                LID = dataSnapshot.getKey();
+                Lemail = dataSnapshot.child("email").getValue().toString();
+                Log.d("cobaL", "email: " + Lemail + " " + "LID: " + LID);
+                Email.setText(Lemail);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        changePicture.setOnClickListener(v -> {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, CAMERA_REQUEST);
+        });
+
+        changeCover.setOnClickListener(v -> {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, GALLERY_REQUEST);
+        });
 
         ganti.setOnClickListener(v -> {
             gantiAlamat.setVisibility(View.GONE);
@@ -162,6 +214,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
                             loadingBar.dismiss();
                         });
+                //uploadImage();
                 Intent intent = new Intent(getApplication(), MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -173,6 +226,47 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             startActivity(intent);
         });
 
+    }
+
+    private void uploadImage() {
+        class UploadImage extends AsyncTask<Bitmap,Void,String> {
+
+            private RequestHandler rh = new RequestHandler();
+
+            @Override
+            protected String doInBackground(Bitmap... bitmaps) {
+                Bitmap bitmap = bitmaps[0];
+                String uploadImage = getStringImage(bitmap);
+
+                HashMap<String,String> data = new HashMap<>();
+                data.put("nama_image", uploadImage);
+
+                String result = rh.postRequest(UPLOAD_URL, data);
+                return result;
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            Photo = (Bitmap) data.getExtras().get("data");
+            profileImage.setImageBitmap(Photo);
+        }
+        if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
+            Cover = (Bitmap) data.getExtras().get("data");
+            coverImage.setImageBitmap(Cover);
+        }
+    }
+
+    public String getStringImage(Bitmap bmp) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
     }
 
     private void cobaOngkir2() {
@@ -267,7 +361,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.spinnner, parent, false);
-            TextView texview = (TextView) view.findViewById(android.R.id.text1);
+            TextView texview = view.findViewById(android.R.id.text1);
 
             if(position == 0) {
                 texview.setText("-- pilih --");
