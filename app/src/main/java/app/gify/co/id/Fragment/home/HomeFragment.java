@@ -102,7 +102,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 .placeholder(R.drawable.gifygif)
                 .centerCrop()
                 .into(imageViewTarget);
-        dialog.show();
+        //dialog.show();
 
         hintAdapter = new HintArrayAdapter<String>(getContext(), 0);
         hintadapterku = new HintArrayAdapter<String>(getContext(), 0);

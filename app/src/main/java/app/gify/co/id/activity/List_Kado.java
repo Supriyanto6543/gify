@@ -3,6 +3,7 @@ package app.gify.co.id.activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -45,7 +46,7 @@ public class List_Kado extends AppCompatActivity {
     ArrayList<MadolKado> madolKados;
     String kado, acara, range;
     GridLayoutManager glm;
-    ImageView backDetailKado;
+    ImageView backDetailKado, cartListKado;
     Dialog dialog;
 
     @Override
@@ -66,6 +67,7 @@ public class List_Kado extends AppCompatActivity {
         dialog.show();
 
         recycler = findViewById(R.id.recycler);
+        cartListKado = findViewById(R.id.cartListKado);
         backDetailKado = findViewById(R.id.backDetailKado);
         backDetailKado.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +76,12 @@ public class List_Kado extends AppCompatActivity {
             }
         });
 
+        cartListKado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(List_Kado.this, CartActivity.class));
+            }
+        });
 
         madolKados = new ArrayList<>();
         glm = new GridLayoutManager(getApplicationContext(), 2);
