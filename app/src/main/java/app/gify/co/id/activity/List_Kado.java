@@ -3,6 +3,7 @@ package app.gify.co.id.activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,6 +32,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.R;
 import app.gify.co.id.adapter.AdapterListKado;
 import app.gify.co.id.baseurl.UrlJson;
@@ -95,6 +97,10 @@ public class List_Kado extends AppCompatActivity {
                 try {
                     JSONArray array = response.getJSONArray("YukNgaji");
                     Log.d("array", "onResponse: " + array.toString() + response.toString());
+                    if (array.length() == 0){
+                        Toast.makeText(List_Kado.this, "Belum ada barang", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(List_Kado.this, MainActivity.class);
+                    }
                     for (int a = 0; a < array.length(); a++){
                         JSONObject object = array.getJSONObject(a);
                         String nama = object.getString("nama");
