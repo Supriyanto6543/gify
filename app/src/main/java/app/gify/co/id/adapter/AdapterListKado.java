@@ -136,4 +136,9 @@ public class AdapterListKado extends RecyclerView.Adapter<RecyclerView.ViewHolde
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(objectRequest);
     }
+
+    public void filterList(ArrayList<MadolKado> filteredList){
+        kados = filteredList;
+        notifyDataSetChanged();
+    }
 }

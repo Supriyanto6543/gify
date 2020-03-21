@@ -3,14 +3,20 @@ package app.gify.co.id.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,13 +29,29 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 
 import javax.net.ssl.SSLContext;
 
@@ -38,6 +60,8 @@ import app.gify.co.id.Fragment.favorit.FavoritFragment;
 import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.Fragment.keluar.KeluarFragment;
 import app.gify.co.id.Fragment.pembelian.PembelianFragment;
+import app.gify.co.id.baseurl.UrlJson;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -46,14 +70,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AppBarConfiguration mAppBarConfiguration;
     ImageView navFragmentHome;
     private long bakPressedTime;
+    CircleImageView profile;
+    LinearLayout cover;
+    String Lemail, LID, photoprofile, coverku, LNama, LEmail2, Lalamat, LNoHp, currentUserID, Ltanggal;
     TextView navigationheademail;
     TextView nama;
     Toolbar toolbar;
+    FirebaseAuth mAuth;
+    DatabaseReference RootRef;
+    View headerLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mAuth = FirebaseAuth.getInstance();
+        RootRef = FirebaseDatabase.getInstance().getReference();
+        currentUserID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         try {
             ProviderInstaller.installIfNeeded(getApplicationContext());
             SSLContext sslContext;
@@ -75,16 +108,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //drawer.setDrawerListener(toggle);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationheademail = headerLayout.findViewById(R.id.textViewNavigationDrawer);
         nama = headerLayout.findViewById(R.id.namaNavigationDrawer);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+
         String email = sharedPreferences.getString("email", "");
         Log.d("easd", "onCreate: " + email + " s " + sharedPreferences.getString("nama", ""));
         navigationheademail.setText(email);
         nama.setText(sharedPreferences.getString("nama", ""));
         loadFragment (new HomeFragment());
+        lemparMysql();
+        cekprofile();
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -103,6 +142,61 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         return false;
+    }
+
+    private void lemparMysql(){
+        RootRef.child("Users").child(currentUserID)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        LID = dataSnapshot.getKey();
+                        LNama = dataSnapshot.child("nama").getValue().toString();
+                        Ltanggal = dataSnapshot.child("tanggal").getValue().toString();
+                        Lalamat = dataSnapshot.child("alamat").getValue().toString();
+                        LNoHp = dataSnapshot.child("noHp").getValue().toString();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+
+    public void cekprofile(){
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA +"?id_tetap=" + LID, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray array = response.getJSONArray("YukNgaji");
+                    for (int i = 0; i < array.length(); i++){
+                        JSONObject object = array.getJSONObject(i);
+                        coverku = object.getString("cover_foto");
+                        photoprofile = object.getString("photo");
+                        profile = headerLayout.findViewById(R.id.imageViewNavigationDrawer);
+                        cover = headerLayout.findViewById(R.id.backgroundHeader);
+                        byte[] imageBytes = Base64.decode(coverku, Base64.DEFAULT);
+                        Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                        Drawable mDrawable = new BitmapDrawable(getResources(), decodedImage);
+                        cover.setBackground(mDrawable);
+                        byte[] imageBytesku = Base64.decode(photoprofile, Base64.DEFAULT);
+                        Bitmap decodedImageku = BitmapFactory.decodeByteArray(imageBytesku, 0, imageBytesku.length);
+                        profile.setImageBitmap(decodedImageku);
+
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(request);
     }
 
     @Override

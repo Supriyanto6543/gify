@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +44,7 @@ import app.gify.co.id.activity.CartActivity;
 import app.gify.co.id.activity.MainActivity;
 import app.gify.co.id.adapter.AdapterFavorit;
 import app.gify.co.id.modal.MadolFavorit;
+import app.gify.co.id.modal.MadolKado;
 
 import static app.gify.co.id.baseurl.UrlJson.GETBARANG;
 import static app.gify.co.id.baseurl.UrlJson.GETFAV;
@@ -57,7 +60,7 @@ public class FavoritFragment extends Fragment {
     GridLayoutManager glm;
     SharedPreferences preferences;
     String uid, id_barang;
-    EditText cariBarang;
+    EditText cariBarang, searchView;
     ProgressDialog mDialog;
     NavigationView navigationView;
     Dialog dialog;
@@ -82,7 +85,23 @@ public class FavoritFragment extends Fragment {
             }
         });
 
+        searchView = view.findViewById(R.id.listKadoEdittext);
+        searchView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                filter(editable.toString());
+            }
+        });
 
         toChart = view.findViewById(R.id.chartBarangFavorit);
         toChart.setOnClickListener(new View.OnClickListener() {
@@ -191,5 +210,14 @@ public class FavoritFragment extends Fragment {
         });
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(objectRequest);
+    }
+
+    private void filter(String text){
+        ArrayList<MadolFavorit> filterKu = new ArrayList<>();
+        for (MadolFavorit item : kados){
+            if (item.getNama().toLowerCase().contains(text.toLowerCase()))
+                filterKu.add(item);
+        }
+        adapterFavorit.filterList(filterKu);
     }
 }
