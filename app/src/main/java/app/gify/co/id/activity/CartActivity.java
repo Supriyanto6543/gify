@@ -1,7 +1,11 @@
 package app.gify.co.id.activity;
 
+import android.annotation.SuppressLint;
+import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -10,9 +14,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,6 +57,7 @@ public class CartActivity extends AppCompatActivity {
     NavigationView navigationView;
     public int hargaku, beratku;
     SharedPreferences preferences;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,9 +86,28 @@ public class CartActivity extends AppCompatActivity {
 
         Checkout.setOnClickListener(view -> {
             Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
+            preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            editor = preferences.edit();
+            editor.remove("namaRange");
+            editor.remove("namaAcara");
+            editor.remove("buatAcara");
+            editor.apply();
             startActivity(intent);
         });
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(passValue, new IntentFilter("message_subject_intent"));
     }
+
+    public BroadcastReceiver passValue = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String name = intent.getStringExtra("name");
+            totalbelanjar.setText(name + "");
+            Toast.makeText(getApplicationContext(), name, Toast.LENGTH_LONG).show();
+        }
+    };
+
+
 
     private void getCart(){
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETCART, null, response -> {
@@ -89,11 +116,9 @@ public class CartActivity extends AppCompatActivity {
                 for (int a = 0; a < array.length(); a++){
                     JSONObject object = array.getJSONObject(a);
                     String id_tetap = object.getString("id_tetap");
-                    Log.d("uidsa", "getCart: " + uidku + " s "  + id_tetap);
                     if (id_tetap.equalsIgnoreCase(uidku)){
                         kuantitas = object.getInt("jumlah");
                         int idbarang = object.getInt("id_barang");
-                        Log.d("tagku", "getCart: " + kuantitas + " s "  + idbarang);
                         getBerat(idbarang);
                     }
                 }
@@ -114,14 +139,11 @@ public class CartActivity extends AppCompatActivity {
                 for (int a = 0; a < array.length(); a++){
                     JSONObject object = array.getJSONObject(a);
                     int id_barang = object.getInt("id");
-                    Log.d("idbarangkudal", "getCart: " + idbarang + " s "  + id_barang);
                     if (idbarang==id_barang){
                         String gambar = object.getString("photo");
                         int harga = object.getInt("harga");
                         String namacart = object.getString("nama");
                         int berat = object.getInt("berat");
-                        Log.d("beratget", "getBerat: " + berat);
-                        Log.d("idbarangkuas", "getCart: " + gambar + " s "  + harga + " s " + namacart + " s " + berat);
                         MadolCart madolCart = new MadolCart(gambar, harga, namacart, idbarang, kuantitas, berat);
                         madolCarts.add(madolCart);
                         adapterCart = new AdapterCart(madolCarts, CartActivity.this);
@@ -130,7 +152,6 @@ public class CartActivity extends AppCompatActivity {
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                Log.d("jsonex", "getBerat: " + e.getMessage());
             }
         }, error -> {
             Log.d("jsoner", "getBerat: " + error.getMessage());

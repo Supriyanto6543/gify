@@ -55,6 +55,7 @@ dependencies {
     /*implementation "com.mikepenz:materialdrawer:v6.1.2"
     implementation "com.mikepenz:materialdrawer-nav:v6.1.2"
     implementation "com.mikepenz:materialdrawer-iconics:v6.1.2"*/
+    implementation "com.github.yalantis:ucrop:2.2.4"
     implementation 'com.code-troopers.betterpickers:library:3.1.0'
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
@@ -62,4 +63,5 @@ dependencies {
     implementation 'androidx.navigation:navigation-runtime:2.2.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation "com.github.firdausmaulan:GlideSlider:1.5.1"
+    implementation 'io.huannguyen.swipeablerv:swipeable-rv:1.0.2'
 }

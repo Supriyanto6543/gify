@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nama = headerLayout.findViewById(R.id.namaNavigationDrawer);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String email = sharedPreferences.getString("email", "");
+        Log.d("easd", "onCreate: " + email + " s " + sharedPreferences.getString("nama", ""));
         navigationheademail.setText(email);
         nama.setText(sharedPreferences.getString("nama", ""));
         loadFragment (new HomeFragment());

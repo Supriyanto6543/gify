@@ -11,8 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
 
-
-
         <LinearLayout
             android:orientation="horizontal"
             android:weightSum="50"
@@ -40,10 +38,6 @@
                 android:textColor="#fff"
                 android:textSize="25dp"/>
 
-
-
-
-
         </LinearLayout>
 
     </androidx.appcompat.widget.Toolbar>
@@ -53,6 +47,8 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="?attr/actionBarSize"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

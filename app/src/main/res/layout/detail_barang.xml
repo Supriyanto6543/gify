@@ -34,7 +34,7 @@
                 android:layout_weight="40"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_gravity="center"
                 android:gravity="start"
                 android:text="DETAIL KADO"
@@ -47,7 +47,7 @@
                 android:layout_weight="5"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
-                android:layout_marginEnd="@dimen/padd_10"
+                android:layout_marginEnd="5dp"
                 android:layout_gravity="center"
                 android:src="@drawable/magnifying_glass" />
 
@@ -57,7 +57,7 @@
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:layout_marginEnd="15dp"
+                android:layout_marginEnd="5dp"
                 android:src="@drawable/add_to_cart" />
 
 
@@ -96,10 +96,10 @@
                     android:layout_height="wrap_content">
 
                     <com.synnapps.carouselview.CarouselView
-                        android:id="@+id/carousel"
                         app:autoPlay="false"
+                        app:strokeColor="@color/colorPrimaryDark"
                         android:layout_width="match_parent"
-                        android:layout_height="190dp"/>
+                        android:layout_height="230dp"/>
 
 
                 </LinearLayout>

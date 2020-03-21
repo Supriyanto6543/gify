@@ -6,10 +6,12 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,8 +33,13 @@ import androidx.fragment.app.Fragment;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.security.ProviderInstaller;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.bumptech.glide.Glide;
 
@@ -66,6 +73,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     Dialog alertadd;
     Dialog dialog;
     Boolean kategoris = false, acaras = false;
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -98,7 +107,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 .placeholder(R.drawable.gifygif)
                 .centerCrop()
                 .into(imageViewTarget);
-        dialog.show();
+        //dialog.show();
 
         hintAdapter = new HintArrayAdapter<String>(getContext(), 0);
         hintadapterku = new HintArrayAdapter<String>(getContext(), 0);
@@ -128,7 +137,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             acaraapaku = String.valueOf(acarapa.getSelectedItem());
             acaraint = acarapa.getSelectedItemPosition();
             kadoint = kadobuatsiapa.getSelectedItemPosition();
-            Log.d("logdku", "onCreateView: " + hariku + " s " + bulanku + " s " + tahunku + " s " + kadobuatsiapaku + " s " + acaraapaku);
             if (hariku == 0 || bulanku == null || tahunku == 0 || kadobuatsiapaku.equals("hint") || acaraapaku.equals("hint")){
                 Toast.makeText(getContext(), "Isi Terlebih dahulu yang kosong", Toast.LENGTH_SHORT).show();
             }else {
@@ -218,7 +226,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         final Calendar currentdate = Calendar.getInstance();
         date = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, month, day) -> {
-            Log.d("asda", "showdateyearpicker: " + year);
             tahun.setText(String.valueOf(year));
             tahunku = year;
         };
@@ -293,10 +300,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     public void getkategori(){
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETKATEGORI, null, response -> {
-            Log.d("bambang", "onResponse: " + response.toString());
             try {
                 JSONArray array = response.getJSONArray("YukNgaji");
-                Log.d("arraku", "onResponse: " + array.length());
                 for (int a = 0;a < array.length() ; a++){
 
                     JSONObject object = array.getJSONObject(a);
@@ -309,17 +314,17 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     kadobuatsiapa.setSelection(0, false); //use this if don't want to onItemClick called for the hint
 
                     kadobuatsiapa.setOnItemSelectedListener(HomeFragment.this);
-                    Log.d("makansamaale", "onResponse: "+tes+" "+ku);
                     kategoris = true;
                     dismissdialog();
+                    Log.d("makansamaale", "onResponse: "+tes+" "+ku);
                 }
             } catch (JSONException e) {
-                Log.d("ejson", "onResponse: " + e.getMessage());
                 e.printStackTrace();
             }
-        }, error -> Log.d("onerror", "onErrorResponse: " + error.getMessage()));
+        }, error -> {
+            error.getMessage();
+        });
         RequestQueue queue = Volley.newRequestQueue(getContext());
-        Log.d("queue", "getkategori: " + objectRequest + queue);
         queue.add(objectRequest);
     }
 
@@ -330,7 +335,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 for (int a = 0; a < array.length(); a++){
                     JSONObject object = array.getJSONObject(a);
                     String acara = object.getString("untuk_acara");
-                    Log.d("acaraku", "onResponse: " + acara);
                     hintadapterku.add(acara);
 
                     acarapa.setAdapter(hintadapterku);
@@ -341,10 +345,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 }
 
             } catch (JSONException e) {
-                Log.d("acarakus", "onResponse: " );
                 e.printStackTrace();
             }
-        }, error -> Log.d("acarakuk", "onResponse: " + error.getMessage()));
+        }, error -> error.getMessage());
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(objectRequest);
     }
@@ -362,16 +365,17 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                         int hariend = object.getInt("hariend");
                         int bulanend = object.getInt("bulanend");
                         if (bulanserver == 11 ){
-                            Log.d("bulanserversamadengan11", "onResponse: ");
                             if (bulan == 11){
-                                Log.d("bulan11", "onResponse: ");
                                 if (hariku >= hari){
-                                    Log.d("hari1", "onResponse: ");
                                     if (0 <= bulanend){
                                         namas = object.getString("nama");
-                                        namas = object.getString("nama");
-                                        Log.d("namakuobjek", "onResponse: " + namas);
                                         Intent intent = new Intent(getContext(), List_Kado.class);
+                                        preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                                        editor = preferences.edit();
+                                        editor.putString("namaRange", namas);
+                                        editor.putString("namaAcara", acaraapaku);
+                                        editor.putString("buatAcara", kadobuatsiapaku);
+                                        editor.apply();
                                         intent.putExtra("range", namas);
                                         intent.putExtra("acara", acaraapaku);
                                         intent.putExtra("buat", kadobuatsiapaku);
@@ -381,22 +385,28 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                             }
                         }else if (bulanserver >= 0){
                             if (bulanserver == bulan){
-                                Log.d("bulan", "onResponse: ");
                                 if (hariku >= hari){
-                                    namas = object.getString("nama");
-                                    Log.d("hariku", "onResponse: " + namas);
                                     Intent intent = new Intent(getContext(), List_Kado.class);
+                                    preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                                    editor = preferences.edit();
+                                    editor.putString("namaRange", namas);
+                                    editor.putString("namaAcara", acaraapaku);
+                                    editor.putString("buatAcara", kadobuatsiapaku);
+                                    editor.apply();
                                     intent.putExtra("range", namas);
                                     intent.putExtra("acara", acaraapaku);
                                     intent.putExtra("buat", kadobuatsiapaku);
                                     startActivity(intent);
                                 }
                             }else if (bulanserver == bulanend){
-                                Log.d("bulanku", "onResponse: ");
                                 if (hariku <= hariend){
-                                    namas = object.getString("nama");
-                                    Log.d("hari", "onResponse: " + namas);
                                     Intent intent = new Intent(getContext(), List_Kado.class);
+                                    preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                                    editor = preferences.edit();
+                                    editor.putString("namaRange", namas);
+                                    editor.putString("namaAcara", acaraapaku);
+                                    editor.putString("buatAcara", kadobuatsiapaku);
+                                    editor.apply();
                                     intent.putExtra("range", namas);
                                     intent.putExtra("acara", acaraapaku);
                                     intent.putExtra("buat", kadobuatsiapaku);
@@ -406,7 +416,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                         }
                     }
                 } catch (JSONException e) {
-                    Log.d("rangeku", "onResponse: " );
                     e.printStackTrace();
                 }
             }

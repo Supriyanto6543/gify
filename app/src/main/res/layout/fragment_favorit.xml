@@ -1,113 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameFavorite"
     android:background="#fab60b"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragment.favorit.FavoritFragment">
 
-    <androidx.appcompat.widget.Toolbar
-        android:background="#fab60b"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
-
-
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:weightSum="55"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/backtoMenuFavorit"
-                android:layout_weight="5"
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:padding="3dp"
-                android:src="@drawable/menu" />
-
-            <TextView
-                android:id="@+id/textFavoriteFavorite"
-                android:layout_weight="40"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="start"
-                android:text="FAVORIT"
-                android:layout_marginStart="5dp"
-                android:textStyle="bold"
-                android:textColor="#fff"
-                android:textSize="25dp"/>
-
-            <EditText
-                android:id="@+id/cariBarangEdittext"
-                android:background="#fff"
-                android:visibility="gone"
-                android:layout_marginEnd="5dp"
-                android:layout_marginStart="5dp"
-                android:hint="Cari barang"
-                android:padding="5dp"
-                android:textColorHint="#b5a981"
-                android:layout_weight="40"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"/>
-
-            <ImageView
-                android:visibility="gone"
-                android:id="@+id/cariBarangFavoritYa"
-                android:layout_weight="5"
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:layout_marginEnd="10dp"
-                android:src="@drawable/checkmark" />
-
-            <ImageView
-                android:id="@+id/cariBarangFavorit"
-                android:layout_weight="5"
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:layout_marginEnd="10dp"
-                android:src="@drawable/magnifying_glass" />
-
-            <ImageView
-                android:id="@+id/chartBarangFavorit"
-                android:layout_weight="5"
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:layout_marginEnd="15dp"
-                android:src="@drawable/add_to_cart" />
-
-
-
-
-
-
-
-
-        </LinearLayout>
-
-    </androidx.appcompat.widget.Toolbar>
-
     <LinearLayout
-        android:layout_marginBottom="?attr/actionBarSize"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerfavorit"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
+        <androidx.appcompat.widget.Toolbar
+            android:background="#fab60b"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="?attr/actionBarSize">
+
+
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:weightSum="55"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/backtoMenuFavorit"
+                    android:layout_weight="5"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:padding="3dp"
+                    android:src="@drawable/menu" />
+
+                <TextView
+                    android:id="@+id/textFavoriteFavorite"
+                    android:layout_weight="40"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="start"
+                    android:text="FAVORIT"
+                    android:layout_marginStart="5dp"
+                    android:textStyle="bold"
+                    android:textColor="#fff"
+                    android:textSize="25dp"/>
+
+                <EditText
+                    android:id="@+id/cariBarangEdittext"
+                    android:background="#fff"
+                    android:visibility="gone"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="5dp"
+                    android:hint="Cari barang"
+                    android:padding="5dp"
+                    android:textColorHint="#b5a981"
+                    android:layout_weight="40"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+                <ImageView
+                    android:visibility="gone"
+                    android:id="@+id/cariBarangFavoritYa"
+                    android:layout_weight="5"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/checkmark" />
+
+                <ImageView
+                    android:id="@+id/cariBarangFavorit"
+                    android:layout_weight="5"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/magnifying_glass" />
+
+                <ImageView
+                    android:id="@+id/chartBarangFavorit"
+                    android:layout_weight="5"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/add_to_cart" />
+
+
+
+
+
+
+
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <LinearLayout
+            android:layout_marginBottom="?attr/actionBarSize"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerfavorit"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
 
     </LinearLayout>
-</LinearLayout>
+</FrameLayout>

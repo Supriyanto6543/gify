@@ -1,6 +1,5 @@
 package app.gify.co.id.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -33,6 +33,12 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import app.gify.co.id.Fragment.favorit.FavoritFragment;
+
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.R;
 
 import static app.gify.co.id.baseurl.UrlJson.GETCART;
@@ -56,11 +62,30 @@ public class DetailKado extends AppCompatActivity {
     int id_barang;
     String idbarangku;
     int sourceImg[] = {R.drawable.lupa_password_background, R.drawable.profile_image};
+    ImageView buatJadiWistlist, back;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_barang_nocard);
+
+        back = findViewById(R.id.backDetailKado);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        buatJadiWistlist = findViewById(R.id.buatJadiWistlist);
+        buatJadiWistlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getSupportFragmentManager();
+                FavoritFragment fragment = new FavoritFragment();
+                fm.beginTransaction().add(R.id.frameFavorite,fragment).commit();
+            }
+        });
 
         belikadodetail = findViewById(R.id.belikadodetail);
         slide = findViewById(R.id.carousel);
@@ -87,6 +112,14 @@ public class DetailKado extends AppCompatActivity {
     }
 
     ImageListener slideImage = (position, imageView) -> imageView.setImageResource(sourceImg[position]);
+
+    public void replaceFragment(Fragment someFragment) {
+        assert getFragmentManager() != null;
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frameFavorite, someFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 
     private void popup() {
 
