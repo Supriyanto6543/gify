@@ -368,13 +368,14 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                             if (bulan == 11){
                                 if (hariku >= hari){
                                     if (0 <= bulanend){
+                                        //YANG DI PUT STRING JANGAN DI UBAH, SEKALI LAGI BERUBAH
                                         namas = object.getString("nama");
                                         Intent intent = new Intent(getContext(), List_Kado.class);
                                         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
                                         editor = preferences.edit();
-                                        editor.putString("namaRange", namas);
-                                        editor.putString("namaAcara", acaraapaku);
-                                        editor.putString("buatAcara", kadobuatsiapaku);
+                                        editor.putString("range", namas);
+                                        editor.putString("acara", acaraapaku);
+                                        editor.putString("buat", kadobuatsiapaku);
                                         editor.apply();
                                         intent.putExtra("range", namas);
                                         intent.putExtra("acara", acaraapaku);
@@ -386,12 +387,14 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                         }else if (bulanserver >= 0){
                             if (bulanserver == bulan){
                                 if (hariku >= hari){
+                                    namas = object.getString("nama");
                                     Intent intent = new Intent(getContext(), List_Kado.class);
                                     preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
                                     editor = preferences.edit();
-                                    editor.putString("namaRange", namas);
-                                    editor.putString("namaAcara", acaraapaku);
-                                    editor.putString("buatAcara", kadobuatsiapaku);
+                                    //YANG DI PUT STRING JANGAN DI UBAH, SEKALI LAGI BERUBAH
+                                    editor.putString("range", namas);
+                                    editor.putString("acara", acaraapaku);
+                                    editor.putString("buat", kadobuatsiapaku);
                                     editor.apply();
                                     intent.putExtra("range", namas);
                                     intent.putExtra("acara", acaraapaku);
@@ -400,12 +403,14 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                 }
                             }else if (bulanserver == bulanend){
                                 if (hariku <= hariend){
+                                    namas = object.getString("nama");
                                     Intent intent = new Intent(getContext(), List_Kado.class);
                                     preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
                                     editor = preferences.edit();
-                                    editor.putString("namaRange", namas);
-                                    editor.putString("namaAcara", acaraapaku);
-                                    editor.putString("buatAcara", kadobuatsiapaku);
+                                    //YANG DI PUT STRING JANGAN DI UBAH, SEKALI LAGI BERUBAH
+                                    editor.putString("range", namas);
+                                    editor.putString("acara", acaraapaku);
+                                    editor.putString("buat", kadobuatsiapaku);
                                     editor.apply();
                                     intent.putExtra("range", namas);
                                     intent.putExtra("acara", acaraapaku);

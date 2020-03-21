@@ -51,7 +51,7 @@ public class AdapterFavorit extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     class MyFav extends RecyclerView.ViewHolder {
 
-        ImageView photo, favorit;
+        ImageView photo, favorit, nonfavorit;
         TextView harga, nama;
         LinearLayout linear;
 
@@ -62,6 +62,7 @@ public class AdapterFavorit extends RecyclerView.Adapter<RecyclerView.ViewHolder
             favorit = itemView.findViewById(R.id.favoritbarang);
             harga = itemView.findViewById(R.id.hargaBarangFavoritAdapter);
             nama = itemView.findViewById(R.id.namabarangfavorit);
+            nonfavorit = itemView.findViewById(R.id.favoritku);
         }
     }
 
@@ -86,6 +87,9 @@ public class AdapterFavorit extends RecyclerView.Adapter<RecyclerView.ViewHolder
             intent.putExtra("gambar", kados.get(position).getGambar());
             intent.putExtra("desc", kados.get(position).getDesc());
             intent.putExtra("harga", kados.get(position).getHarga());
+            if (((MyFav)holder).favorit.getVisibility()==View.VISIBLE){
+                intent.putExtra("favorit", true);
+            }
             intent.putExtra("nama", kados.get(position).getNama() + "(" + kados.get(position).getKode() + ")");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
@@ -118,6 +122,7 @@ public class AdapterFavorit extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             Log.d("kados", "getFavorit: " + id_barang + kados.get(Position).getId_barang());
                         }else {
                             ((MyFav)holder).favorit.setVisibility(View.GONE);
+                            ((MyFav)holder).nonfavorit.setVisibility(View.VISIBLE);
                             Log.d("kadosfail", "getFavorit: " + id_barang + kados.get(Position).getId_barang());
                         }
                     }

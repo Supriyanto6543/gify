@@ -123,8 +123,17 @@
                     android:layout_height="wrap_content"/>
 
                 <ImageView
-                    android:id="@+id/buatJadiWistlist"
+                    android:id="@+id/favoritdeta"
                     android:src="@drawable/love"
+                    android:layout_gravity="end"
+                    android:layout_weight="10"
+                    android:layout_width="30dp"
+                    android:layout_height="40dp"/>
+
+                <ImageView
+                    android:id="@+id/unfavoritdet"
+                    android:visibility="gone"
+                    android:src="@drawable/settings"
                     android:layout_gravity="end"
                     android:layout_weight="10"
                     android:layout_width="30dp"
