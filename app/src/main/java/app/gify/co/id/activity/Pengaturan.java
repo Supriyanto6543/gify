@@ -31,6 +31,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,10 +48,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.util.FileUtils;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,8 +80,9 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     EditText NamaDepan, NamaBelakang, NoHp, Email, GantiAlamat, editTextKecamatan, editTextKelurahan;
     LinearLayout changePicture, changeCover;
     TextView Kelurahan, Kecamatan;
-    String namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi, namaUser, emailnama, idku, namanama;
-    ImageView CheckList, ganti,profileImage, coverImage;
+    String namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi, Lemail, LID, namaUser, emailnama, idku, namanama;
+    ImageView CheckList, ganti;
+    CircleImageView  profileImage, coverImage;
     ImageView Back;
     TextView gantiAlamat;
     ProgressDialog loadingBar;
@@ -109,6 +114,26 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_pengaturan);
 
+        NamaDepan = findViewById(R.id.namaDepanPengaturan);
+        NamaBelakang = findViewById(R.id.namaBelakangPengaturan);
+        NoHp = findViewById(R.id.noHpPengaturan);
+        Email = findViewById(R.id.emailPengaturan);
+        CheckList = findViewById(R.id.checklistPengaturan);
+        Back = findViewById(R.id.backPengaturan);
+        changePicture = findViewById(R.id.changePicturePengaturan);
+        Kelurahan = findViewById(R.id.kelurahan);
+        Kecamatan = findViewById(R.id.kecamatan);
+        gantiAlamat = findViewById(R.id.textviewAlamatPengaturan);
+        GantiAlamat = findViewById(R.id.edittextAlamatPengaturan);
+        ganti = findViewById(R.id.gantiAlamatPengaturan);
+        viewTerserah = findViewById(R.id.viewTerserah);
+        viewKecamatan = findViewById(R.id.Viewkecamatan);
+        viewKelurahan = findViewById(R.id.Viewkelurahan);
+        editTextKelurahan = findViewById(R.id.edittextkelurahan);
+        editTextKecamatan = findViewById(R.id.edittextkecamatan);
+        profileImage = findViewById(R.id.ProfileImage);
+        coverImage = findViewById(R.id.photo);
+        changeCover = findViewById(R.id.changeCoverPengaturan);
 
 
         callMethos();
@@ -116,6 +141,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         namaUser = sharedPreferences.getString("nama", "");
         Log.d("nama", namaUser);
+
 
 
 
@@ -127,6 +153,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         mAuth = FirebaseAuth.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
         currentUserID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+
 
         cobaOngkir1();
         cobaOngkir2();
@@ -145,6 +172,21 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 .into(imageViewTarget);
 
         dialog.show();
+
+        RootRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                LID = dataSnapshot.getKey();
+                Lemail = dataSnapshot.child("email").getValue().toString();
+                Log.d("cobaL", "email: " + Lemail + " " + "LID: " + LID);
+                Email.setText(Lemail);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         changePicture.setOnClickListener(v -> {
             Intent galleryIntent = new Intent(Intent.ACTION_PICK,

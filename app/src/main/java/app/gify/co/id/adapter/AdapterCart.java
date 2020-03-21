@@ -1,6 +1,7 @@
 package app.gify.co.id.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -69,6 +71,10 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 kuantitas = kuantitas + 1;
                 ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
                 ((MyCart)holder).harga.setText(String.valueOf(hargaku*kuantitas));
+                int total = hargaku * kuantitas;
+                Intent intent = new Intent("message_subject_intent");
+                intent.putExtra("name", String.valueOf((total)));
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
             }
 
         });
