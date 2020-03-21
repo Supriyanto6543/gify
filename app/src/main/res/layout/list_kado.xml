@@ -27,7 +27,7 @@
                 android:layout_height="45dp"
                 android:layout_gravity="start"
                 android:padding="10dp"
-                android:src="@drawable/menu" />
+                android:src="@drawable/reply" />
 
             <TextView
                 android:layout_weight="30"

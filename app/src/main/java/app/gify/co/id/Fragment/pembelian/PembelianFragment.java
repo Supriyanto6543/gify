@@ -63,6 +63,6 @@ public class PembelianFragment extends Fragment {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.frame, someFragment);
         transaction.addToBackStack(null);
-        transaction.commit();
+        transaction.commitNowAllowingStateLoss();
     }
 }

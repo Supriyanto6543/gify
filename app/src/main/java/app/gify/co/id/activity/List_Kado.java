@@ -3,7 +3,10 @@ package app.gify.co.id.activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -22,7 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -31,6 +34,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import app.gify.co.id.Fragment.favorit.FavoritFragment;
 import app.gify.co.id.R;
 import app.gify.co.id.adapter.AdapterListKado;
 import app.gify.co.id.baseurl.UrlJson;
@@ -47,17 +51,22 @@ public class List_Kado extends AppCompatActivity {
     GridLayoutManager glm;
     ImageView backDetailKado;
     Dialog dialog;
+    SharedPreferences preferences;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_kado);
+
+
+
         dialog  = new Dialog(List_Kado.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.loading);
         ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
-        GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(gifImageView);
+        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
         Glide.with(List_Kado.this)
                 .load(R.drawable.gifygif)
                 .placeholder(R.drawable.gifygif)
@@ -70,7 +79,7 @@ public class List_Kado extends AppCompatActivity {
         backDetailKado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getApplicationContext()).openDrawer();
+                finish();
             }
         });
 
@@ -79,9 +88,11 @@ public class List_Kado extends AppCompatActivity {
         glm = new GridLayoutManager(getApplicationContext(), 2);
         recycler.setLayoutManager(glm);
 
-        kado = getIntent().getStringExtra("buat").replace(" ", "%20");
-        acara = getIntent().getStringExtra("acara").replace(" ", "%20");
-        range = getIntent().getStringExtra("range");
+        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        kado = preferences.getString("buat", "").replace(" ", "%20");
+        acara = preferences.getString("acara", "").replace(" ", "%20");
+        range = preferences.getString("range", "");
         Log.d("rangesa", "onCreate: " + kado + " s " + acara + " s " + range + " s ");
 
         getBarang();
