@@ -22,22 +22,19 @@
 
     </group>
 
-    <group>
+    <group android:checkableBehavior="single">
 
-        <menu>
-
-            <item
-                android:id="@+id/nav_pengaturan"
-                android:icon="@drawable/settings"
-                android:iconTint="#FF0000"
-                android:title="Pengaturan" />
-            <item
-                android:id="@+id/nav_keluar"
-                android:icon="@drawable/logout"
-                android:iconTint="#FF0000"
-                android:title="Keluar" />
-
-        </menu>
+        <item
+            android:id="@+id/nav_pengaturan"
+            android:icon="@drawable/settings"
+            android:iconTint="#FF0000"
+            android:title="Pengaturan" />
+        <item
+            android:id="@+id/nav_keluar"
+            android:icon="@drawable/logout"
+            android:iconTint="#FF0000"
+            android:title="Keluar" />
 
     </group>
+
 </menu>

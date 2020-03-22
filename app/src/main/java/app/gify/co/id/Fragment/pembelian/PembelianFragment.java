@@ -33,9 +33,7 @@ public class PembelianFragment extends Fragment {
         cariKadoPembelian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = null;
-                fragment = new HomeFragment();
-                replaceFragment(fragment);
+                loadFragment(new HomeFragment());
             }
         });
 
@@ -58,12 +56,19 @@ public class PembelianFragment extends Fragment {
         return view;
     }
 
-    public void replaceFragment(Fragment someFragment) {
-        assert getFragmentManager() != null;
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame, someFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+
+
+    private boolean loadFragment(Fragment fragment) {
+        if (fragment != null) {
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frame, fragment)
+                    .commit();
+
+            return true;
+        }
+
+        return false;
     }
 
 

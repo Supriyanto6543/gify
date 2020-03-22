@@ -50,6 +50,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -74,11 +75,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     SharedPreferences sharedPreferences;
 
     private AppBarConfiguration mAppBarConfiguration;
-    ImageView navFragmentHome;
+    ImageView navFragmentHome,cover;
     private long bakPressedTime;
     CircleImageView profile;
-    LinearLayout cover;
-    String Lemail, LID, photoprofile, coverku, LNama, LEmail2, Lalamat, LNoHp, currentUserID, Ltanggal;
+    String Lemail, LID, coverku, photoprofile, Lalamat, LNoHp, currentUserID, Ltanggal;
     TextView navigationheademail;
     TextView nama;
     Toolbar toolbar;
@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Dialog dialog;
     SessionManager sessionManager;
     SharedPreferences.Editor editor;
+    Bitmap decodedImage, decodedImageku;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -123,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.removeHeaderView(navigationView.getHeaderView(0));
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -135,9 +137,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nama = headerLayout.findViewById(R.id.namaNavigationDrawer);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         profile = headerLayout.findViewById(R.id.imageViewNavigationDrawer);
-        cover = headerLayout.findViewById(R.id.backgroundHeader);
+        cover = headerLayout.findViewById(R.id.coverDrawable);
         lemparMysql();
         cekprofile();
+
+
         String email = sharedPreferences.getString("email", "");
         Log.d("easd", "onCreate: " + email + " s " + sharedPreferences.getString("nama", ""));
         navigationheademail.setText(email);
@@ -173,15 +177,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         JSONObject object = array.getJSONObject(i);
                         coverku = object.getString("cover_foto");
                         photoprofile = object.getString("photo");
-                        dialog.dismiss();
-                        Log.d("gambar 1", coverku + "");
                         byte[] imageBytes = Base64.decode(coverku, Base64.DEFAULT);
-                        Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-                        Drawable mDrawable = new BitmapDrawable(getResources(), decodedImage);
-                        cover.setBackground(mDrawable);
+                        decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
                         byte[] imageBytesku = Base64.decode(photoprofile, Base64.DEFAULT);
-                        Bitmap decodedImageku = BitmapFactory.decodeByteArray(imageBytesku, 0, imageBytesku.length);
+                        decodedImageku = BitmapFactory.decodeByteArray(imageBytesku, 0, imageBytesku.length);
+                        cover.setImageBitmap(decodedImage);
                         profile.setImageBitmap(decodedImageku);
+                        dialog.dismiss();
 
 
                     }

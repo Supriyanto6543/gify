@@ -148,10 +148,10 @@ public class CartActivity extends AppCompatActivity {
         }
     };
 
-    private void senderEmail(){
+    /*private void senderEmail(){
         SenderAgent senderAgent = new SenderAgent("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CartActivity.this);
         senderAgent.execute();
-    }
+    }*/
 
     public String LoadData(String inFile) {
         String tContents = "";
