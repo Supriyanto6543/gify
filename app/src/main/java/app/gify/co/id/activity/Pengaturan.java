@@ -81,7 +81,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     LinearLayout changePicture, changeCover;
     TextView Kelurahan, Kecamatan;
     String namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi, Lemail, LID, namaUser, emailnama, idku, namanama,
-    LNama, LEmail2, Lalamat, LNoHp, Ltanggal;
+    LNama, LEmail2, Lalamat, LNoHp, Ltanggal, fotoProfil, fotoCover;
     ImageView CheckList, ganti,profileImage, coverImage;
     ImageView Back;
     TextView gantiAlamat;
@@ -108,6 +108,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     RequestQueue queue;
     int bitmap_size = 60;
     int max_resolution_image = 800;
+    String belomAdaAlamat = "Belum Memasukkan Alamat";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -321,6 +322,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             profile = data.getData();
             try {
                 Photo = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), profile);
+                Log.d("hasil profile", Photo+ " aku ganteng");
                 profileImage.setImageBitmap(Photo);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -332,6 +334,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             cover = data.getData();
             try {
                 Cover = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), cover);
+                Log.d("hasil cover", Cover + " aku lebih ganteng");
                 coverImage.setImageBitmap(Cover);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -349,6 +352,9 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                         LNama = dataSnapshot.child("nama").getValue().toString();
                         Ltanggal = dataSnapshot.child("tanggal").getValue().toString();
                         Lalamat = dataSnapshot.child("alamat").getValue().toString();
+                        if(Lalamat.isEmpty()){
+                            Lalamat.equals(belomAdaAlamat);
+                        }
                         LNoHp = dataSnapshot.child("noHp").getValue().toString();
                     }
 
@@ -361,14 +367,15 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
 
     public void cekprofile(){
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA +"?nama=" + LNama, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA + "?id_tetap=" + LID, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray array = response.getJSONArray("YukNgaji");
                     for (int i = 0; i < array.length(); i++){
                         JSONObject object = array.getJSONObject(i);
-                        idku = object.getString("id_tetap");
+                        fotoProfil = object.getString("photo");
+                        fotoCover = object.getString("cover_foto");
                         Log.d("namalagi", idku);
                         emailnama = object.getString("email");
                         dialog.dismiss();
@@ -401,9 +408,48 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
 
 
+    /*private void AkuGanteng(){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.POST_IMAGE +"?id_tetap=" + LID, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("mmakan bang",response + "");
+                try {
+                    if (response.equals("bisa")){
+                        Intent intentku = new Intent(getApplication(), MainActivity.class);
+                        startActivity(intentku);
+                        finish();
+                    }else if (response.equals("gagal")){
+                        Toast.makeText(getApplicationContext(), "Gagal Coba Lagi", Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                    }
+                }catch (Exception e){
+                    e.getMessage();
+                    Toast.makeText(Pengaturan.this, "isi semua kolom", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                error.getMessage();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("photo", getStringImage(Photo));
+                params.put("cover_foto", getStringImage(Cover));
+                Log.d("Hasil Gambar", getStringImage(Photo) + "");
+                return params;
+            }
+        };
+        queue.add(stringRequest);
+    }*/
+
 
     private void AkuGantengBanget(){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE +"?id_tetap=" + idku, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE +"?id_tetap=" + LID, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d("mmakan bang",response + "");

@@ -220,7 +220,10 @@ public class Register extends AppCompatActivity {
                 params.put("id_tetap", id_tetap);
                 params.put("email", email);
                 params.put("nama", nama);
+                params.put("photo", "photo");
+                params.put("cover_foto", "cover");
                 params.put("ttl", ttl);
+                params.put("alamat", "masukkan alamat di setting anda");
                 params.put("passwords", passwords);
                 params.put("nohp", nohp);
                 return params;
