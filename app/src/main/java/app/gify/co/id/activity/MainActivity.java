@@ -66,6 +66,7 @@ import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.Fragment.keluar.KeluarFragment;
 import app.gify.co.id.Fragment.pembelian.PembelianFragment;
 import app.gify.co.id.baseurl.UrlJson;
+import app.gify.co.id.sessions.SessionManager;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ImageView navFragmentHome,cover;
     private long bakPressedTime;
     CircleImageView profile;
-    String Lemail, LID, coverku, photoprofile, Lalamat, LNoHp, currentUserID, Ltanggal;
+    String Lemail, LID, coverku, photoprofile, Lalamat, LNoHp, currentUserID, Ltanggal, LNama;
     TextView navigationheademail;
     TextView nama;
     Toolbar toolbar;

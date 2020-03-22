@@ -118,14 +118,15 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         recyclerView.setLayoutManager(glm);
 
         Checkout.setOnClickListener(view -> {
-            Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
+            //Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
             preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             editor = preferences.edit();
             editor.remove("namaRange");
             editor.remove("namaAcara");
             editor.remove("buatAcara");
             editor.apply();
-            startActivity(intent);
+            senderEmail();
+            //startActivity(intent);
 
         });
 
@@ -142,7 +143,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
             totalbelanjar.setText(harga + "");
             totalberat.setText(berat + "");
             template = "<h2> Gify Transaction </h2> " +
-                    "<h3> Kamu baru saja melakukan pesanan dengan detaik sebagai berikut </h3>"
+                    "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
                     + "<p><b> Nama barang: </p></b>"
                     + "<p><b> Harga barang: Rp: " + format.format(Double.valueOf(replaceNumberOfAmount(harga, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
                     + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
@@ -154,10 +155,10 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         }
     };
 
-    /*private void senderEmail(){
+    private void senderEmail(){
         SenderAgent senderAgent = new SenderAgent("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CartActivity.this);
         senderAgent.execute();
-    }*/
+    }
 
     public String LoadData(String inFile) {
         String tContents = "";
