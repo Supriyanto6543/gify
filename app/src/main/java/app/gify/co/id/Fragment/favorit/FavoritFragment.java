@@ -28,6 +28,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
@@ -54,13 +55,13 @@ public class FavoritFragment extends Fragment {
 
     ImageView navView, toChart, ya, cari;
     AdapterFavorit adapterFavorit;
-    TextView textView;
+    TextView textView, tulisan;
     RecyclerView recyclerView;
     ArrayList<MadolFavorit> kados;
     GridLayoutManager glm;
     SharedPreferences preferences;
     String uid, id_barang;
-    EditText cariBarang, searchView;
+    EditText searchViews;
     ProgressDialog mDialog;
     NavigationView navigationView;
     Dialog dialog;
@@ -72,21 +73,20 @@ public class FavoritFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_favorit, container, false);
         recyclerView = view.findViewById(R.id.recyclerfavorit);
         ya = view.findViewById(R.id.cariBarangFavoritYa);
-        cariBarang = view.findViewById(R.id.cariBarangEdittext);
         textView = view.findViewById(R.id.textFavoriteFavorite);
         cari = view.findViewById(R.id.cariBarangFavorit);
-        cari.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ya.setVisibility(View.VISIBLE);
-                cari.setVisibility(View.GONE);
-                cariBarang.setVisibility(View.VISIBLE);
-                textView.setVisibility(View.GONE);
-            }
+        searchViews = view.findViewById(R.id.cariBarangEdittext);
+        tulisan = view.findViewById(R.id.textFavoriteFavorite);
+        cari.setOnClickListener(v -> {
+            ya.setVisibility(View.VISIBLE);
+            cari.setVisibility(View.GONE);
+            tulisan.setVisibility(View.GONE);
+            searchViews.setVisibility(View.VISIBLE);
+            textView.setVisibility(View.GONE);
+
         });
 
-        searchView = view.findViewById(R.id.listKadoEdittext);
-        searchView.addTextChangedListener(new TextWatcher() {
+        searchViews.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -104,12 +104,9 @@ public class FavoritFragment extends Fragment {
         });
 
         toChart = view.findViewById(R.id.chartBarangFavorit);
-        toChart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), CartActivity.class);
-                startActivity(intent);
-            }
+        toChart.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), CartActivity.class);
+            startActivity(intent);
         });
 
         dialog  = new Dialog(getActivity());
@@ -147,7 +144,7 @@ public class FavoritFragment extends Fragment {
         return view;
     }
 
-    private void getBarang() {
+    private void getBarang(String idbarangbarang) {
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETBARANG, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -161,9 +158,9 @@ public class FavoritFragment extends Fragment {
                         String tipe = object.getString("kode_barang");
                         String desc = object.getString("deskripsi");
                         String idbarang = object.getString("id");
-                        Log.d("idbarang", "onResponse: " + idbarang + " s " +id_barang);
-                        if (idbarang.equalsIgnoreCase(id_barang)){
-                            Log.d("idbarangif", "onResponse: " + idbarang + id_barang);
+                        Log.d("idbarang", "onResponse: " + idbarang + " s " +idbarangbarang);
+                        if (idbarang.equalsIgnoreCase(idbarangbarang)){
+                            Log.d("idbarangif", "onResponse: " + idbarang + idbarangbarang);
                             MadolFavorit madolFavorit = new MadolFavorit(gambar, harga, nama, tipe, desc, idbarang);
                             kados.add(madolFavorit);
                             adapterFavorit = new AdapterFavorit(kados, getContext());
@@ -197,7 +194,7 @@ public class FavoritFragment extends Fragment {
                     if (id_tetap.contains(uid)){
                         id_barang = object.getString("id_barang");
                         Log.d("idbarangku", "getFavorit: " + id_tetap + uid + id_barang);
-                        getBarang();
+                        getBarang(id_barang);
                     }else {
                         dialog.dismiss();
                     }

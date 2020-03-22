@@ -50,8 +50,8 @@ import java.util.Random;
 import app.gify.co.id.R;
 import app.gify.co.id.adapter.AdapterCart;
 import app.gify.co.id.modal.MadolCart;
-import app.gify.co.id.thirdparty.GMailSender;
-import app.gify.co.id.thirdparty.SenderAgent;
+//import app.gify.co.id.thirdparty.GMailSender;
+//import app.gify.co.id.thirdparty.SenderAgent;
 import app.gify.co.id.widgets.RecyclerTouchDelete;
 
 import static app.gify.co.id.baseurl.UrlJson.GETBARANG;
@@ -130,7 +130,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
 
         });
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(passValue, new IntentFilter("message_subject_intent"));
+//        LocalBroadcastManager.getInstance(this).registerReceiver(passValue, new IntentFilter("message_subject_intent"));
 
         ItemTouchHelper.SimpleCallback callback = new RecyclerTouchDelete(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(callback).attachToRecyclerView(recyclerView);
@@ -156,6 +156,52 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
     };
 
     private void senderEmail(){
+//    public BroadcastReceiver passValue = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            name = intent.getStringExtra("name");
+//            totalbelanjar.setText(name + "");
+//            template = "<h2> Gify Transaction </h2> " +
+//                    "<h3> Kamu baru saja melakukan pesanan dengan detaik sebagai berikut </h3>"
+//                    + "<p><b> Nama barang: </p></b>"
+//                    + "<p><b> Harga barang: Rp: " + format.format(Double.valueOf(replaceNumberOfAmount(name, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
+//                    + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
+//                    + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
+//                    + "<h2>Salam, Gify Team</h2>";
+//
+//            templateConvert = Html.fromHtml(template);
+//            Toast.makeText(getApplicationContext(), format.format(Double.valueOf(replaceNumberOfAmount(name, lastNumber))), Toast.LENGTH_LONG).show();
+//        }
+//    };
+//
+//    private void senderEmail(){
+//        SenderAgent senderAgent = new SenderAgent("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CartActivity.this);
+//        senderAgent.execute();
+//    }
+//
+//    public String LoadData(String inFile) {
+//        String tContents = "";
+//
+//        try {
+//            InputStream stream = getAssets().open(inFile);
+//
+//            int size = stream.available();
+//            byte[] buffer = new byte[size];
+//            stream.read(buffer);
+//            stream.close();
+//            tContents = new String(buffer);
+//        } catch (IOException e) {
+//            // Handle exceptions here
+//        }
+//
+//        return tContents;
+//
+//    }
+//
+//    private String replaceNumberOfAmount(String original, int replace){
+//        return original.substring(0, original.length() - 3) + replace;
+//    }
+    /*private void senderEmail(){
         SenderAgent senderAgent = new SenderAgent("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CartActivity.this);
         senderAgent.execute();
     }
