@@ -84,6 +84,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     LNama, LEmail2, Lalamat, LNoHp, Ltanggal, fotoProfil, fotoCover;
     ImageView CheckList, ganti,profileImage, coverImage;
     ImageView Back;
+    String  nampung;
     TextView gantiAlamat;
     ProgressDialog loadingBar;
     HintArrayAdapter hintAdapter, hintadapterku;
@@ -225,15 +226,16 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         CheckList.setOnClickListener(v -> {
             namadepan = NamaDepan.getText().toString().trim();
             namabelakang = NamaBelakang.getText().toString().trim();
+            nama = namadepan + " " + namabelakang;
             noHp = NoHp.getText().toString().trim();
             email = Email.getText().toString().trim();
             kelurahan = editTextKelurahan.getText().toString().trim();
             kecamatan = editTextKecamatan.getText().toString().trim();
             gAlamat = GantiAlamat.getText().toString().trim();
-            kota = String.valueOf(KotaS.getSelectedItem());
-            provinsi = String.valueOf(ProvinsiS.getSelectedItem());
+            kota = KotaS.getSelectedItem().toString();
+            provinsi = ProvinsiS.getSelectedItem().toString();
+            alamat = gAlamat + "," + " " + kelurahan + "," + " " + kecamatan + "," + " " + kota + "," + " " + profile;
 
-            AkuGantengBanget();
             dialog.show();
 
 
@@ -272,6 +274,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                             dialog.dismiss();
                         });
 
+                AkuGantengBanget();
+                dialog.dismiss();
 
             }
         });
@@ -349,13 +353,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         LID = dataSnapshot.getKey();
-                        LNama = dataSnapshot.child("nama").getValue().toString();
-                        Ltanggal = dataSnapshot.child("tanggal").getValue().toString();
-                        Lalamat = dataSnapshot.child("alamat").getValue().toString();
-                        if(Lalamat.isEmpty()){
-                            Lalamat.equals(belomAdaAlamat);
-                        }
-                        LNoHp = dataSnapshot.child("noHp").getValue().toString();
                     }
 
                     @Override
@@ -509,8 +506,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     ProvinsiS.setSelection(0, false);
 
                     ProvinsiS.setOnItemSelectedListener(Pengaturan.this);
-
-
                 }
             } catch (JSONException e) {
                 Log.d("err10", "Response: ");
@@ -560,7 +555,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
     }
 
     @Override
