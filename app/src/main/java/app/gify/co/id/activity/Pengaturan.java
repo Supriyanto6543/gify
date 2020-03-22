@@ -81,7 +81,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     LinearLayout changePicture, changeCover;
     TextView Kelurahan, Kecamatan;
     String namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi, Lemail, LID, namaUser, emailnama, idku, namanama,
-    LNama, LEmail2, Lalamat, LNoHp, Ltanggal;
+    LNama, LEmail2, Lalamat, LNoHp, Ltanggal, fotoProfil, fotoCover;
     ImageView CheckList, ganti,profileImage, coverImage;
     ImageView Back;
     TextView gantiAlamat;
@@ -108,6 +108,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     RequestQueue queue;
     int bitmap_size = 60;
     int max_resolution_image = 800;
+    String belomAdaAlamat = "Belum Memasukkan Alamat";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -134,6 +135,18 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         profileImage = findViewById(R.id.profileimage);
         coverImage = findViewById(R.id.photo);
         changeCover = findViewById(R.id.changeCoverPengaturan);
+        dialog  = new Dialog(Pengaturan.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.loading);
+        ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
+        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
+        Glide.with(Pengaturan.this)
+                .load(R.drawable.gifygif)
+                .placeholder(R.drawable.gifygif)
+                .centerCrop()
+                .into(imageViewTarget);
+        dialog.show();
 
 
         callMethos();
@@ -159,17 +172,9 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         cobaOngkir2();
         cekprofile();
 
-        dialog  = new Dialog(Pengaturan.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.loading);
-        ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
-        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
-        Glide.with(Pengaturan.this)
-                .load(R.drawable.gifygif)
-                .placeholder(R.drawable.gifygif)
-                .centerCrop()
-                .into(imageViewTarget);
+
+
+
 
 
         RootRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
@@ -224,15 +229,16 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         CheckList.setOnClickListener(v -> {
             namadepan = NamaDepan.getText().toString().trim();
             namabelakang = NamaBelakang.getText().toString().trim();
+            nama = namadepan + " " + namabelakang;
             noHp = NoHp.getText().toString().trim();
             email = Email.getText().toString().trim();
             kelurahan = editTextKelurahan.getText().toString().trim();
             kecamatan = editTextKecamatan.getText().toString().trim();
             gAlamat = GantiAlamat.getText().toString().trim();
-            kota = String.valueOf(KotaS.getSelectedItem());
-            provinsi = String.valueOf(ProvinsiS.getSelectedItem());
+            kota = KotaS.getSelectedItem().toString();
+            provinsi = ProvinsiS.getSelectedItem().toString();
+            alamat = gAlamat + "," + " " + kelurahan + "," + " " + kecamatan + "," + " " + kota + "," + " " + profile;
 
-            AkuGantengBanget();
             dialog.show();
 
 
@@ -271,6 +277,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                             dialog.dismiss();
                         });
 
+                AkuGantengBanget();
+                dialog.dismiss();
 
             }
         });
@@ -346,10 +354,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         LID = dataSnapshot.getKey();
-                        LNama = dataSnapshot.child("nama").getValue().toString();
-                        Ltanggal = dataSnapshot.child("tanggal").getValue().toString();
-                        Lalamat = dataSnapshot.child("alamat").getValue().toString();
-                        LNoHp = dataSnapshot.child("noHp").getValue().toString();
+                        dialog.dismiss();
                     }
 
                     @Override
@@ -361,15 +366,15 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
 
     public void cekprofile(){
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA +"?nama=" + LNama, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA + "?id_tetap=" + LID, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray array = response.getJSONArray("YukNgaji");
                     for (int i = 0; i < array.length(); i++){
                         JSONObject object = array.getJSONObject(i);
-                        idku = object.getString("id_tetap");
-                        Log.d("namalagi", idku);
+                        fotoProfil = object.getString("photo");
+                        fotoCover = object.getString("cover_foto");
                         emailnama = object.getString("email");
                         dialog.dismiss();
 
@@ -400,10 +405,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
 
 
-
-
     private void AkuGantengBanget(){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE +"?id_tetap=" + idku, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE +"?id_tetap=" + LID, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d("mmakan bang",response + "");
@@ -432,9 +435,10 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("photo", getStringImage(Photo));
-                params.put("cover_foto", getStringImage(Cover));
-                Log.d("Hasil Gambar", getStringImage(Photo) + "");
+                params.put("foto", getStringImage(Photo));
+                params.put("cover", getStringImage(Cover));
+                params.put("id_tetap", LID);
+                Log.d("Hasil Gambar", getStringImage(Photo) + "" +  getStringImage(Cover) + "");
                 return params;
             }
         };
@@ -463,8 +467,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     ProvinsiS.setSelection(0, false);
 
                     ProvinsiS.setOnItemSelectedListener(Pengaturan.this);
-
-
                 }
             } catch (JSONException e) {
                 Log.d("err10", "Response: ");
@@ -514,7 +516,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
     }
 
     @Override

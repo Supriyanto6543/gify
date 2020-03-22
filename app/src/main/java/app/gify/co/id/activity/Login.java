@@ -88,7 +88,6 @@ public class Login extends AppCompatActivity {
 
             email = Email.getText().toString().trim();
             password = Password.getText().toString().trim();
-            Masuk.setVisibility(View.GONE);
             progressBar = new ProgressDialog(Login.this);
             progressBar.setTitle("Sign In");
             progressBar.setMessage("Harap Tunggu...");

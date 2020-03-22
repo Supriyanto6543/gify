@@ -8,18 +8,18 @@ import android.widget.Toast;
 
 import java.util.Properties;
 
-import javax.mail.Authenticator;
+/*import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMessage;*/
 
-public class SenderAgent extends AsyncTask<Void, Void, Void> {
+public class SenderAgent /*extends AsyncTask<Void, Void, Void>*/ {
 
-    private String mail;
+    /*private String mail;
     private String subject;
     private Spanned message;
 
@@ -77,5 +77,5 @@ public class SenderAgent extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         progressDialog.dismiss();
         Toast.makeText(context, "Berhasil membuat Transaksi", Toast.LENGTH_LONG).show();
-    }
+    }*/
 }

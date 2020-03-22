@@ -1,6 +1,8 @@
 package app.gify.co.id.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -15,6 +17,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,6 +38,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
@@ -68,25 +73,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     SharedPreferences sharedPreferences;
 
     private AppBarConfiguration mAppBarConfiguration;
-    ImageView navFragmentHome;
+    ImageView navFragmentHome,cover;
     private long bakPressedTime;
     CircleImageView profile;
-    LinearLayout cover;
-    String Lemail, LID, photoprofile, coverku, LNama, LEmail2, Lalamat, LNoHp, currentUserID, Ltanggal;
+    String Lemail, LID, coverku, photoprofile, Lalamat, LNoHp, currentUserID, Ltanggal;
     TextView navigationheademail;
     TextView nama;
     Toolbar toolbar;
     FirebaseAuth mAuth;
     DatabaseReference RootRef;
     View headerLayout;
+    Dialog dialog;
+    SessionManager sessionManager;
+    SharedPreferences.Editor editor;
+    Bitmap decodedImage, decodedImageku;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        dialog  = new Dialog(MainActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.loading);
+        ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
+        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
+        Glide.with(MainActivity.this)
+                .load(R.drawable.gifygif)
+                .placeholder(R.drawable.gifygif)
+                .centerCrop()
+                .into(imageViewTarget);
+
         mAuth = FirebaseAuth.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
         currentUserID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+
         try {
             ProviderInstaller.installIfNeeded(getApplicationContext());
             SSLContext sslContext;
@@ -101,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.removeHeaderView(navigationView.getHeaderView(0));
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -112,6 +134,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationheademail = headerLayout.findViewById(R.id.textViewNavigationDrawer);
         nama = headerLayout.findViewById(R.id.namaNavigationDrawer);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        profile = headerLayout.findViewById(R.id.imageViewNavigationDrawer);
+        cover = headerLayout.findViewById(R.id.coverDrawable);
+        lemparMysql();
+        cekprofile();
 
 
         String email = sharedPreferences.getString("email", "");
@@ -119,30 +145,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationheademail.setText(email);
         nama.setText(sharedPreferences.getString("nama", ""));
         loadFragment (new HomeFragment());
-        lemparMysql();
-        cekprofile();
+
     }
 
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
-        return true;
-    }
-
-    private boolean loadFragment(Fragment fragment) {
-        if (fragment != null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.frame, fragment)
-                    .commit();
-
-            return true;
-        }
-
-        return false;
-    }
 
     private void lemparMysql(){
         RootRef.child("Users").child(currentUserID)
@@ -174,15 +179,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         JSONObject object = array.getJSONObject(i);
                         coverku = object.getString("cover_foto");
                         photoprofile = object.getString("photo");
-                        profile = headerLayout.findViewById(R.id.imageViewNavigationDrawer);
-                        cover = headerLayout.findViewById(R.id.backgroundHeader);
                         byte[] imageBytes = Base64.decode(coverku, Base64.DEFAULT);
-                        Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-                        Drawable mDrawable = new BitmapDrawable(getResources(), decodedImage);
-                        cover.setBackground(mDrawable);
+                        decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
                         byte[] imageBytesku = Base64.decode(photoprofile, Base64.DEFAULT);
-                        Bitmap decodedImageku = BitmapFactory.decodeByteArray(imageBytesku, 0, imageBytesku.length);
+                        decodedImageku = BitmapFactory.decodeByteArray(imageBytesku, 0, imageBytesku.length);
+                        cover.setImageBitmap(decodedImage);
                         profile.setImageBitmap(decodedImageku);
+                        dialog.dismiss();
+
 
                     }
                 }catch (Exception e){
@@ -198,6 +202,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.add(request);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
+        return true;
+    }
+
+    private boolean loadFragment(Fragment fragment) {
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frame, fragment)
+                    .commit();
+
+            return true;
+        }
+
+        return false;
+    }
+
+
 
     @Override
     public void onBackPressed() {
