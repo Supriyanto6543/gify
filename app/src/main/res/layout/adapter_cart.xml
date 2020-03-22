@@ -1,97 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.cardview.widget.CardView
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="10dp"
-        app:cardBackgroundColor="#fff"
+    <RelativeLayout
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <ImageView
+            android:id="@+id/delete_icon"
+            android:layout_width="@dimen/ic_delete"
+            android:layout_height="@dimen/ic_delete"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/padd_10"
+            android:src="@drawable/swrv_default_ic_delete" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/padd_10"
+            android:layout_toLeftOf="@id/delete_icon"
+            android:text="@string/delete"
+            android:textColor="#fff"
+            android:textSize="13dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/foreground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:weightSum="100"
-            android:layout_margin="@dimen/padd_10"
+        <androidx.cardview.widget.CardView
+            app:cardCornerRadius="5dp"
+            app:cardBackgroundColor="#fff"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/gambarcart"
-                android:src="@drawable/foto_barang"
-                android:layout_weight="25"
-                android:layout_width="0dp"
-                android:layout_height="100dp"/>
-
             <LinearLayout
-                android:layout_marginStart="5dp"
-                android:orientation="vertical"
-                android:layout_weight="45"
-                android:layout_width="0dp"
+                android:orientation="horizontal"
+                android:weightSum="100"
+                android:layout_margin="@dimen/padd_10"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/hargacart"
-                    android:text="Rp 120.000,-"
-                    android:textColor="#fd672c"
-                    android:textStyle="bold"
-                    android:textSize="19dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:id="@+id/gambarcart"
+                    android:src="@drawable/foto_barang"
+                    android:layout_weight="25"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"/>
+
+                <LinearLayout
+                    android:layout_marginStart="5dp"
+                    android:orientation="vertical"
+                    android:layout_weight="45"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/hargacart"
+                        android:text="Rp 120.000,-"
+                        android:textColor="#fd672c"
+                        android:textStyle="bold"
+                        android:textSize="19dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/namacart"
+                        android:text="Dompet Kulit Modern Pria"
+                        android:textColor="#4a4a4a"
+                        android:textStyle="bold"
+                        android:textSize="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/kurangcart"
+                    android:src="@drawable/minus"
+                    android:tint="#f1f1f1"
+                    android:layout_gravity="center"
+                    android:layout_weight="10"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"/>
 
                 <TextView
-                    android:id="@+id/namacart"
-                    android:text="Dompet Kulit Modern Pria"
-                    android:textColor="#4a4a4a"
+                    android:id="@+id/quantitas"
+                    android:text="1"
+                    android:textSize="30dp"
+                    android:textColor="#838181"
                     android:textStyle="bold"
-                    android:textSize="20dp"
-                    android:layout_width="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="10"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"/>
+
+                <ImageView
+                    android:id="@+id/tambahcart"
+                    android:src="@drawable/add"
+                    android:tint="#f1f1f1"
+                    android:layout_gravity="center"
+                    android:layout_weight="10"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"/>
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/kurangcart"
-                android:src="@drawable/minus"
-                android:tint="#f1f1f1"
-                android:layout_gravity="center"
-                android:layout_weight="10"
-                android:layout_width="0dp"
-                android:layout_height="40dp"/>
 
-            <TextView
-                android:id="@+id/quantitas"
-                android:text="1"
-                android:textSize="30dp"
-                android:textColor="#838181"
-                android:textStyle="bold"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="10"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"/>
+        </androidx.cardview.widget.CardView>
 
-            <ImageView
-                android:id="@+id/tambahcart"
-                android:src="@drawable/add"
-                android:tint="#f1f1f1"
-                android:layout_gravity="center"
-                android:layout_weight="10"
-                android:layout_width="0dp"
-                android:layout_height="40dp"/>
+    </RelativeLayout>
 
-        </LinearLayout>
-
-
-    </androidx.cardview.widget.CardView>
-
-
-
-</LinearLayout>
+</RelativeLayout>

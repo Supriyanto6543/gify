@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
@@ -51,11 +52,12 @@ import app.gify.co.id.adapter.AdapterCart;
 import app.gify.co.id.modal.MadolCart;
 //import app.gify.co.id.thirdparty.GMailSender;
 //import app.gify.co.id.thirdparty.SenderAgent;
+import app.gify.co.id.widgets.RecyclerTouchDelete;
 
 import static app.gify.co.id.baseurl.UrlJson.GETBARANG;
 import static app.gify.co.id.baseurl.UrlJson.GETCART;
 
-public class CartActivity extends AppCompatActivity {
+public class CartActivity extends AppCompatActivity implements RecyclerTouchDelete.RecyclerTouchListener{
 
     Button Checkout, lanjutBelanja;
     ImageView backCart;
@@ -71,7 +73,7 @@ public class CartActivity extends AppCompatActivity {
     public int hargaku, beratku;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
-    String name;
+    String harga, berat;
     String template;
     Spanned templateConvert;
     NumberFormat format;
@@ -128,7 +130,29 @@ public class CartActivity extends AppCompatActivity {
         });
 
 //        LocalBroadcastManager.getInstance(this).registerReceiver(passValue, new IntentFilter("message_subject_intent"));
+
+        ItemTouchHelper.SimpleCallback callback = new RecyclerTouchDelete(0, ItemTouchHelper.LEFT, this);
+        new ItemTouchHelper(callback).attachToRecyclerView(recyclerView);
     }
+
+    public BroadcastReceiver passValue = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            harga = intent.getStringExtra("name");
+            totalbelanjar.setText(harga + "");
+            totalberat.setText(berat + "");
+            template = "<h2> Gify Transaction </h2> " +
+                    "<h3> Kamu baru saja melakukan pesanan dengan detaik sebagai berikut </h3>"
+                    + "<p><b> Nama barang: </p></b>"
+                    + "<p><b> Harga barang: Rp: " + format.format(Double.valueOf(replaceNumberOfAmount(harga, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
+                    + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
+                    + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
+                    + "<h2>Salam, Gify Team</h2>";
+
+            templateConvert = Html.fromHtml(template);
+            Toast.makeText(getApplicationContext(), format.format(Double.valueOf(replaceNumberOfAmount(harga, lastNumber))), Toast.LENGTH_LONG).show();
+        }
+    };
 
 //    public BroadcastReceiver passValue = new BroadcastReceiver() {
 //        @Override
@@ -175,6 +199,33 @@ public class CartActivity extends AppCompatActivity {
 //    private String replaceNumberOfAmount(String original, int replace){
 //        return original.substring(0, original.length() - 3) + replace;
 //    }
+    /*private void senderEmail(){
+        SenderAgent senderAgent = new SenderAgent("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CartActivity.this);
+        senderAgent.execute();
+    }*/
+
+    public String LoadData(String inFile) {
+        String tContents = "";
+
+        try {
+            InputStream stream = getAssets().open(inFile);
+
+            int size = stream.available();
+            byte[] buffer = new byte[size];
+            stream.read(buffer);
+            stream.close();
+            tContents = new String(buffer);
+        } catch (IOException e) {
+            // Handle exceptions here
+        }
+
+        return tContents;
+
+    }
+
+    private String replaceNumberOfAmount(String original, int replace){
+        return original.substring(0, original.length() - 3) + replace;
+    }
 
     private void getCart(){
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETCART, null, response -> {
@@ -225,5 +276,18 @@ public class CartActivity extends AppCompatActivity {
         });
         RequestQueue queue = Volley.newRequestQueue(CartActivity.this);
         queue.add(objectRequest);
+    }
+
+    @Override
+    public void onSwipe(RecyclerView.ViewHolder viewHolder, int dir, int pos) {
+        if (viewHolder instanceof AdapterCart.MyCart){
+            String name = madolCarts.get(viewHolder.getAdapterPosition()).getNamacart();
+
+            MadolCart madolCart = madolCarts.get(viewHolder.getAdapterPosition());
+            int deleteIndex =  viewHolder.getAdapterPosition();
+
+            adapterCart.removeItem(viewHolder.getAdapterPosition());
+
+        }
     }
 }
