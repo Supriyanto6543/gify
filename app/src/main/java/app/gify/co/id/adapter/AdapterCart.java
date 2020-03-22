@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,10 +39,11 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.context = context;
     }
 
-    class MyCart extends RecyclerView.ViewHolder {
+    public class MyCart extends RecyclerView.ViewHolder {
 
-        ImageView gambar, tambah, kurang;
-        TextView harga, nama, quantitas;
+        public ImageView gambar, tambah, kurang;
+        public TextView harga, nama, quantitas;
+        public RelativeLayout background, foreground;
 
         public MyCart(@NonNull View itemView) {
             super(itemView);
@@ -51,6 +53,8 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             harga = itemView.findViewById(R.id.hargacart);
             nama = itemView.findViewById(R.id.namacart);
             quantitas = itemView.findViewById(R.id.quantitas);
+            background = itemView.findViewById(R.id.background);
+            foreground = itemView.findViewById(R.id.foreground);
         }
     }
 
@@ -75,9 +79,8 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Glide.with(view).load(carts.get(position).getGambar()).into(((MyCart)holder).gambar);
         Intent intent = new Intent("message_subject_intent");
         intent.putExtra("name", String.valueOf((totalCart(carts))));
+        intent.putExtra("berat", String.valueOf((beratCart(carts))));
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-        Intent intentx = new Intent("message_subject_intent");
-        //intentx.putExtra("name", );
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         ((MyCart)holder).tambah.setOnClickListener(view1 -> {
             if (kuantitas<9){
@@ -119,5 +122,26 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         return totalPrice;
+    }
+
+    public int beratCart(List<MadolCart> items){
+        int totalBerat = 0;
+        for (int i = 0; i< items.size(); i++){
+            totalBerat += items.get(i).getBerat();
+        }
+
+        return totalBerat;
+    }
+
+    public void removeItem(int item){
+        carts.remove(item);
+
+        notifyItemRemoved(item);
+    }
+
+    public void restoreItem(MadolCart madolCart, int item){
+        carts.add(item, madolCart);
+
+        notifyItemInserted(item);
     }
 }

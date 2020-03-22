@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         LID = dataSnapshot.getKey();
                         LNama = dataSnapshot.child("nama").getValue().toString();
                         Ltanggal = dataSnapshot.child("tanggal").getValue().toString();
-                        Lalamat = dataSnapshot.child("alamat").getValue().toString();
+                        //Lalamat = dataSnapshot.child("alamat").getValue().toString();
                         LNoHp = dataSnapshot.child("noHp").getValue().toString();
                     }
 
