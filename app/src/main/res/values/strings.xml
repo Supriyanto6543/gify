@@ -61,4 +61,8 @@
         <item>December</item>
     </string-array>
     <string name="unknown">Unknown</string>
+
+    <string name="gify_title">
+
+    </string>
 </resources>
