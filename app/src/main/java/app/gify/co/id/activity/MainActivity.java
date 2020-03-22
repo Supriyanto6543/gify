@@ -1,6 +1,8 @@
 package app.gify.co.id.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -15,6 +17,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,6 +38,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
@@ -61,6 +66,7 @@ import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.Fragment.keluar.KeluarFragment;
 import app.gify.co.id.Fragment.pembelian.PembelianFragment;
 import app.gify.co.id.baseurl.UrlJson;
+import app.gify.co.id.sessions.SessionManager;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -79,14 +85,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FirebaseAuth mAuth;
     DatabaseReference RootRef;
     View headerLayout;
+    Dialog dialog;
+    SessionManager sessionManager;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        dialog  = new Dialog(MainActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.loading);
+        ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
+        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
+        Glide.with(MainActivity.this)
+                .load(R.drawable.gifygif)
+                .placeholder(R.drawable.gifygif)
+                .centerCrop()
+                .into(imageViewTarget);
+
         mAuth = FirebaseAuth.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
         currentUserID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+
         try {
             ProviderInstaller.installIfNeeded(getApplicationContext());
             SSLContext sslContext;
@@ -112,37 +134,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationheademail = headerLayout.findViewById(R.id.textViewNavigationDrawer);
         nama = headerLayout.findViewById(R.id.namaNavigationDrawer);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-
+        profile = headerLayout.findViewById(R.id.imageViewNavigationDrawer);
+        cover = headerLayout.findViewById(R.id.backgroundHeader);
+        lemparMysql();
+        cekprofile();
         String email = sharedPreferences.getString("email", "");
         Log.d("easd", "onCreate: " + email + " s " + sharedPreferences.getString("nama", ""));
         navigationheademail.setText(email);
         nama.setText(sharedPreferences.getString("nama", ""));
         loadFragment (new HomeFragment());
-        lemparMysql();
-        cekprofile();
+
     }
 
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
-        return true;
-    }
-
-    private boolean loadFragment(Fragment fragment) {
-        if (fragment != null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.frame, fragment)
-                    .commit();
-
-            return true;
-        }
-
-        return false;
-    }
 
     private void lemparMysql(){
         RootRef.child("Users").child(currentUserID)
@@ -150,10 +153,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         LID = dataSnapshot.getKey();
-                        LNama = dataSnapshot.child("nama").getValue().toString();
-                        Ltanggal = dataSnapshot.child("tanggal").getValue().toString();
-                        Lalamat = dataSnapshot.child("alamat").getValue().toString();
-                        LNoHp = dataSnapshot.child("noHp").getValue().toString();
                     }
 
                     @Override
@@ -174,8 +173,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         JSONObject object = array.getJSONObject(i);
                         coverku = object.getString("cover_foto");
                         photoprofile = object.getString("photo");
-                        profile = headerLayout.findViewById(R.id.imageViewNavigationDrawer);
-                        cover = headerLayout.findViewById(R.id.backgroundHeader);
+                        dialog.dismiss();
+                        Log.d("gambar 1", coverku + "");
                         byte[] imageBytes = Base64.decode(coverku, Base64.DEFAULT);
                         Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
                         Drawable mDrawable = new BitmapDrawable(getResources(), decodedImage);
@@ -183,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         byte[] imageBytesku = Base64.decode(photoprofile, Base64.DEFAULT);
                         Bitmap decodedImageku = BitmapFactory.decodeByteArray(imageBytesku, 0, imageBytesku.length);
                         profile.setImageBitmap(decodedImageku);
+
 
                     }
                 }catch (Exception e){
@@ -198,6 +198,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.add(request);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
+        return true;
+    }
+
+    private boolean loadFragment(Fragment fragment) {
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frame, fragment)
+                    .commit();
+
+            return true;
+        }
+
+        return false;
+    }
+
+
 
     @Override
     public void onBackPressed() {

@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -181,6 +182,7 @@ public class Register extends AppCompatActivity {
                 Date dates = currentDateformat.parse(String.valueOf(selectedDate));
                 String tanggal = format.format(dates);
                 TanggalLahir.setText(tanggal);
+                TanggalLahir.setTextColor(Color.BLACK);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -220,7 +222,10 @@ public class Register extends AppCompatActivity {
                 params.put("id_tetap", id_tetap);
                 params.put("email", email);
                 params.put("nama", nama);
+                params.put("photo", "photo");
+                params.put("cover_foto", "cover");
                 params.put("ttl", ttl);
+                params.put("alamat", "masukkan alamat di setting anda");
                 params.put("passwords", passwords);
                 params.put("nohp", nohp);
                 return params;
