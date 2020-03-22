@@ -13,17 +13,21 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Currency;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.atomic.AtomicReference;
 
 import app.gify.co.id.R;
-import app.gify.co.id.activity.CartActivity;
 import app.gify.co.id.modal.MadolCart;
 
 public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     ArrayList<MadolCart> carts;
+    MadolCart mm;
     View view;
     View viewku;
     Context context;
@@ -62,19 +66,28 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         kuantitas = carts.get(position).getJumlah();
         int hargaku = carts.get(position).getHarga();
-        ((MyCart)holder).harga.setText(String.valueOf(hargaku*kuantitas));
+
+        Locale locale = new Locale("id", "ID");
+        NumberFormat format = NumberFormat.getCurrencyInstance(locale);
+
+        ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku*kuantitas)));
         ((MyCart)holder).nama.setText(carts.get(position).getNamacart());
-        //Picasso.get().load(carts.get(position).getGambar()).into(((MyCart)holder).gambar);
         Glide.with(view).load(carts.get(position).getGambar()).into(((MyCart)holder).gambar);
+        Intent intent = new Intent("message_subject_intent");
+        intent.putExtra("name", String.valueOf((totalCart(carts))));
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        Intent intentx = new Intent("message_subject_intent");
+        //intentx.putExtra("name", );
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         ((MyCart)holder).tambah.setOnClickListener(view1 -> {
             if (kuantitas<9){
                 kuantitas = kuantitas + 1;
                 ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
                 ((MyCart)holder).harga.setText(String.valueOf(hargaku*kuantitas));
                 int total = hargaku * kuantitas;
-                Intent intent = new Intent("message_subject_intent");
-                intent.putExtra("name", String.valueOf((total)));
-                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                Intent intents = new Intent("message_subject_intent");
+                intents.putExtra("name", String.valueOf((total)));
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
             }
 
         });
@@ -84,6 +97,10 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 kuantitas = kuantitas - 1;
                 ((MyCart)holder).harga.setText(String.valueOf(hargaku*kuantitas));
                 ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
+                int total = hargaku * kuantitas;
+                Intent intents = new Intent("message_subject_intent");
+                intents.putExtra("name", String.valueOf((total)));
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
             }
 
         });
@@ -92,5 +109,15 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemCount() {
         return carts.size();
+    }
+
+    public int totalCart(List<MadolCart> items){
+
+        int totalPrice = 0;
+        for(int i = 0 ; i < items.size(); i++) {
+            totalPrice += items.get(i).getHarga();
+        }
+
+        return totalPrice;
     }
 }

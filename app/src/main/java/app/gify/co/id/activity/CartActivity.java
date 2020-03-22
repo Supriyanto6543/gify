@@ -9,6 +9,11 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.SpannedString;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -33,11 +38,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Currency;
+import java.util.Locale;
+import java.util.Random;
 
 import app.gify.co.id.R;
 import app.gify.co.id.adapter.AdapterCart;
 import app.gify.co.id.modal.MadolCart;
+import app.gify.co.id.thirdparty.GMailSender;
+import app.gify.co.id.thirdparty.SenderAgent;
 
 import static app.gify.co.id.baseurl.UrlJson.GETBARANG;
 import static app.gify.co.id.baseurl.UrlJson.GETCART;
@@ -58,6 +71,13 @@ public class CartActivity extends AppCompatActivity {
     public int hargaku, beratku;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
+    String name;
+    String template;
+    Spanned templateConvert;
+    NumberFormat format;
+    Locale id;
+    Random random;
+    int lastNumber;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,6 +88,17 @@ public class CartActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), List_Kado.class);
             startActivity(intent);
         });
+
+        id = new Locale("id", "ID");
+
+        format = NumberFormat.getCurrencyInstance(id);
+
+        random = new Random();
+        lastNumber = 0;
+
+        for (int k = 0; k < 3; k++){
+            lastNumber+=(random.nextInt(10)*Math.pow(10, k));
+        }
 
         backCart = findViewById(R.id.backCartNav);
         backCart.setOnClickListener(v -> finish());
@@ -93,6 +124,7 @@ public class CartActivity extends AppCompatActivity {
             editor.remove("buatAcara");
             editor.apply();
             startActivity(intent);
+
         });
 
         LocalBroadcastManager.getInstance(this).registerReceiver(passValue, new IntentFilter("message_subject_intent"));
@@ -101,13 +133,48 @@ public class CartActivity extends AppCompatActivity {
     public BroadcastReceiver passValue = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String name = intent.getStringExtra("name");
+            name = intent.getStringExtra("name");
             totalbelanjar.setText(name + "");
-            Toast.makeText(getApplicationContext(), name, Toast.LENGTH_LONG).show();
+            template = "<h2> Gify Transaction </h2> " +
+                    "<h3> Kamu baru saja melakukan pesanan dengan detaik sebagai berikut </h3>"
+                    + "<p><b> Nama barang: </p></b>"
+                    + "<p><b> Harga barang: Rp: " + format.format(Double.valueOf(replaceNumberOfAmount(name, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
+                    + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
+                    + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
+                    + "<h2>Salam, Gify Team</h2>";
+
+            templateConvert = Html.fromHtml(template);
+            Toast.makeText(getApplicationContext(), format.format(Double.valueOf(replaceNumberOfAmount(name, lastNumber))), Toast.LENGTH_LONG).show();
         }
     };
 
+    private void senderEmail(){
+        SenderAgent senderAgent = new SenderAgent("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CartActivity.this);
+        senderAgent.execute();
+    }
 
+    public String LoadData(String inFile) {
+        String tContents = "";
+
+        try {
+            InputStream stream = getAssets().open(inFile);
+
+            int size = stream.available();
+            byte[] buffer = new byte[size];
+            stream.read(buffer);
+            stream.close();
+            tContents = new String(buffer);
+        } catch (IOException e) {
+            // Handle exceptions here
+        }
+
+        return tContents;
+
+    }
+
+    private String replaceNumberOfAmount(String original, int replace){
+        return original.substring(0, original.length() - 3) + replace;
+    }
 
     private void getCart(){
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETCART, null, response -> {
