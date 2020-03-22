@@ -146,14 +146,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    public void replaceFragment(KeluarFragment someFragment) {
-        assert getFragmentManager() != null;
-        android.app.Fragment fragment = new android.app.Fragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
 
     private void lemparMysql(){
         RootRef.child("Users").child(currentUserID)
@@ -161,10 +153,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         LID = dataSnapshot.getKey();
-                        LNama = dataSnapshot.child("nama").getValue().toString();
-                        Ltanggal = dataSnapshot.child("tanggal").getValue().toString();
-                        Lalamat = dataSnapshot.child("alamat").getValue().toString();
-                        LNoHp = dataSnapshot.child("noHp").getValue().toString();
                     }
 
                     @Override
