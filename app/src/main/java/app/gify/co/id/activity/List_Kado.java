@@ -8,10 +8,14 @@ import android.content.SharedPreferences;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -51,8 +55,10 @@ public class List_Kado extends AppCompatActivity {
     ArrayList<MadolKado> madolKados;
     String kado, acara, range;
     GridLayoutManager glm;
-    ImageView backDetailKado, cartListKado;
+    ImageView backDetailKado, cartListKado, cariBarangListKado;
     Dialog dialog;
+    EditText searchView;
+    TextView tulisanListKado;
     SharedPreferences preferences;
 
 
@@ -61,8 +67,15 @@ public class List_Kado extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_kado);
 
-
-
+        tulisanListKado = findViewById(R.id.tulisanListKado);
+        cariBarangListKado = findViewById(R.id.cariBarangListKado);
+        cariBarangListKado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.setVisibility(View.VISIBLE);
+                tulisanListKado.setVisibility(View.GONE);
+            }
+        });
         dialog  = new Dialog(List_Kado.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
@@ -75,6 +88,24 @@ public class List_Kado extends AppCompatActivity {
                 .centerCrop()
                 .into(imageViewTarget);
         dialog.show();
+
+        searchView = findViewById(R.id.listKadoEdittext);
+        searchView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                filter(editable.toString());
+            }
+        });
 
         recycler = findViewById(R.id.recycler);
         cartListKado = findViewById(R.id.cartListKado);
@@ -102,6 +133,10 @@ public class List_Kado extends AppCompatActivity {
         kado = preferences.getString("buatAcara", "").replace(" ", "%20");
         acara = preferences.getString("namaAcara", "").replace(" ", "%20");
         range = preferences.getString("namaRange", "").replace(" ", "%20");
+        kado = preferences.getString("buat", "");
+        acara = preferences.getString("acara", "");
+        range = preferences.getString("range", "");
+        Log.d("kadoacararange", "onCreate: " + kado + " s " + acara + " s " + range );
 
         getBarang();
 
@@ -145,5 +180,14 @@ public class List_Kado extends AppCompatActivity {
         });
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         queue.add(objectRequest);
+    }
+
+    private void filter(String text){
+        ArrayList<MadolKado> filterKu = new ArrayList<>();
+        for (MadolKado item : madolKados){
+            if (item.getNama().toLowerCase().contains(text.toLowerCase()))
+                filterKu.add(item);
+        }
+        adapterListKado.filterList(filterKu);
     }
 }
