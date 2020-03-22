@@ -130,6 +130,9 @@ public class List_Kado extends AppCompatActivity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
+        kado = preferences.getString("buatAcara", "").replace(" ", "%20");
+        acara = preferences.getString("namaAcara", "").replace(" ", "%20");
+        range = preferences.getString("namaRange", "").replace(" ", "%20");
         kado = preferences.getString("buat", "");
         acara = preferences.getString("acara", "");
         range = preferences.getString("range", "");
