@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fab60b"
+
     android:orientation="vertical"
     android:gravity="center_horizontal"
     tools:context=".Fragment.home.HomeFragment">
@@ -55,148 +56,157 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <ImageView
-        android:src="@drawable/home_ultah"
-        android:layout_width="300dp"
-        android:layout_height="200dp"/>
-
-    <TextView
-    android:text="Kado buat siapa?"
-    android:textStyle="bold"
-    android:textColor="#fff"
-    android:textSize="20dp"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"/>
-
-    <Spinner
-        android:id="@+id/buatSiapaCari"
-        android:background="@drawable/login_email_password"
-        android:layout_marginEnd="30dp"
-        android:paddingStart="30dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="5dp"
-        android:gravity="center_vertical"
-        android:textStyle="bold"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"/>
-
-    <TextView
-        android:text="Untuk acara apa?"
-        android:textStyle="bold"
-        android:textColor="#fff"
-        android:textSize="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <Spinner
-        android:id="@+id/acaraApaCari"
-        android:background="@drawable/login_email_password"
-        android:layout_marginEnd="30dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="5dp"
-        android:paddingStart="30dp"
-        android:gravity="center_vertical"
-        android:textStyle="bold"
-        android:textColorHint="#DAAEAEAE"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"/>
-
-    <TextView
-        android:text="Masukan tanggal lahir dia"
-        android:textStyle="bold"
-        android:textColor="#fff"
-        android:textSize="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
     <LinearLayout
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:orientation="horizontal"
-        android:weightSum="104">
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:src="@drawable/home_ultah"
+            android:layout_width="300dp"
+            android:layout_height="200dp"/>
 
         <TextView
-            android:id="@+id/tanggalCari"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="5dp"
-            android:layout_weight="23"
-            android:background="@drawable/login_email_password"
-            android:gravity="center"
-            android:hint="28"
-            android:textColorHint="#DAAEAEAE"
-            android:textSize="15dp"
+            android:text="Kado buat siapa?"
             android:textStyle="bold"
-            android:textColor="#000"
-            />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="10dp"
-            android:layout_weight="3" />
-
-        <TextView
-            android:id="@+id/bulanCari"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="5dp"
-            android:layout_weight="50"
-            android:background="@drawable/login_email_password"
+            android:textColor="#fff"
+            android:textSize="20dp"
+            android:layout_gravity="center"
             android:gravity="center"
-            android:hint="December"
-            android:textColorHint="#DAAEAEAE"
-            android:textSize="18dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Spinner
+            android:id="@+id/buatSiapaCari"
+            android:background="@drawable/login_email_password"
+            android:layout_marginEnd="30dp"
+            android:paddingStart="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
             android:textStyle="bold"
-            android:textColor="#000"
-            />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="10dp"
-            android:layout_weight="3" />
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
 
         <TextView
-            android:datePickerMode="spinner"
-            android:spinnerMode="dropdown"
-            android:id="@+id/tahunCari"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="5dp"
-            android:layout_weight="25"
-            android:background="@drawable/login_email_password"
+            android:text="Untuk acara apa?"
+            android:textStyle="bold"
+            android:textColor="#fff"
+            android:textSize="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
             android:gravity="center"
-            android:textColor="#000"
-            android:hint="1998"
-            android:padding="6dp"
-            android:textColorHint="#DAAEAEAE"
-            android:textSize="15dp"
-            android:textStyle="bold" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
+        <Spinner
+            android:id="@+id/acaraApaCari"
+            android:background="@drawable/login_email_password"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="5dp"
+            android:paddingStart="30dp"
+            android:gravity="center_vertical"
+            android:textStyle="bold"
+            android:textColorHint="#DAAEAEAE"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
+
+        <TextView
+            android:text="Masukan tanggal lahir dia"
+            android:textStyle="bold"
+            android:textColor="#fff"
+            android:textSize="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:orientation="horizontal"
+            android:weightSum="104">
+
+            <TextView
+                android:id="@+id/tanggalCari"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="23"
+                android:background="@drawable/login_email_password"
+                android:gravity="center"
+                android:hint="28"
+                android:textColorHint="#DAAEAEAE"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:textColor="#000"
+                />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="10dp"
+                android:layout_weight="3" />
+
+            <TextView
+                android:id="@+id/bulanCari"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="50"
+                android:background="@drawable/login_email_password"
+                android:gravity="center"
+                android:hint="December"
+                android:textColorHint="#DAAEAEAE"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:textColor="#000"
+                />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="10dp"
+                android:layout_weight="3" />
+
+            <TextView
+                android:datePickerMode="spinner"
+                android:spinnerMode="dropdown"
+                android:id="@+id/tahunCari"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="25"
+                android:background="@drawable/login_email_password"
+                android:gravity="center"
+                android:textColor="#000"
+                android:hint="1998"
+                android:padding="6dp"
+                android:textColorHint="#DAAEAEAE"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/cariKado"
+            android:text="CARI KADO"
+            android:textStyle="bold"
+            android:textColor="#fff"
+            android:textSize="17dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/login_tombol"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/cariKado"
-        android:text="CARI KADO"
-        android:textStyle="bold"
-        android:textColor="#fff"
-        android:textSize="17dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/login_tombol"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
 </LinearLayout>

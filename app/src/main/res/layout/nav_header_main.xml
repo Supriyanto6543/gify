@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
@@ -7,38 +7,55 @@
     android:background="#FFFFFF"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_marginTop="10dp"
-        android:id="@+id/imageViewNavigationDrawer"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:contentDescription="@string/nav_header_desc"
-        android:padding="@dimen/nav_header_vertical_spacing"
-        android:src="#000" />
-
-    <TextView
-        android:id="@+id/namaNavigationDrawer"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:textColor="#aa7a00"
+    <ImageView
+        android:background="#fff"
+        android:id="@+id/coverDrawable"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/nav_header_title"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:layout_height="match_parent"/>
 
-    <TextView
-        android:id="@+id/textViewNavigationDrawer"
-        android:textColor="#aa7a00"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/nav_header_subtitle" />
+    <LinearLayout
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-</LinearLayout>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginTop="10dp"
+            android:id="@+id/imageViewNavigationDrawer"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:contentDescription="@string/nav_header_desc"
+            android:padding="@dimen/nav_header_vertical_spacing"
+            android:src="#000" />
+
+        <TextView
+            android:id="@+id/namaNavigationDrawer"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="#aa7a00"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/nav_header_title"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        <TextView
+            android:id="@+id/textViewNavigationDrawer"
+            android:textColor="#aa7a00"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nav_header_subtitle" />
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

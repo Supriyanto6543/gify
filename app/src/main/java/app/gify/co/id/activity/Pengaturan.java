@@ -135,6 +135,18 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         profileImage = findViewById(R.id.profileimage);
         coverImage = findViewById(R.id.photo);
         changeCover = findViewById(R.id.changeCoverPengaturan);
+        dialog  = new Dialog(Pengaturan.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.loading);
+        ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
+        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
+        Glide.with(Pengaturan.this)
+                .load(R.drawable.gifygif)
+                .placeholder(R.drawable.gifygif)
+                .centerCrop()
+                .into(imageViewTarget);
+        dialog.show();
 
 
         callMethos();
@@ -160,17 +172,9 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         cobaOngkir2();
         cekprofile();
 
-        dialog  = new Dialog(Pengaturan.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.loading);
-        ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
-        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
-        Glide.with(Pengaturan.this)
-                .load(R.drawable.gifygif)
-                .placeholder(R.drawable.gifygif)
-                .centerCrop()
-                .into(imageViewTarget);
+
+
+
 
 
         RootRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
@@ -222,8 +226,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             viewTerserah.setVisibility(View.GONE);
         });
 
-        CheckList.setOnClickListener(v -> {
-            namadepan = NamaDepan.getText().toString().trim();
+        CheckList.setOnClickListener((View v) -> {
+            /*namadepan = NamaDepan.getText().toString().trim();
             namabelakang = NamaBelakang.getText().toString().trim();
             noHp = NoHp.getText().toString().trim();
             email = Email.getText().toString().trim();
@@ -231,15 +235,15 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             kecamatan = editTextKecamatan.getText().toString().trim();
             gAlamat = GantiAlamat.getText().toString().trim();
             kota = String.valueOf(KotaS.getSelectedItem());
-            provinsi = String.valueOf(ProvinsiS.getSelectedItem());
+            provinsi = String.valueOf(ProvinsiS.getSelectedItem());*/
 
             AkuGantengBanget();
+
             dialog.show();
 
-
-            if (namadepan.isEmpty() || namabelakang.isEmpty() || noHp.isEmpty() || email.isEmpty() || gAlamat.isEmpty() || kelurahan.isEmpty() || kecamatan.isEmpty() || kota.isEmpty() || provinsi.isEmpty()) {
-                /*Toast.makeText(Pengaturan.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();*/
+            /*if (namadepan.isEmpty() || namabelakang.isEmpty() || noHp.isEmpty() || email.isEmpty() || gAlamat.isEmpty() || kelurahan.isEmpty() || kecamatan.isEmpty() || kota.isEmpty() || provinsi.isEmpty()) {
+                *//*Toast.makeText(Pengaturan.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();*//*
             }
             else {
                 RootRef.child("Users").child(currentUserID).child("nama").setValue(nama)
@@ -273,7 +277,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                         });
 
 
-            }
+            }*/
         });
 
 
@@ -322,7 +326,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             profile = data.getData();
             try {
                 Photo = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), profile);
-                Log.d("hasil profile", Photo+ " aku ganteng");
                 profileImage.setImageBitmap(Photo);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -334,7 +337,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             cover = data.getData();
             try {
                 Cover = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), cover);
-                Log.d("hasil cover", Cover + " aku lebih ganteng");
                 coverImage.setImageBitmap(Cover);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -349,13 +351,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         LID = dataSnapshot.getKey();
-                        LNama = dataSnapshot.child("nama").getValue().toString();
-                        Ltanggal = dataSnapshot.child("tanggal").getValue().toString();
-                        Lalamat = dataSnapshot.child("alamat").getValue().toString();
-                        if(Lalamat.isEmpty()){
-                            Lalamat.equals(belomAdaAlamat);
-                        }
-                        LNoHp = dataSnapshot.child("noHp").getValue().toString();
+                        dialog.dismiss();
                     }
 
                     @Override
@@ -376,7 +372,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                         JSONObject object = array.getJSONObject(i);
                         fotoProfil = object.getString("photo");
                         fotoCover = object.getString("cover_foto");
-                        Log.d("namalagi", idku);
                         emailnama = object.getString("email");
                         dialog.dismiss();
 
@@ -405,47 +400,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         return encodedImage;
     }
 
-
-
-
-    /*private void AkuGanteng(){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.POST_IMAGE +"?id_tetap=" + LID, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("mmakan bang",response + "");
-                try {
-                    if (response.equals("bisa")){
-                        Intent intentku = new Intent(getApplication(), MainActivity.class);
-                        startActivity(intentku);
-                        finish();
-                    }else if (response.equals("gagal")){
-                        Toast.makeText(getApplicationContext(), "Gagal Coba Lagi", Toast.LENGTH_LONG).show();
-                        dialog.dismiss();
-                    }
-                }catch (Exception e){
-                    e.getMessage();
-                    Toast.makeText(Pengaturan.this, "isi semua kolom", Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                error.getMessage();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("photo", getStringImage(Photo));
-                params.put("cover_foto", getStringImage(Cover));
-                Log.d("Hasil Gambar", getStringImage(Photo) + "");
-                return params;
-            }
-        };
-        queue.add(stringRequest);
-    }*/
 
 
     private void AkuGantengBanget(){
@@ -478,9 +432,10 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("photo", getStringImage(Photo));
-                params.put("cover_foto", getStringImage(Cover));
-                Log.d("Hasil Gambar", getStringImage(Photo) + "");
+                params.put("foto", getStringImage(Photo));
+                params.put("cover", getStringImage(Cover));
+                params.put("id_tetap", LID);
+                Log.d("Hasil Gambar", getStringImage(Photo) + "" +  getStringImage(Cover) + "");
                 return params;
             }
         };
