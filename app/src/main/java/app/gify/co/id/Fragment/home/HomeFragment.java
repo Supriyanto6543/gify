@@ -96,18 +96,18 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         mDialog.setCancelable(false);
         mDialog.setCanceledOnTouchOutside(false);
         mDialog.show();*/
-        dialog  = new Dialog(getActivity());
+        dialog  = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.loading);
         ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
         DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
-        Glide.with(getActivity())
+        Glide.with(getContext())
                 .load(R.drawable.gifygif)
                 .placeholder(R.drawable.gifygif)
                 .centerCrop()
                 .into(imageViewTarget);
-        //dialog.show();
+        dialog.show();
 
         hintAdapter = new HintArrayAdapter<String>(getContext(), 0);
         hintadapterku = new HintArrayAdapter<String>(getContext(), 0);

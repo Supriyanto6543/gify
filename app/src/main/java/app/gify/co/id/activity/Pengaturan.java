@@ -226,24 +226,25 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             viewTerserah.setVisibility(View.GONE);
         });
 
-        CheckList.setOnClickListener((View v) -> {
-            /*namadepan = NamaDepan.getText().toString().trim();
+        CheckList.setOnClickListener(v -> {
+            namadepan = NamaDepan.getText().toString().trim();
             namabelakang = NamaBelakang.getText().toString().trim();
+            nama = namadepan + " " + namabelakang;
             noHp = NoHp.getText().toString().trim();
             email = Email.getText().toString().trim();
             kelurahan = editTextKelurahan.getText().toString().trim();
             kecamatan = editTextKecamatan.getText().toString().trim();
             gAlamat = GantiAlamat.getText().toString().trim();
-            kota = String.valueOf(KotaS.getSelectedItem());
-            provinsi = String.valueOf(ProvinsiS.getSelectedItem());*/
-
-            AkuGantengBanget();
+            kota = KotaS.getSelectedItem().toString();
+            provinsi = ProvinsiS.getSelectedItem().toString();
+            alamat = gAlamat + "," + " " + kelurahan + "," + " " + kecamatan + "," + " " + kota + "," + " " + profile;
 
             dialog.show();
 
-            /*if (namadepan.isEmpty() || namabelakang.isEmpty() || noHp.isEmpty() || email.isEmpty() || gAlamat.isEmpty() || kelurahan.isEmpty() || kecamatan.isEmpty() || kota.isEmpty() || provinsi.isEmpty()) {
-                *//*Toast.makeText(Pengaturan.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();*//*
+
+            if (namadepan.isEmpty() || namabelakang.isEmpty() || noHp.isEmpty() || email.isEmpty() || gAlamat.isEmpty() || kelurahan.isEmpty() || kecamatan.isEmpty() || kota.isEmpty() || provinsi.isEmpty()) {
+                /*Toast.makeText(Pengaturan.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();*/
             }
             else {
                 RootRef.child("Users").child(currentUserID).child("nama").setValue(nama)
@@ -276,8 +277,10 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                             dialog.dismiss();
                         });
 
+                AkuGantengBanget();
+                dialog.dismiss();
 
-            }*/
+            }
         });
 
 
@@ -527,7 +530,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
     }
 
     @Override

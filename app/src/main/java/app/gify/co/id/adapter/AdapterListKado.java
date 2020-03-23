@@ -120,10 +120,7 @@ public class AdapterListKado extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         Log.d("idbarangku", "getFavorit: " + id_tetap + uid);
                         if (kados.get(Position).getId_barang().equalsIgnoreCase(id_barang)){
                             ((MyKado)holder).favorit.setVisibility(View.VISIBLE);
-                            Log.d("kados", "getFavorit: " + id_barang + kados.get(Position).getId_barang());
-                        }else {
-                            ((MyKado)holder).favorit.setVisibility(View.GONE);
-                            Log.d("kadosfail", "getFavorit: " + id_barang + kados.get(Position).getId_barang());
+                            Log.d("kados", "getFavorit: " + id_barang + kados.get(Position).getId_barang().equalsIgnoreCase(id_barang));
                         }
                     }
                 }

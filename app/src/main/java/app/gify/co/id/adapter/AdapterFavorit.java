@@ -96,7 +96,6 @@ public class AdapterFavorit extends RecyclerView.Adapter<RecyclerView.ViewHolder
         });
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         uid = preferences.getString("uid", "");
-        getFavorit(position, holder);
         Log.d("uidkua", "onBindViewHolder: " + id_barang + " s " + kados.get(position).getId_barang());
 
     }
@@ -104,37 +103,6 @@ public class AdapterFavorit extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemCount() {
         return kados.size();
-    }
-
-    private void getFavorit(int Position, RecyclerView.ViewHolder holder){
-        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETFAV,null, response -> {
-            try {
-                JSONArray array = response.getJSONArray("YukNgaji");
-                for (int a = 0; a < array.length(); a++){
-                    JSONObject object = array.getJSONObject(a);
-                    String id_tetap = object.getString("id_tetap");
-                    Log.d("idbarangfor", "getFavorit: " + id_tetap + " s " + uid);
-                    if (id_tetap.contains(uid)){
-                        id_barang = object.getString("id_barang");
-                        Log.d("idbarangku", "getFavorit: " + id_tetap + uid);
-                        if (kados.get(Position).getId_barang().equalsIgnoreCase(id_barang)){
-                            ((MyFav)holder).favorit.setVisibility(View.VISIBLE);
-                            Log.d("kados", "getFavorit: " + id_barang + kados.get(Position).getId_barang());
-                        }else {
-                            ((MyFav)holder).favorit.setVisibility(View.GONE);
-                            ((MyFav)holder).nonfavorit.setVisibility(View.VISIBLE);
-                            Log.d("kadosfail", "getFavorit: " + id_barang + kados.get(Position).getId_barang());
-                        }
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }, error -> {
-            Log.d("adapterlist", "getFavorit: " + error.getMessage());
-        });
-        RequestQueue queue = Volley.newRequestQueue(context);
-        queue.add(objectRequest);
     }
 
     public void filterList(ArrayList<MadolFavorit> filteredList){

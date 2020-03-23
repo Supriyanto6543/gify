@@ -26,11 +26,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.navigation.NavigationView;
 
@@ -49,13 +51,15 @@ import java.util.Random;
 import app.gify.co.id.R;
 import app.gify.co.id.adapter.AdapterCart;
 import app.gify.co.id.modal.MadolCart;
-import app.gify.co.id.thirdparty.GMailSender;
-import app.gify.co.id.thirdparty.SenderAgent;
+//import app.gify.co.id.thirdparty.GMailSender;
+//import app.gify.co.id.thirdparty.SenderAgent;
+import app.gify.co.id.widgets.RecyclerTouchDelete;
 
+import static app.gify.co.id.baseurl.UrlJson.DELETECART;
 import static app.gify.co.id.baseurl.UrlJson.GETBARANG;
 import static app.gify.co.id.baseurl.UrlJson.GETCART;
 
-public class CartActivity extends AppCompatActivity {
+public class CartActivity extends AppCompatActivity implements RecyclerTouchDelete.RecyclerTouchListener{
 
     Button Checkout, lanjutBelanja;
     ImageView backCart;
@@ -71,7 +75,7 @@ public class CartActivity extends AppCompatActivity {
     public int hargaku, beratku;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
-    String name;
+    String harga, berat;
     String template;
     Spanned templateConvert;
     NumberFormat format;
@@ -119,39 +123,39 @@ public class CartActivity extends AppCompatActivity {
             Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
             preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             editor = preferences.edit();
-            editor.remove("namaRange");
-            editor.remove("namaAcara");
-            editor.remove("buatAcara");
+            editor.remove("range");
+            editor.remove("acara");
+            editor.remove("buat");
             editor.apply();
+//            senderEmail();
             startActivity(intent);
 
         });
 
         LocalBroadcastManager.getInstance(this).registerReceiver(passValue, new IntentFilter("message_subject_intent"));
+
+        ItemTouchHelper.SimpleCallback callback = new RecyclerTouchDelete(0, ItemTouchHelper.LEFT, this);
+        new ItemTouchHelper(callback).attachToRecyclerView(recyclerView);
     }
 
     public BroadcastReceiver passValue = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            name = intent.getStringExtra("name");
-            totalbelanjar.setText(name + "");
+            harga = intent.getStringExtra("name");
+            totalbelanjar.setText(harga + "");
+            totalberat.setText(berat + "");
             template = "<h2> Gify Transaction </h2> " +
-                    "<h3> Kamu baru saja melakukan pesanan dengan detaik sebagai berikut </h3>"
+                    "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
                     + "<p><b> Nama barang: </p></b>"
-                    + "<p><b> Harga barang: Rp: " + format.format(Double.valueOf(replaceNumberOfAmount(name, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
+                    + "<p><b> Harga barang: Rp: " + format.format(Double.valueOf(replaceNumberOfAmount(harga, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
                     + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
                     + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
                     + "<h2>Salam, Gify Team</h2>";
 
             templateConvert = Html.fromHtml(template);
-            Toast.makeText(getApplicationContext(), format.format(Double.valueOf(replaceNumberOfAmount(name, lastNumber))), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), format.format(Double.valueOf(replaceNumberOfAmount(harga, lastNumber))), Toast.LENGTH_LONG).show();
         }
     };
-
-    /*private void senderEmail(){
-        SenderAgent senderAgent = new SenderAgent("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CartActivity.this);
-        senderAgent.execute();
-    }*/
 
     public String LoadData(String inFile) {
         String tContents = "";
@@ -175,6 +179,11 @@ public class CartActivity extends AppCompatActivity {
     private String replaceNumberOfAmount(String original, int replace){
         return original.substring(0, original.length() - 3) + replace;
     }
+
+//    private void senderEmail(){
+//        SenderAgent senderAgent = new SenderAgent("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CartActivity.this);
+//        senderAgent.execute();
+//    }
 
     private void getCart(){
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETCART, null, response -> {
@@ -222,6 +231,62 @@ public class CartActivity extends AppCompatActivity {
             }
         }, error -> {
             Log.d("jsoner", "getBerat: " + error.getMessage());
+        });
+        RequestQueue queue = Volley.newRequestQueue(CartActivity.this);
+        queue.add(objectRequest);
+    }
+
+    @Override
+    public void onSwipe(RecyclerView.ViewHolder viewHolder, int dir, int pos) {
+        if (viewHolder instanceof AdapterCart.MyCart){
+            String name = madolCarts.get(viewHolder.getAdapterPosition()).getNamacart();
+
+            MadolCart madolCart = madolCarts.get(viewHolder.getAdapterPosition());
+            int deleteIndex =  viewHolder.getAdapterPosition();
+
+            Log.d("taptap", "onSwipe: " + madolCarts.get(viewHolder.getAdapterPosition()).getNamacart());
+
+            GETBARANG(madolCarts.get(viewHolder.getAdapterPosition()).getNamacart());
+
+            adapterCart.removeItem(viewHolder.getAdapterPosition());
+        }
+    }
+
+    private void deletecart(String id_barang){
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, DELETECART+"?idtetap="+uidku+"&idbarang="+id_barang, response -> {
+            try {
+                if (response.equalsIgnoreCase("bisa")){
+                    Toast.makeText(CartActivity.this, "Barang telah di hapus", Toast.LENGTH_SHORT).show();
+                    Log.d("bisabarangcart", "GETBARANG: " );
+                }
+            }catch (Exception e){
+                Log.d("ekscartactivity", "deletecart: " + e.getMessage());
+            }
+        }, error -> {
+            Log.d("ernocartdel", "deletecart: " + error.getMessage());
+        });
+        RequestQueue queue = Volley.newRequestQueue(CartActivity.this);
+        queue.add(stringRequest);
+    }
+
+    private void GETBARANG(String namas){
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETBARANG,null, response -> {
+            try {
+                JSONArray array = response.getJSONArray("YukNgaji");
+                for (int a = 0; a < array.length(); a++){
+                    JSONObject object = array.getJSONObject(a);
+                    String nama = object.getString("nama");
+                    if (nama.equalsIgnoreCase(namas)){
+                        Log.d("namabarang", "GETBARANG: " + nama + " s " + namas);
+                        String id = object.getString("id");
+                        deletecart(id);
+                    }
+                }
+            }catch (Exception e){
+                Log.d("barangexce", "GETBARANG: " + e.getMessage());
+            }
+        }, error -> {
+            Log.d("errorgetbrng", "GETBARANG: " + error.getMessage());
         });
         RequestQueue queue = Volley.newRequestQueue(CartActivity.this);
         queue.add(objectRequest);
