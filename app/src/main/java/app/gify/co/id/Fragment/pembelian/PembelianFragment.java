@@ -11,14 +11,11 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.R;
 import app.gify.co.id.activity.CartActivity;
 import app.gify.co.id.activity.MainActivity;
-import app.gify.co.id.activity.Pembelian;
 
 
 public class PembelianFragment extends Fragment {
@@ -29,7 +26,7 @@ public class PembelianFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pembelian, container, false);
-        cariKadoPembelian = view.findViewById(R.id.cariKadoPembelian);
+        cariKadoPembelian = view.findViewById(R.id.cariKadoPembelians);
         cariKadoPembelian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

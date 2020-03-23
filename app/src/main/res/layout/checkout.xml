@@ -148,7 +148,7 @@
                                 android:autofillHints="Nama depan" />
 
 
-                            <TextView
+                            <EditText
                                 android:id="@+id/textviewAlamatCheckout"
                                 android:hint="Jl."
                                 android:textColorHint="#b5a981"
@@ -204,7 +204,7 @@
 
                             <EditText
                                 android:id="@+id/kelurahanCheckout"
-                                android:text="-- pilih --"
+                                android:text="Tenjolaya"
                                 android:layout_gravity="center"
                                 android:textStyle="bold"
                                 android:textSize="15dp"
@@ -244,7 +244,7 @@
 
                             <EditText
                                 android:id="@+id/kecamatanCheckout"
-                                android:text="-- pilih --"
+                                android:text="Kesugihan"
                                 android:layout_gravity="center"
                                 android:textStyle="bold"
                                 android:layout_marginStart="5dp"
@@ -284,7 +284,6 @@
 
                             <Spinner
                                 android:id="@+id/kotaCheckout"
-                                android:text="-- pilih --"
                                 android:layout_gravity="center"
                                 android:textSize="15dp"
                                 android:textStyle="bold"
@@ -324,7 +323,6 @@
 
                             <Spinner
                                 android:id="@+id/provinsiCheckout"
-                                android:text="-- pilih --"
                                 android:layout_gravity="center"
                                 android:textStyle="bold"
                                 android:layout_marginStart="5dp"
