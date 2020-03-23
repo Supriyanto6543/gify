@@ -1,5 +1,6 @@
 package app.gify.co.id.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -44,6 +45,7 @@ import app.gify.co.id.R;
 import app.gify.co.id.adapter.AdapterFavorit;
 
 import static app.gify.co.id.baseurl.UrlJson.CHECKCART;
+import static app.gify.co.id.baseurl.UrlJson.DELETEFAV;
 import static app.gify.co.id.baseurl.UrlJson.GETCART;
 import static app.gify.co.id.baseurl.UrlJson.GETFAV;
 import static app.gify.co.id.baseurl.UrlJson.SENDCART;
@@ -125,7 +127,18 @@ public class DetailKado extends AppCompatActivity {
     }
 
     private void delfav() {
+        StringRequest request = new StringRequest(Request.Method.GET, DELETEFAV+"?idtetap="+uid+"&idbarang="+idbarangku, response -> {
+            if (response.equalsIgnoreCase("bisa")){
+                Toast.makeText(this, "Barang telah di hapus dari favorite", Toast.LENGTH_SHORT).show();
+                faforit = false;
+                favorit.setVisibility(View.GONE);
+                unfavorit.setVisibility(View.VISIBLE);
+            }
+        }, error -> {
 
+        });
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(request);
     }
 
     ImageListener slideImage = (position, imageView) -> imageView.setImageResource(sourceImg[position]);
