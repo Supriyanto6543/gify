@@ -7,11 +7,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.os.PersistableBundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +43,7 @@ public class Login extends AppCompatActivity {
     TextView lupaSandi;
     String email, password, userID, Uemail;
     Button Masuk, Daftar;
+    ImageView lihatPassword, hidePassword;
     ProgressDialog progressBar;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -60,6 +64,27 @@ public class Login extends AppCompatActivity {
         Masuk = findViewById(R.id.masuk);
         Daftar = findViewById(R.id.daftar);
         lupaSandi = findViewById(R.id.lupaSandi);
+        lihatPassword = findViewById(R.id.lihatPassword);
+        hidePassword = findViewById(R.id.hidePassword);
+
+        lihatPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                lihatPassword.setVisibility(View.GONE);
+                hidePassword.setVisibility(View.VISIBLE);
+            }
+        });
+
+        hidePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                lihatPassword.setVisibility(View.VISIBLE);
+                hidePassword.setVisibility(View.GONE);
+            }
+        });
+
 
         Daftar.setOnClickListener(v -> {
             Intent registerIntent = new Intent(getApplication(), Register.class);

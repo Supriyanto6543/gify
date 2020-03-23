@@ -295,20 +295,4 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         queue.add(objectRequest);
     }
 
-    private void deleteCart(int delete){
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, DELETECART+delete, null, response -> {
-            try {
-                JSONArray array = response.getJSONArray("YukNgaji");
-                for (int k = 0; k < array.length(); k++){
-
-                }
-            }catch (JSONException e){
-                e.printStackTrace();
-            }
-        }, error -> {
-            Log.d("deleteAction", error.getMessage());
-        });
-        RequestQueue queue = Volley.newRequestQueue(CartActivity.this);
-        queue.add(request);
-    }
 }

@@ -2,6 +2,8 @@ package app.gify.co.id.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -33,8 +36,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
@@ -52,6 +57,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.util.FileUtils;
 import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
@@ -276,7 +283,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                         });
 
                 AkuGantengBanget();
-                dialog.dismiss();
 
             }
         });
@@ -395,7 +401,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     public String getStringImage(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 50, baos);
         byte[] imageBytes = baos.toByteArray();
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
@@ -405,6 +411,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     private void AkuGantengBanget(){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE +"?id_tetap=" + LID, new Response.Listener<String>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(String response) {
                 Log.d("mmakan bang",response + "");
@@ -433,9 +440,18 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("foto", getStringImage(Photo));
-                params.put("cover", getStringImage(Cover));
-                params.put("id_tetap", LID);
+
+                if (getStringImage(Photo).isEmpty()){
+                    params.put("cover", getStringImage(Cover));
+                    params.put("id_tetap", LID);
+                }else if (getStringImage(Cover).isEmpty()){
+                    params.put("foto", getStringImage(Photo));
+                    params.put("id_tetap", LID);
+                }else{
+                    params.put("foto", getStringImage(Photo));
+                    params.put("cover", getStringImage(Cover));
+                    params.put("id_tetap", LID);
+                }
                 Log.d("Hasil Gambar", getStringImage(Photo) + "" +  getStringImage(Cover) + "");
                 return params;
             }
@@ -462,9 +478,14 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
                     ProvinsiS.setAdapter(hintadapterku);
 
+
+
                     ProvinsiS.setSelection(0, false);
 
                     ProvinsiS.setOnItemSelectedListener(Pengaturan.this);
+
+
+
                 }
             } catch (JSONException e) {
                 Log.d("err10", "Response: ");

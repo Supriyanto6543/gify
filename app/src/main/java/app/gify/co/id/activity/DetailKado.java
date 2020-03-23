@@ -1,5 +1,6 @@
 package app.gify.co.id.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -54,6 +55,8 @@ import app.gify.co.id.adapter.AdapterFavorit;
 
 import static app.gify.co.id.baseurl.UrlJson.DETAILKADO;
 import static app.gify.co.id.baseurl.UrlJson.CHECKCART;
+import static app.gify.co.id.baseurl.UrlJson.DELETEFAV;
+import static app.gify.co.id.baseurl.UrlJson.GETBARANG;
 import static app.gify.co.id.baseurl.UrlJson.GETCART;
 import static app.gify.co.id.baseurl.UrlJson.GETFAV;
 import static app.gify.co.id.baseurl.UrlJson.SENDCART;
@@ -97,7 +100,7 @@ public class DetailKado extends AppCompatActivity {
         nama = findViewById(R.id.namadetail);
         //kodebarang = findViewById(R.id.kodebarang);
         harga = findViewById(R.id.hargadetail);
-        desc = findViewById(R.id.descdetail);
+        desc = findViewById(R.id.descdetails);
         favorit = findViewById(R.id.favoritdeta);
         unfavorit = findViewById(R.id.unfavoritdet);
 
@@ -148,7 +151,21 @@ public class DetailKado extends AppCompatActivity {
         }
     };
     private void delfav() {
+        StringRequest request = new StringRequest(Request.Method.GET, DELETEFAV+"?idtetap="+uid+"&idbarang="+idbarangku, response -> {
+            if (response.equalsIgnoreCase("bisa")){
+                Toast.makeText(this, "Barang telah di hapus dari favorite", Toast.LENGTH_SHORT).show();
+                getIntent().removeExtra("favorit");
+                Intent intent = new Intent(DetailKado.this, List_Kado.class);
+                startActivity(intent);
+                finish();
+                favorit.setVisibility(View.GONE);
+                unfavorit.setVisibility(View.VISIBLE);
+            }
+        }, error -> {
 
+        });
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(request);
     }
 
     private void popup() {
@@ -191,7 +208,7 @@ public class DetailKado extends AppCompatActivity {
 
         batal.setOnClickListener(view1 -> dialog.dismiss());
         proses.setOnClickListener(view1 -> {
-            sendtocart(id);
+            getCart();
         });
 
 
@@ -374,10 +391,12 @@ public class DetailKado extends AppCompatActivity {
                 for (int i = 0; i < response.length(); i++){
                     JSONObject object = response.getJSONObject(i);
                     photobyid = object.getString("photo");
-                    kodeBarangbyid = object.getString("kode_barang");
                     namabyid = object.getString("nama");
                     hargabyid = object.getInt("harga");
                     deskripsibyid = object.getString("deskripsi");
+                    kodeBarangbyid = object.getString("kode_barang");
+                    Log.d("descharga", "getDetailBarangById: " + hargabyid + " s " + deskripsibyid + " s " + photobyid);
+                    nama.setText(namabyid + "(" + kodeBarangbyid + ")");
                     berat = object.getString("berat");
 
                     nama.setText(namabyid + kodeBarangbyid);
@@ -385,6 +404,8 @@ public class DetailKado extends AppCompatActivity {
                     //kodebarang.setText(kodeBarangbyid);
                     harga.setText("Rp. " + hargabyid);
                     desc.setText(deskripsibyid);
+
+
                 }
             }catch (Exception e){
                 e.printStackTrace();

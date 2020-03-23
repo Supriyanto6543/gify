@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -67,11 +68,17 @@ public class CheckoutActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Lnama = dataSnapshot.child("nama").getValue().toString();
                         LNohp = dataSnapshot.child("noHp").getValue().toString();
-                        Lalamat = dataSnapshot.child("alamat").getValue().toString();
 
-                        textViewCheckOutAlamat.setText(Lalamat);
-                        NamaPenerima.setText(Lnama);
-                        NoPenerima.setText(LNohp);
+                        if (!dataSnapshot.child("alamat").exists()) {
+                            Toast.makeText(getApplicationContext(), "isi alamat terlebih dahulu di pengaturan", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), CartActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Lalamat = dataSnapshot.child("alamat").getValue().toString();
+                            textViewCheckOutAlamat.setText(Lalamat);
+                            NamaPenerima.setText(Lnama);
+                            NoPenerima.setText(LNohp);
+                        }
                     }
 
                     @Override
