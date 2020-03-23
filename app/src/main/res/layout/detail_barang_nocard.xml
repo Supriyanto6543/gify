@@ -79,7 +79,6 @@
 
             <LinearLayout
                 android:layout_marginTop="@dimen/padd_10"
-                android:background="@drawable/detailkado1"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -88,11 +87,11 @@
                     android:id="@+id/carousel"
                     android:layout_width="match_parent"
                     android:layout_height="230dp"
-                    app:fillColor="@color/colorPrimary"
-                    app:pageColor="#FFF"
+                    app:fillColor="@color/description"
+                    app:pageColor="#FFFFFF"
                     app:radius="6dp"
                     app:slideInterval="3000"
-                    app:strokeColor="@color/colorPrimary"
+                    app:strokeColor="@color/description"
                     app:strokeWidth="1dp"/>
 
             </LinearLayout>
@@ -106,7 +105,7 @@
 
                 <TextView
                     android:id="@+id/namadetail"
-                    android:text="Dompet Klulit Moder Pria Inficlo (SPP509)"
+                    android:text=""
                     android:textStyle="bold"
                     android:textSize="19dp"
                     android:textColor="#ffffff"
@@ -141,6 +140,18 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/kodebarang"
+                android:text=""
+                android:textStyle="bold"
+                android:background="@drawable/detailkado"
+                android:textSize="19dp"
+                android:textColor="#ffffff"
+                android:paddingLeft="30dp"
+                android:layout_weight="50"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
             <LinearLayout
                 android:background="@drawable/detailkado1"
                 android:padding="20dp"
@@ -150,7 +161,7 @@
 
                 <TextView
                     android:id="@+id/hargadetail"
-                    android:text="Rp 120.000,;"
+                    android:text=""
                     android:textColor="#fd672c"
                     android:textStyle="bold"
                     android:textSize="16dp"
@@ -159,7 +170,7 @@
 
                 <TextView
                     android:id="@+id/descdetail"
-                    android:text="Produk Terbaru dari Barnd infclo dibuad dengan bahan yang nyaman digunakan, kualitas terbaik, desain trendy, update dan tidak pasaran. Membuat tampil percaya diri."
+                    android:text=""
                     android:layout_marginTop="5dp"
                     android:textStyle="bold"
                     android:textColor="#4a4a4a"

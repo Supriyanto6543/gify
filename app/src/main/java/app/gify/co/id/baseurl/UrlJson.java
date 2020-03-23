@@ -19,5 +19,8 @@ public class UrlJson {
     public static final String CHECKCART = ROOT + "cart.php";
     public static final String SENDCART = ROOT + "cartorder.php";
     public static final String SENDFAV = ROOT + "sendfavorit.php";
+    public static final String DETAILKADO = ROOT + "detailkado.php?id=";
+
     public static final String DELETECART = ROOT + "deletecart.php";
+    public static final String DELETEFAV = ROOT + "delfav.php";
 }
