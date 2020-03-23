@@ -73,13 +73,13 @@ public class CheckoutActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Lnama = dataSnapshot.child("nama").getValue().toString();
                         LNohp = dataSnapshot.child("noHp").getValue().toString();
+                        Lalamat = dataSnapshot.child("alamat").getValue().toString();
 
-                        if (!dataSnapshot.child("alamat").exists()) {
+                        if (Lalamat == null) {
                             Toast.makeText(getApplicationContext(), "isi alamat terlebih dahulu di pengaturan", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getApplicationContext(), CartActivity.class);
                             startActivity(intent);
                         } else {
-                            Lalamat = dataSnapshot.child("alamat").getValue().toString();
                             textViewCheckOutAlamat.setText(Lalamat);
                             NamaPenerima.setText(Lnama);
                             NoPenerima.setText(LNohp);

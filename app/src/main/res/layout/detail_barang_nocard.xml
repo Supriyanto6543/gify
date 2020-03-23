@@ -83,8 +83,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.synnapps.carouselview.CarouselView
+                <ImageView
                     android:id="@+id/carousel"
+                    android:layout_width="match_parent"
+                    android:layout_height="230dp"/>
+
+                <com.synnapps.carouselview.CarouselView
+
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="230dp"
                     app:fillColor="@color/description"
@@ -105,7 +111,7 @@
 
                 <TextView
                     android:id="@+id/namadetail"
-                    android:text=""
+                    android:text="Dompet Klulit Moder Pria Inficlo (SPP509)"
                     android:textStyle="bold"
                     android:textSize="19dp"
                     android:textColor="#ffffff"
@@ -149,7 +155,7 @@
 
                 <TextView
                     android:id="@+id/hargadetail"
-                    android:text=""
+                    android:text="Rp 120.000,;"
                     android:textColor="#fd672c"
                     android:textStyle="bold"
                     android:textSize="16dp"

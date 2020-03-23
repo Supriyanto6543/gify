@@ -51,6 +51,8 @@ import java.util.Random;
 import app.gify.co.id.R;
 import app.gify.co.id.adapter.AdapterCart;
 import app.gify.co.id.modal.MadolCart;
+import app.gify.co.id.thirdparty.GMailSender;
+//import app.gify.co.id.thirdparty.SenderAgent;
 import app.gify.co.id.widgets.RecyclerTouchDelete;
 
 import static app.gify.co.id.baseurl.UrlJson.DELETECART;
@@ -129,6 +131,9 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
             startActivity(intent);
 
         });
+
+        harga = getIntent().getStringExtra("harga");
+        Log.d("daus", harga + "");
 
         LocalBroadcastManager.getInstance(this).registerReceiver(passValue, new IntentFilter("message_subject_intent"));
 

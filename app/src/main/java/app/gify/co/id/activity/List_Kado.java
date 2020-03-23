@@ -87,7 +87,7 @@ public class List_Kado extends AppCompatActivity {
                 .placeholder(R.drawable.gifygif)
                 .centerCrop()
                 .into(imageViewTarget);
-        dialog.show();
+        //dialog.show();
 
         searchView = findViewById(R.id.listKadoEdittext);
         searchView.addTextChangedListener(new TextWatcher() {
