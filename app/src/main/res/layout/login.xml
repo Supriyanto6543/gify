@@ -88,7 +88,6 @@
                 android:textColorHint="#818181"
                 android:paddingStart="10dp"
                 android:background="@drawable/login_email_password"
-                android:layout_weight=""
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 

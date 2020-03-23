@@ -95,7 +95,6 @@ public class DetailKado extends AppCompatActivity {
         belikadodetail = findViewById(R.id.belikadodetail);
         slide = findViewById(R.id.carousel);
         nama = findViewById(R.id.namadetail);
-        kodebarang = findViewById(R.id.kodebarang);
         harga = findViewById(R.id.hargadetail);
         desc = findViewById(R.id.descdetail);
         favorit = findViewById(R.id.favoritdeta);
@@ -151,7 +150,10 @@ public class DetailKado extends AppCompatActivity {
         StringRequest request = new StringRequest(Request.Method.GET, DELETEFAV+"?idtetap="+uid+"&idbarang="+idbarangku, response -> {
             if (response.equalsIgnoreCase("bisa")){
                 Toast.makeText(this, "Barang telah di hapus dari favorite", Toast.LENGTH_SHORT).show();
-                faforit = false;
+                getIntent().removeExtra("favorit");
+                Intent intent = new Intent(DetailKado.this, List_Kado.class);
+                startActivity(intent);
+                finish();
                 favorit.setVisibility(View.GONE);
                 unfavorit.setVisibility(View.VISIBLE);
             }
@@ -161,8 +163,6 @@ public class DetailKado extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(request);
     }
-
-    ImageListener slideImage = (position, imageView) -> imageView.setImageResource(sourceImg[position]);
 
     private void popup() {
 
@@ -385,13 +385,11 @@ public class DetailKado extends AppCompatActivity {
                 for (int i = 0; i < response.length(); i++){
                     JSONObject object = response.getJSONObject(i);
                     photobyid = object.getString("photo");
-                    kodeBarangbyid = object.getString("kode_barang");
                     namabyid = object.getString("nama");
                     hargabyid = object.getInt("harga");
                     deskripsibyid = object.getString("deskripsi");
 
-                    nama.setText(namabyid);
-                    kodebarang.setText(kodeBarangbyid);
+                    nama.setText(namabyid + "(" + kodeBarangbyid + ")");
                     harga.setText("Rp. " + hargabyid);
                     desc.setText(deskripsibyid);
                 }
