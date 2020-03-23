@@ -1,7 +1,12 @@
 package app.gify.co.id.activity;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -36,6 +42,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
     DatabaseReference RootRef;
     FirebaseAuth mAuth;
+    private NotificationManager mNotificationManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +62,32 @@ public class CheckoutActivity extends AppCompatActivity {
 
         prosescekout.setOnClickListener(view -> {
             Intent intent = new Intent(CheckoutActivity.this, Pembelian.class);
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "notify_001");
+
+            NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+            bigText.setBigContentTitle("Pembelian Berhasil");
+            bigText.setSummaryText("Bayar hadiah ke penjual sekarang");
+
+            mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+            mBuilder.setContentTitle("Pembelian Berhasil");
+            mBuilder.setContentText("Bayar hadiah ke penjual sekarang");
+            mBuilder.setPriority(Notification.PRIORITY_MAX);
+            mBuilder.setStyle(bigText);
+
+            mNotificationManager = (NotificationManager) getApplication().getSystemService(Context.NOTIFICATION_SERVICE);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            {
+                String channelId = "Your_channel_id";
+                NotificationChannel channel = new NotificationChannel(
+                        channelId,
+                        "Channel human readable title",
+                        NotificationManager.IMPORTANCE_HIGH);
+                mNotificationManager.createNotificationChannel(channel);
+                mBuilder.setChannelId(channelId);
+            }
+
+            mNotificationManager.notify(0, mBuilder.build());
             startActivity(intent);
         });
 

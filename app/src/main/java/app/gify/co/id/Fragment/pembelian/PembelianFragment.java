@@ -33,7 +33,12 @@ public class PembelianFragment extends Fragment {
         cariKadoPembelian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new HomeFragment());
+                FragmentManager fm = getFragmentManager();
+                assert fm != null;
+                FragmentTransaction ft = fm.beginTransaction();
+                HomeFragment llf = new HomeFragment();
+                ft.replace(R.id.frame, llf);
+                ft.commit();
             }
         });
 

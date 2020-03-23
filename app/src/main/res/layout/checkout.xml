@@ -85,6 +85,7 @@
                         android:hint="Nasrudin Nawawi"
                         android:textColorHint="#b5a981"
                         android:textColor="#aa7a00"
+                        android:background="@drawable/kamdakmdwk"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -101,6 +102,7 @@
                         android:hint="Nasrudin Nawawi"
                         android:textColorHint="#b5a981"
                         android:textColor="#aa7a00"
+                        android:background="@drawable/kamdakmdwk"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -174,10 +176,11 @@
 
 
                         <View
-                            android:background="#b5a981"
+                            android:background="#fae59d"
                             android:layout_marginTop="2dp"
                             android:layout_width="match_parent"
-                            android:layout_height="0.2dp"/>
+                            android:layout_height="2.5dp"/>
+
 
                         <LinearLayout
                             android:id="@+id/pilihKelurahanCheckout"
@@ -214,10 +217,10 @@
                         </LinearLayout>
 
                         <View
-                            android:background="#b5a981"
+                            android:background="#fae59d"
                             android:layout_marginTop="2dp"
                             android:layout_width="match_parent"
-                            android:layout_height="0.2dp"/>
+                            android:layout_height="2.5dp"/>
 
                         <LinearLayout
                             android:id="@+id/pilihKecamatanCheckout"
@@ -254,10 +257,10 @@
                         </LinearLayout>
 
                         <View
-                            android:background="#b5a981"
+                            android:background="#fae59d"
                             android:layout_marginTop="2dp"
                             android:layout_width="match_parent"
-                            android:layout_height="0.2dp"/>
+                            android:layout_height="2.5dp"/>
 
                         <LinearLayout
                             android:id="@+id/pilihKotaCheckout"
@@ -294,10 +297,10 @@
                         </LinearLayout>
 
                         <View
-                            android:background="#b5a981"
+                            android:background="#fae59d"
                             android:layout_marginTop="2dp"
                             android:layout_width="match_parent"
-                            android:layout_height="0.2dp"/>
+                            android:layout_height="2.5dp"/>
 
                         <LinearLayout
                             android:id="@+id/pilihProvinsiCheckout"
@@ -334,10 +337,10 @@
                         </LinearLayout>
 
                         <View
-                            android:background="#b5a981"
+                            android:background="#fae59d"
                             android:layout_marginTop="2dp"
                             android:layout_width="match_parent"
-                            android:layout_height="0.2dp"/>
+                            android:layout_height="2.5dp"/>
 
 
                     </LinearLayout>
@@ -352,8 +355,7 @@
 
                     <EditText
                         android:id="@+id/ucapanCheckout"
-                        android:hint=".................................................................................................................................................................................................................."
-                        android:backgroundTint="#fff"
+                        android:background="@drawable/goku"
                         android:textColorHint="#b5a981"
                         android:layout_marginBottom="30dp"
                         android:layout_width="match_parent"

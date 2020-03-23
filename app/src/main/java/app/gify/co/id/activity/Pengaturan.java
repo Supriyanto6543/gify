@@ -3,7 +3,9 @@ package app.gify.co.id.activity;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -40,6 +42,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
@@ -95,6 +98,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     private static final int GALLERY_PHOTO = 1;
     private static final int GALLERY_COVER = 2;
+    private static final int NOTIF = 3;
+    private static final String NOTIFICATION_ID = "notif";
     private static final int PICK_IMAGE_GALLERY_REQUEST_CODE = 3;
     public static final String UPLOAD_URL = UrlJson.IMAGE;
 
@@ -111,6 +116,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     SharedPreferences sharedPreferences;
     Uri cover, profile;
     RequestQueue queue;
+    private NotificationManager mNotificationManager;
     int bitmap_size = 60;
     int max_resolution_image = 800;
     String belomAdaAlamat = "Belum Memasukkan Alamat";
@@ -244,12 +250,14 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             provinsi = ProvinsiS.getSelectedItem().toString();
             alamat = gAlamat + "," + " " + kelurahan + "," + " " + kecamatan + "," + " " + kota + "," + " " + profile;
 
-            dialog.show();
+            /*dialog.show();*/
+
+            AkuGantengBanget();
 
 
             if (namadepan.isEmpty() || namabelakang.isEmpty() || noHp.isEmpty() || email.isEmpty() || gAlamat.isEmpty() || kelurahan.isEmpty() || kecamatan.isEmpty() || kota.isEmpty() || provinsi.isEmpty()) {
-                /*Toast.makeText(Pengaturan.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();*/
+                Toast.makeText(Pengaturan.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
             else {
                 RootRef.child("Users").child(currentUserID).child("nama").setValue(nama)
@@ -282,7 +290,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                             dialog.dismiss();
                         });
 
-                AkuGantengBanget();
+
 
             }
         });
@@ -374,7 +382,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONArray array = response.getJSONArray("YukNgaji");
+                    JSONArray array = response.getJSONArray("GIFY");
                     for (int i = 0; i < array.length(); i++){
                         JSONObject object = array.getJSONObject(i);
                         fotoProfil = object.getString("photo");
@@ -420,6 +428,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                         Intent intentku = new Intent(getApplication(), MainActivity.class);
                         startActivity(intentku);
                         finish();
+
                     }else if (response.equals("gagal")){
                         Toast.makeText(getApplicationContext(), "Gagal Coba Lagi", Toast.LENGTH_LONG).show();
                         dialog.dismiss();
@@ -440,19 +449,9 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-
-                if (getStringImage(Photo).isEmpty()){
-                    params.put("cover", getStringImage(Cover));
-                    params.put("id_tetap", LID);
-                }else if (getStringImage(Cover).isEmpty()){
-                    params.put("foto", getStringImage(Photo));
-                    params.put("id_tetap", LID);
-                }else{
-                    params.put("foto", getStringImage(Photo));
-                    params.put("cover", getStringImage(Cover));
-                    params.put("id_tetap", LID);
-                }
-                Log.d("Hasil Gambar", getStringImage(Photo) + "" +  getStringImage(Cover) + "");
+                params.put("foto", getStringImage(Photo));
+                params.put("cover", getStringImage(Cover));
+                params.put("id_tetap", LID);
                 return params;
             }
         };
