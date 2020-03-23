@@ -244,7 +244,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             kota = KotaS.getSelectedItem().toString();
             provinsi = ProvinsiS.getSelectedItem().toString();
             alamat = gAlamat + "," + " " + kelurahan + "," + " " + kecamatan + "," + " " + kota + "," + " " + provinsi;
-            AkuGantengBanget();
             dialog.show();
 
 
@@ -285,7 +284,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
 
                 dialog.dismiss();
-
+                AkuGantengBanget();
             }
         });
 
