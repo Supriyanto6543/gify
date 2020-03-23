@@ -353,6 +353,7 @@
                             android:layout_height="wrap_content">
 
                             <TextView
+                                android:id="@+id/provinsiCheckOutText"
                                 android:text="Provinsi"
                                 android:layout_gravity="center"
                                 android:textStyle="bold"

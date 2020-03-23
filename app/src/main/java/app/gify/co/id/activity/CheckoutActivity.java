@@ -85,7 +85,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         kecamatan = findViewById(R.id.kecamatanCheckout);
         kelurahan = findViewById(R.id.kelurahanCheckout);
         kota = findViewById(R.id.kotaCheckoutText);
-        /*provinsi = findViewById(R.id.provinsiCheckoutText);*/
+        provinsi = findViewById(R.id.provinsiCheckOutText);
         gantiAlamat = findViewById(R.id.gantiAlamatCheckout);
         Kota = findViewById(R.id.kotaCheckout);
         Provinsi = findViewById(R.id.provinsiCheckout);
