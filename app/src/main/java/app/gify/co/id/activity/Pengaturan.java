@@ -2,6 +2,8 @@ package app.gify.co.id.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -33,8 +36,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
@@ -278,7 +283,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                         });
 
                 AkuGantengBanget();
-                dialog.dismiss();
 
             }
         });
@@ -407,6 +411,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     private void AkuGantengBanget(){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE +"?id_tetap=" + LID, new Response.Listener<String>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(String response) {
                 Log.d("mmakan bang",response + "");
