@@ -84,13 +84,16 @@ public class AdapterListKado extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             Log.d("udin", kados.get(position).getGambar() + "");
         }
+        String id = kados.get(position).getId_barang();
         ((MyKado)holder).linear.setOnClickListener(view1 -> {
             Intent intent = new Intent(context.getApplicationContext(), DetailKado.class);
             intent.putExtra("gambar", kados.get(position).getGambar());
+            intent.putExtra("gambar1", kados.get(position).getGambar1());
+            intent.putExtra("gambar2", kados.get(position).getGambar2());
             intent.putExtra("desc", kados.get(position).getDesc());
             intent.putExtra("harga", kados.get(position).getHarga());
             intent.putExtra("idbarang", kados.get(position).getId_barang());
-            intent.putExtra("idbarang", kados.get(position).getId_barang());
+            intent.putExtra("id", kados.get(position).getId_barang());
             intent.putExtra("nama", kados.get(position).getNama() + "(" + kados.get(position).getKode() + ")");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);

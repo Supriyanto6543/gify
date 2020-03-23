@@ -173,20 +173,50 @@
             android:layout_height="40dp"
             android:contentDescription="@string/todo" />
 
-        <EditText
-            android:id="@+id/passwordRegister"
-            android:inputType="textPassword"
-            android:singleLine="true"
 
-            android:hint="Password"
-            android:textColorHint="#818181"
-            android:autofillHints="Email"
-            android:paddingStart="10dp"
-            android:textColor="#000"
-            android:background="@drawable/login_email_password"
+
+        <RelativeLayout
             android:layout_weight="85"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
             android:layout_width="0dp"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/passwordRegister"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:hint="Password"
+                android:textColorHint="#818181"
+                android:autofillHints="Email"
+                android:paddingStart="10dp"
+                android:textColor="#000"
+                android:background="@drawable/login_email_password"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <ImageView
+                android:id="@+id/lihatPasswordRegister"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/nohidden"
+                android:layout_width="25dp"
+                android:layout_height="25dp"/>
+
+            <ImageView
+                android:id="@+id/hidePasswordRegister"
+                android:visibility="gone"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/hidden"
+                android:layout_width="25dp"
+                android:layout_height="25dp"/>
+
+        </RelativeLayout>
 
     </LinearLayout>
 

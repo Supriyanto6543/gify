@@ -1,7 +1,11 @@
 package app.gify.co.id.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -21,9 +25,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.squareup.picasso.Picasso;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageListener;
 
@@ -31,6 +40,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +53,9 @@ import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.R;
 import app.gify.co.id.adapter.AdapterFavorit;
 
+import static app.gify.co.id.baseurl.UrlJson.DETAILKADO;
+import static app.gify.co.id.baseurl.UrlJson.CHECKCART;
+import static app.gify.co.id.baseurl.UrlJson.DELETEFAV;
 import static app.gify.co.id.baseurl.UrlJson.GETCART;
 import static app.gify.co.id.baseurl.UrlJson.GETFAV;
 import static app.gify.co.id.baseurl.UrlJson.SENDCART;
@@ -51,7 +64,7 @@ import static app.gify.co.id.baseurl.UrlJson.SENDFAV;
 public class DetailKado extends AppCompatActivity {
 
     CarouselView slide;
-    TextView nama, harga, desc, namapopup, jumlah, hargapopuptop, hargapopupdown;
+    TextView nama, harga, desc, namapopup, jumlah, hargapopuptop, hargapopupdown, kodebarang;
     Button belikadodetail;
     AlertDialog.Builder builder;
     AlertDialog dialog;
@@ -59,14 +72,10 @@ public class DetailKado extends AppCompatActivity {
     ImageView tambah, kurang, favorit, unfavorit;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
-    int hargas;
-    int cingpai = 1;
     CarouselView carouselView;
-    String uid;
-    int id_barang;
-    String idbarang;
-    String idbarangku;
-    int sourceImg[] = {R.drawable.lupa_password_background, R.drawable.profile_image};
+    String idbarangku, uid, id, photobyid, kodeBarangbyid, namabyid, deskripsibyid;
+    int id_barang, hargabyid, cingpai, gambar, gambar1, gambar2;
+    int sourceImg[];
     Boolean faforit;
     ImageView buatJadiWistlist, back;
 
@@ -86,10 +95,18 @@ public class DetailKado extends AppCompatActivity {
         belikadodetail = findViewById(R.id.belikadodetail);
         slide = findViewById(R.id.carousel);
         nama = findViewById(R.id.namadetail);
+        kodebarang = findViewById(R.id.kodebarang);
         harga = findViewById(R.id.hargadetail);
         desc = findViewById(R.id.descdetail);
         favorit = findViewById(R.id.favoritdeta);
         unfavorit = findViewById(R.id.unfavoritdet);
+
+        id = getIntent().getStringExtra("id");
+        gambar = getIntent().getIntExtra("gambar", 0);
+        gambar1 = getIntent().getIntExtra("gambar1", 0);
+        gambar2 = getIntent().getIntExtra("gambar2", 0);
+
+        sourceImg = new int[]{gambar, gambar1, gambar2};
 
         //carousel
         carouselView = (CarouselView) findViewById(R.id.carousel);
@@ -111,15 +128,38 @@ public class DetailKado extends AppCompatActivity {
         uid = preferences.getString("uid", "");
 
         unfavorit.setOnClickListener(view -> getFav());
+        favorit.setOnClickListener(view -> delfav());
 
-        hargas = getIntent().getIntExtra("harga", -1);
-        nama.setText(getIntent().getStringExtra("nama"));
-        harga.setText("Rp. " + hargas);
-        desc.setText(getIntent().getStringExtra("desc"));
+        getDetailBarangById(id);
 
         belikadodetail.setOnClickListener(view -> {
             popup();
         });
+
+        Toast.makeText(getApplicationContext(), "Id mu adalah " + id, Toast.LENGTH_LONG).show();
+    }
+
+    ImageListener slideImage = new ImageListener() {
+        @Override
+        public void setImageForPosition(int position, ImageView imageView) {
+            //imageView.setImageResource(sourceImg[position]);
+            Glide.with(DetailKado.this).load(sourceImg[position]).into(imageView);
+            new DownloadImageTask(imageView).execute(String.valueOf(sourceImg[position]));
+        }
+    };
+    private void delfav() {
+        StringRequest request = new StringRequest(Request.Method.GET, DELETEFAV+"?idtetap="+uid+"&idbarang="+idbarangku, response -> {
+            if (response.equalsIgnoreCase("bisa")){
+                Toast.makeText(this, "Barang telah di hapus dari favorite", Toast.LENGTH_SHORT).show();
+                faforit = false;
+                favorit.setVisibility(View.GONE);
+                unfavorit.setVisibility(View.VISIBLE);
+            }
+        }, error -> {
+
+        });
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(request);
     }
 
     ImageListener slideImage = (position, imageView) -> imageView.setImageResource(sourceImg[position]);
@@ -139,8 +179,8 @@ public class DetailKado extends AppCompatActivity {
 
 
         namapopup.setText(getIntent().getStringExtra("nama"));
-        hargapopuptop.setText("Rp. " + hargas);
-        hargapopupdown.setText("Rp. " + hargas);
+        hargapopuptop.setText("Rp. " + hargabyid);
+        hargapopupdown.setText("Rp. " + hargabyid);
 
         tambah.setOnClickListener(view1 -> {
             if (cingpai==9){
@@ -149,7 +189,7 @@ public class DetailKado extends AppCompatActivity {
                 cingpai = cingpai + 1;
             }
             jumlah.setText(String.valueOf(cingpai));
-            hargapopupdown.setText("Rp. " + hargas*cingpai);
+            hargapopupdown.setText("Rp. " + hargabyid*cingpai);
         });
         kurang.setOnClickListener(view1 -> {
             if (cingpai==1){
@@ -159,13 +199,12 @@ public class DetailKado extends AppCompatActivity {
             }
 
             jumlah.setText(String.valueOf(cingpai));
-            hargapopupdown.setText("Rp. " + hargas*cingpai);;
+            hargapopupdown.setText("Rp. " + hargabyid*cingpai);;
         });
 
         batal.setOnClickListener(view1 -> dialog.dismiss());
         proses.setOnClickListener(view1 -> {
-            getCart();
-
+            sendtocart(id);
         });
 
 
@@ -204,27 +243,16 @@ public class DetailKado extends AppCompatActivity {
     }
 
     private void getCart(){
-        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETCART, null, response -> {
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, CHECKCART+"?idtetap="+uid+"&idbarang="+idbarangku, null, response -> {
             try {
                 JSONArray array = response.getJSONArray("YukNgaji");
                 Log.d("trycart", "getCart: " + response + array.length());
-                for (int a = 0; a < array.length(); a++){
-                    JSONObject object = array.getJSONObject(a);
-                    String id_tetapku = object.getString("id_tetap");
-                    Log.d("testgetcart", "getCart: " + uid + " s " + id_tetapku);
-                    if (uid.equalsIgnoreCase(id_tetapku)){
-                        id_barang = object.getInt("id_barang");
-                        Log.d("testgetcartif", "getCart: ");
-                        if (id_barang == Integer.parseInt(idbarangku)){
-                            Toast.makeText(this, "Barang sudah ada di keranjang", Toast.LENGTH_SHORT).show();
-                        }else {
-                            Log.d("testgetcartelse", "getCart: ");
-                            sendtocart(String.valueOf(idbarangku));
-                        }
-                    }
+                Log.d("nullsebelum", "getCart: " + array.toString());
+                if (array.isNull(0)){
+                    sendtocart(idbarangku);
+                }else {
+                    Toast.makeText(this, "Barang sudah ada di cart", Toast.LENGTH_SHORT).show();
                 }
-
-
             } catch (JSONException e) {
                 Log.d("exceptioncart", "getCart: " + e.getMessage());
                 e.printStackTrace();
@@ -280,11 +308,11 @@ public class DetailKado extends AppCompatActivity {
                         String id_barang = object.getString("id_barang");
                         Log.d("uidgetfav", "getFav: " + id_barang + " s " + idbarangku);
                         if (id_barang.equalsIgnoreCase(idbarangku)){
-
+                            Toast.makeText(this, "barang sudah ada di favorit", Toast.LENGTH_SHORT).show();
                             Log.d("idbarangequalfav", "getFav: " + id_barang + " s " + idbarangku);
-                        }else {
-                            sendFavorit();
                         }
+                    }else {
+                        sendFavorit();
                     }
                 }
             } catch (JSONException e) {
@@ -325,5 +353,56 @@ public class DetailKado extends AppCompatActivity {
         queue.add(objectRequest);
     }
 
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
 
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+
+    }
+
+    private void getDetailBarangById(String id){
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.POST, DETAILKADO+id, null, response -> {
+            try {
+                for (int i = 0; i < response.length(); i++){
+                    JSONObject object = response.getJSONObject(i);
+                    photobyid = object.getString("photo");
+                    kodeBarangbyid = object.getString("kode_barang");
+                    namabyid = object.getString("nama");
+                    hargabyid = object.getInt("harga");
+                    deskripsibyid = object.getString("deskripsi");
+
+                    nama.setText(namabyid);
+                    kodebarang.setText(kodeBarangbyid);
+                    harga.setText("Rp. " + hargabyid);
+                    desc.setText(deskripsibyid);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }, error -> {
+
+        });
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(arrayRequest);
+    }
 }

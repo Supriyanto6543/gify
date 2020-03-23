@@ -11,11 +11,14 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,7 +60,7 @@ public class Register extends AppCompatActivity {
     TextView TanggalLahir;
     String nama, email, noHp, password, currentUserID;
     Button Masuk;
-
+    ImageView lihatPassword, hidePassword;
     Calendar date;
     StringBuilder selectedDate;
 
@@ -74,6 +77,7 @@ public class Register extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
 
+
         InitializeFields();
 
         TanggalLahir.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +86,25 @@ public class Register extends AppCompatActivity {
                 showDateTimePicker();
             }
         });
+
+        lihatPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                lihatPassword.setVisibility(View.GONE);
+                hidePassword.setVisibility(View.VISIBLE);
+            }
+        });
+
+        hidePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                lihatPassword.setVisibility(View.VISIBLE);
+                hidePassword.setVisibility(View.GONE);
+            }
+        });
+
 
         Masuk.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +123,8 @@ public class Register extends AppCompatActivity {
         NoHp = findViewById(R.id.noHPRegister);
         Password = findViewById(R.id.passwordRegister);
         TanggalLahir = findViewById(R.id.tanggalLahirRegister);
+        hidePassword = findViewById(R.id.hidePasswordRegister);
+        lihatPassword = findViewById(R.id.lihatPasswordRegister);
     }
 
     private void CreateNewAccount() {
