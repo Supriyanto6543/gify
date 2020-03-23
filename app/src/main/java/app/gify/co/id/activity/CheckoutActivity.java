@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.LineNumberReader;
 
+import app.gify.co.id.Fragment.pembelian.PembelianFragment;
 import app.gify.co.id.R;
 
 public class CheckoutActivity extends AppCompatActivity {
@@ -32,7 +34,8 @@ public class CheckoutActivity extends AppCompatActivity {
 
     EditText NamaPenerima, NoPenerima;
     String currentUserID, Lnama, LNohp, Lalamat;
-    TextView textViewCheckOutAlamat;
+    EditText textViewCheckOutAlamat;
+    Spinner provinsi, kota;
 
     DatabaseReference RootRef;
     FirebaseAuth mAuth;
@@ -48,13 +51,15 @@ public class CheckoutActivity extends AppCompatActivity {
         textViewCheckOutAlamat = findViewById(R.id.textviewAlamatCheckout);
         NamaPenerima = findViewById(R.id.namaPenerimaCheckout);
         NoPenerima = findViewById(R.id.noHPPenerimaCheckout);
+        provinsi = findViewById(R.id.provinsiCheckout);
+        kota = findViewById(R.id.kotaCheckout);
 
         prosescekout = findViewById(R.id.prorsesCheckout);
         back = findViewById(R.id.backCheckout);
         back.setOnClickListener(v -> finish());
 
         prosescekout.setOnClickListener(view -> {
-            Intent intent = new Intent(CheckoutActivity.this, Pembelian.class);
+            Intent intent = new Intent(CheckoutActivity.this, PembelianFragment.class);
             startActivity(intent);
         });
 
