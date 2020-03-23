@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         profile = headerLayout.findViewById(R.id.imageViewNavigationDrawer);
         cover = headerLayout.findViewById(R.id.coverDrawable);
         lemparMysql();
-        cekprofile();
+        //cekprofile();
 
 
         String email = sharedPreferences.getString("email", "");
@@ -170,39 +170,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void cekprofile(){
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA +"?id_tetap=" + LID, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONArray array = response.getJSONArray("YukNgaji");
-                    for (int i = 0; i < array.length(); i++){
-                        JSONObject object = array.getJSONObject(i);
-                        coverku = object.getString("cover_foto");
-                        photoprofile = object.getString("photo");
-                        byte[] imageBytes = Base64.decode(coverku, Base64.DEFAULT);
-                        decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-                        byte[] imageBytesku = Base64.decode(photoprofile, Base64.DEFAULT);
-                        decodedImageku = BitmapFactory.decodeByteArray(imageBytesku, 0, imageBytesku.length);
-                        cover.setImageBitmap(decodedImage);
-                        profile.setImageBitmap(decodedImageku);
-                        dialog.dismiss();
-
-
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        requestQueue.add(request);
-    }
+//    public void cekprofile(){
+//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA +"?id_tetap=" + LID, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                try {
+//                    JSONArray array = response.getJSONArray("YukNgaji");
+//                    for (int i = 0; i < array.length(); i++){
+//                        JSONObject object = array.getJSONObject(i);
+//                        coverku = object.getString("cover_foto");
+//                        photoprofile = object.getString("photo");
+//                        byte[] imageBytes = Base64.decode(coverku, Base64.DEFAULT);
+//                        decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+//                        byte[] imageBytesku = Base64.decode(photoprofile, Base64.DEFAULT);
+//                        decodedImageku = BitmapFactory.decodeByteArray(imageBytesku, 0, imageBytesku.length);
+//                        cover.setImageBitmap(decodedImage);
+//                        profile.setImageBitmap(decodedImageku);
+//                        dialog.dismiss();
+//
+//
+//                    }
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//
+//            }
+//        });
+//        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+//        requestQueue.add(request);
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

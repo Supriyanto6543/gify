@@ -158,10 +158,13 @@ public class List_Kado extends AppCompatActivity {
                         String nama = object.getString("nama");
                         int harga = object.getInt("harga");
                         String gambar = object.getString("photo").replace(" ", "%20");
+                        String gambar1 = object.getString("photo1").replace(" ", "%20");
+                        String gambar2 = object.getString("photo2").replace(" ", "%20");
                         String tipe = object.getString("kode_barang");
                         String desc = object.getString("deskripsi");
                         String idbarang = object.getString("id");
-                        MadolKado madolKado = new MadolKado(gambar, harga, nama, tipe, desc, idbarang);
+                        //MadolKado madolKado = new MadolKado(gambar, harga, nama, tipe, desc, idbarang);
+                        MadolKado madolKado = new MadolKado(gambar, gambar1, gambar2, harga, nama, tipe, desc, idbarang);
                         madolKados.add(madolKado);
                         adapterListKado = new AdapterListKado(madolKados, getApplicationContext());
                         recycler.setAdapter(adapterListKado);
