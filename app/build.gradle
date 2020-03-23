@@ -9,7 +9,7 @@ android {
         applicationId "app.gify.co.id"
         minSdkVersion 21
         targetSdkVersion 29
-        multiDexEnabled false
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
 

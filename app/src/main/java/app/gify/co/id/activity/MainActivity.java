@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ImageView navFragmentHome,cover;
     private long bakPressedTime;
     CircleImageView profile;
-    String Lemail, LID, coverku, photoprofile, Lalamat, LNoHp, currentUserID, Ltanggal;
+    String Lemail, LID, coverku, photoprofile, Lalamat, LNoHp, currentUserID;
     TextView navigationheademail;
     TextView nama;
     Toolbar toolbar;
@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Dialog dialog;
     SessionManager sessionManager;
     SharedPreferences.Editor editor;
-    Bitmap decodedImage, decodedImageku;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mAuth = FirebaseAuth.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
         currentUserID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+
 
         try {
             ProviderInstaller.installIfNeeded(getApplicationContext());
@@ -138,43 +138,96 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         profile = headerLayout.findViewById(R.id.imageViewNavigationDrawer);
         cover = headerLayout.findViewById(R.id.coverDrawable);
-        lemparMysql();
-        cekprofile();
+
+
 
 
         String email = sharedPreferences.getString("email", "");
-        Log.d("easd", "onCreate: " + email + " s " + sharedPreferences.getString("nama", ""));
+        /*idgua = sharedPreferences.getString("gokuGanteng", "");
+        Log.d("easd", "onCreate: " + email + " s " + sharedPreferences.getString("nama", ""));*/
         navigationheademail.setText(email);
-        nama.setText(sharedPreferences.getString("nama", ""));
+        Lemail = sharedPreferences.getString("nama", "");
+        nama.setText(Lemail);
+        lemparMysql();
         loadFragment (new HomeFragment());
 
     }
 
 
     private void lemparMysql(){
-        RootRef.child("Users").child(currentUserID)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        LID = dataSnapshot.getKey();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-    }
-
-
-    public void cekprofile(){
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA +"?id_tetap=" + LID, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA  + nama.getText().toString(), null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONArray array = response.getJSONArray("YukNgaji");
+                    JSONArray array = response.getJSONArray("GIFY");
                     for (int i = 0; i < array.length(); i++){
                         JSONObject object = array.getJSONObject(i);
+
+                        String goku = object.getString("id_tetap");
+                        if (goku != null){
+                            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_IMAGE  + goku, null, new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    try {
+                                        JSONArray array = response.getJSONArray("GIFY");
+                                        for (int i = 0; i < array.length(); i++){
+                                            JSONObject object = array.getJSONObject(i);
+
+                                            coverku = object.getString("cover_foto");
+                                            photoprofile = object.getString("photo");
+                                            byte[] imageBytes = Base64.decode(coverku, Base64.DEFAULT);
+                                            Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                                            byte[] imageBytesku = Base64.decode(photoprofile, Base64.DEFAULT);
+                                            Bitmap decodedImageku = BitmapFactory.decodeByteArray(imageBytesku, 0, imageBytesku.length);
+                                            cover.setImageBitmap(decodedImage);
+                                            profile.setImageBitmap(decodedImageku);
+                                            dialog.dismiss();
+
+
+                                        }
+                                    }catch (Exception e){
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                            });
+                            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                            requestQueue.add(request);
+                        }
+                        Log.d("goky", goku + " ");
+
+                        dialog.dismiss();
+
+
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(request);
+    }
+
+
+    /*public void cekprofile(){
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_IMAGE  + goku, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray array = response.getJSONArray("GIFY");
+                    for (int i = 0; i < array.length(); i++){
+                        JSONObject object = array.getJSONObject(i);
+
                         coverku = object.getString("cover_foto");
                         photoprofile = object.getString("photo");
                         byte[] imageBytes = Base64.decode(coverku, Base64.DEFAULT);
@@ -199,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.add(request);
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
