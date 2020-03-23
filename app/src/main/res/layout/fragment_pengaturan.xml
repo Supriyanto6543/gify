@@ -6,8 +6,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/Theme.AppCompat.Light.NoActionBar"
-    tools:context=".activity.PengaturanFragment">
+    style="@style/Theme.AppCompat.Light.NoActionBar">
 
     <androidx.appcompat.widget.Toolbar
         android:background="#fab60b"
@@ -340,6 +339,7 @@
                         android:layout_width="21dp"
                         android:layout_height="20dp"
                         android:layout_weight="5"
+                        android:layout_gravity="center"
                         android:src="@drawable/maps"
                         android:tint="#dad9d5" />
 

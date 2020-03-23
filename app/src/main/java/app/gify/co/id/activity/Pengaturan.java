@@ -449,9 +449,19 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("foto", getStringImage(Photo));
-                params.put("cover", getStringImage(Cover));
-                params.put("id_tetap", LID);
+                if(getStringImage(Photo) == null){
+                    params.put("foto", "photo");
+                    params.put("cover", getStringImage(Cover));
+                    params.put("id_tetap", LID);
+                }else if (getStringImage(Cover) == null){
+                    params.put("foto", getStringImage(Photo));
+                    params.put("cover", "cover");
+                    params.put("id_tetap", LID);
+                }else {
+                    params.put("foto", getStringImage(Photo));
+                    params.put("cover", getStringImage(Cover));
+                    params.put("id_tetap", LID);
+                }
                 return params;
             }
         };
