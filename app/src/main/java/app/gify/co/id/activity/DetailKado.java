@@ -112,6 +112,7 @@ public class DetailKado extends AppCompatActivity {
         uid = preferences.getString("uid", "");
 
         unfavorit.setOnClickListener(view -> getFav());
+        favorit.setOnClickListener(view -> delfav());
 
         hargas = getIntent().getIntExtra("harga", -1);
         nama.setText(getIntent().getStringExtra("nama"));
@@ -121,6 +122,10 @@ public class DetailKado extends AppCompatActivity {
         belikadodetail.setOnClickListener(view -> {
             popup();
         });
+    }
+
+    private void delfav() {
+
     }
 
     ImageListener slideImage = (position, imageView) -> imageView.setImageResource(sourceImg[position]);
@@ -270,11 +275,11 @@ public class DetailKado extends AppCompatActivity {
                         String id_barang = object.getString("id_barang");
                         Log.d("uidgetfav", "getFav: " + id_barang + " s " + idbarangku);
                         if (id_barang.equalsIgnoreCase(idbarangku)){
-
+                            Toast.makeText(this, "barang sudah ada di favorit", Toast.LENGTH_SHORT).show();
                             Log.d("idbarangequalfav", "getFav: " + id_barang + " s " + idbarangku);
-                        }else {
-                            sendFavorit();
                         }
+                    }else {
+                        sendFavorit();
                     }
                 }
             } catch (JSONException e) {
