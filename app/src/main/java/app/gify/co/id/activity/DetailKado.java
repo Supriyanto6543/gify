@@ -146,7 +146,7 @@ public class DetailKado extends AppCompatActivity {
             popup();
         });
 
-        Toast.makeText(getApplicationContext(), "Id mu adalah " + id, Toast.LENGTH_LONG).show();
+        /*Toast.makeText(getApplicationContext(), "Id mu adalah " + id, Toast.LENGTH_LONG).show();*/
     }
 
     ImageListener slideImage = new ImageListener() {

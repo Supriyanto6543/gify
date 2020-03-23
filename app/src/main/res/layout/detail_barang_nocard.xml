@@ -117,7 +117,7 @@
                     android:textColor="#ffffff"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="15dp"
-                    android:layout_marginStart="30dp"
+                    android:layout_marginStart="20dp"
                     android:layout_weight="50"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"/>
@@ -129,7 +129,7 @@
 
                 <ImageView
                     android:id="@+id/favoritdeta"
-                    android:src="@drawable/love"
+                    android:src="@drawable/love1"
                     android:layout_gravity="end"
                     android:layout_weight="10"
                     android:layout_width="30dp"
@@ -138,7 +138,7 @@
                 <ImageView
                     android:id="@+id/unfavoritdet"
                     android:visibility="gone"
-                    android:src="@drawable/settings"
+                    android:src="@drawable/love"
                     android:layout_gravity="end"
                     android:layout_weight="10"
                     android:layout_width="30dp"

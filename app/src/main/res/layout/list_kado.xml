@@ -49,6 +49,7 @@
                 android:hint="Cari barang"
                 android:layout_gravity="center"
                 android:padding="5dp"
+                android:textColor="#b5a981"
                 android:textColorHint="#b5a981"
                 android:layout_weight="30"
                 android:layout_width="0dp"
@@ -58,9 +59,9 @@
                 android:id="@+id/cariBarangListKado"
                 android:layout_width="45dp"
                 android:layout_height="37dp"
-                android:layout_gravity="start"
+                android:layout_gravity="center"
                 android:layout_weight="0"
-                android:padding="10dp"
+                android:padding="5dp"
                 android:src="@drawable/magnifying_glass" />
 
             <ImageView

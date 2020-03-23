@@ -92,6 +92,7 @@
                 android:layout_height="match_parent"/>
 
             <ImageView
+                android:tint="@color/colorPrimary"
                 android:id="@+id/lihatPassword"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="10dp"
@@ -102,6 +103,7 @@
                 android:layout_height="25dp"/>
 
             <ImageView
+                android:tint="@color/colorPrimary"
                 android:id="@+id/hidePassword"
                 android:visibility="gone"
                 android:layout_alignParentEnd="true"

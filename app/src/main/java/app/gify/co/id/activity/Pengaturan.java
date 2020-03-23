@@ -239,9 +239,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             editTextKelurahan.setVisibility(View.VISIBLE);
             GantiAlamat.setVisibility(View.VISIBLE);
 
-            viewKecamatan.setVisibility(View.GONE);
-            viewKelurahan.setVisibility(View.GONE);
-            viewTerserah.setVisibility(View.GONE);
         });
 
         CheckList.setOnClickListener(v -> {

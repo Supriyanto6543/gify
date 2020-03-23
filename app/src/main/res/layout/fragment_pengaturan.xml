@@ -336,7 +336,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:layout_width="21dp"
+                        android:layout_width="0dp"
                         android:layout_height="20dp"
                         android:layout_weight="5"
                         android:layout_gravity="center"
@@ -345,15 +345,14 @@
 
                     <EditText
                         android:id="@+id/edittextAlamatPengaturan"
-                        android:visibility="gone"
                         android:background="@drawable/kamdakmdwk"
                         android:hint="Jl. Sudirman No. 58"
                         android:textColorHint="#b5a981"
                         android:textStyle="bold"
                         android:textSize="15dp"
                         android:layout_marginStart="2dp"
-                        android:textColor="#000"
-                        android:layout_weight="85"
+                        android:textColor="#b5a981"
+                        android:layout_weight="90"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:autofillHints="Nama depan" />
@@ -361,10 +360,11 @@
 
                     <TextView
                         android:id="@+id/textviewAlamatPengaturan"
-                        android:layout_width="299dp"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="2dp"
-                        android:layout_weight="89"
+                        android:visibility="gone"
+                        android:layout_weight="90"
                         android:autofillHints="Nama depan"
                         android:hint="Jl."
                         android:textColor="#b5a981"
@@ -375,9 +375,10 @@
 
                     <ImageView
                         android:id="@+id/gantiAlamatPengaturan"
-                        android:layout_width="35dp"
+                        android:layout_width="0dp"
                         android:layout_height="20dp"
-                        android:layout_weight="6"
+                        android:layout_weight="5"
+                        android:layout_gravity="center"
                         android:src="@drawable/edit"
                         android:tint="#dad9d5" />
 
@@ -388,6 +389,7 @@
                 <View
                     android:id="@+id/viewTerserah"
                     android:background="#fae59d"
+                    android:visibility="gone"
                     android:layout_marginTop="2dp"
                     android:layout_width="match_parent"
                     android:layout_height="2.5dp"/>
@@ -395,16 +397,17 @@
                 <LinearLayout
                     android:id="@+id/pilihKelurahanPengaturan"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_gravity="center"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:orientation="horizontal"
                     android:weightSum="100">
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
                         android:layout_gravity="center"
                         android:layout_weight="30"
                         android:text="Kelurahan"
@@ -415,24 +418,25 @@
                     <EditText
                         android:id="@+id/edittextkelurahan"
                         android:visibility="gone"
-                        android:background="@drawable/dbjadjahdja"
+
+                        android:background="#fff"
                         android:hint="Sukajadi"
                         android:textColorHint="#b5a981"
                         android:textStyle="bold"
                         android:textSize="15dp"
                         android:layout_marginStart="2dp"
-                        android:textColor="#000"
-                        android:layout_weight="85"
+                        android:textColor="#b5a981"
+                        android:layout_weight="65"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:autofillHints="Nama depan" />
 
                     <TextView
                         android:id="@+id/kelurahan"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:layout_marginStart="5dp"
+                        android:layout_marginStart="2dp"
                         android:layout_weight="65"
                         android:gravity="center"
                         android:text="-- pilih --"
@@ -451,13 +455,13 @@
 
                 <LinearLayout
                     android:id="@+id/pilihKecamatanPengaturan"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:weightSum="100"
                     android:layout_gravity="center"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="40dp">
 
                     <TextView
                         android:text="Kecamatan"
@@ -465,23 +469,24 @@
                         android:textStyle="bold"
                         android:textColor="#b5a981"
                         android:textSize="15dp"
+                        android:gravity="center_vertical"
                         android:layout_weight="30"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="match_parent"/>
 
                     <EditText
                         android:id="@+id/edittextkecamatan"
                         android:visibility="gone"
-                        android:background="@drawable/dbjadjahdja"
+                        android:background="#fff"
                         android:hint="Tenjolaya"
                         android:textColorHint="#b5a981"
                         android:textStyle="bold"
                         android:textSize="15dp"
                         android:layout_marginStart="2dp"
-                        android:textColor="#000"
-                        android:layout_weight="85"
+                        android:textColor="#b5a981"
+                        android:layout_weight="65"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:autofillHints="Nama depan" />
 
                     <TextView
@@ -490,12 +495,12 @@
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:textStyle="bold"
-                        android:layout_marginStart="5dp"
+                        android:layout_marginStart="2dp"
                         android:textColor="#b5a981"
                         android:textSize="15dp"
                         android:layout_weight="65"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="match_parent"/>
 
                 </LinearLayout>
 
@@ -508,7 +513,7 @@
 
                 <LinearLayout
                     android:id="@+id/pilihKotaPengaturan"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:weightSum="100"
                     android:layout_gravity="center"
@@ -532,7 +537,7 @@
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:textStyle="bold"
-                        android:layout_marginStart="5dp"
+                        android:layout_marginStart="2dp"
                         android:textColor="#b5a981"
                         android:layout_weight="65"
                         android:textSize="15dp"
@@ -549,7 +554,7 @@
 
                 <LinearLayout
                     android:id="@+id/pilihProvinsiPengaturan"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:weightSum="100"
                     android:layout_gravity="center"
@@ -575,7 +580,7 @@
                         android:backgroundTint="#fff"
                         android:textSize="15dp"
                         android:textStyle="bold"
-                        android:layout_marginStart="5dp"
+                        android:layout_marginStart="2dp"
                         android:textColor="#b5a981"
                         android:layout_weight="65"
                         android:layout_width="0dp"

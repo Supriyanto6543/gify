@@ -93,7 +93,7 @@
         android:layout_height="50dp">
 
         <ImageView
-            android:src="@drawable/email"
+            android:src="@drawable/calendar"
             android:layout_gravity="center"
             android:padding="10dp"
             android:layout_weight="15"
@@ -196,6 +196,7 @@
                 android:layout_height="match_parent"/>
 
             <ImageView
+                android:tint="@color/colorPrimary"
                 android:id="@+id/lihatPasswordRegister"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="10dp"
@@ -206,6 +207,7 @@
                 android:layout_height="25dp"/>
 
             <ImageView
+                android:tint="@color/colorPrimary"
                 android:id="@+id/hidePasswordRegister"
                 android:visibility="gone"
                 android:layout_alignParentEnd="true"
