@@ -56,6 +56,7 @@ import app.gify.co.id.adapter.AdapterFavorit;
 import static app.gify.co.id.baseurl.UrlJson.DETAILKADO;
 import static app.gify.co.id.baseurl.UrlJson.CHECKCART;
 import static app.gify.co.id.baseurl.UrlJson.DELETEFAV;
+import static app.gify.co.id.baseurl.UrlJson.GETBARANG;
 import static app.gify.co.id.baseurl.UrlJson.GETCART;
 import static app.gify.co.id.baseurl.UrlJson.GETFAV;
 import static app.gify.co.id.baseurl.UrlJson.SENDCART;
@@ -96,7 +97,7 @@ public class DetailKado extends AppCompatActivity {
         slide = findViewById(R.id.carousel);
         nama = findViewById(R.id.namadetail);
         harga = findViewById(R.id.hargadetail);
-        desc = findViewById(R.id.descdetail);
+        desc = findViewById(R.id.descdetails);
         favorit = findViewById(R.id.favoritdeta);
         unfavorit = findViewById(R.id.unfavoritdet);
 
@@ -141,7 +142,7 @@ public class DetailKado extends AppCompatActivity {
     ImageListener slideImage = new ImageListener() {
         @Override
         public void setImageForPosition(int position, ImageView imageView) {
-            //imageView.setImageResource(sourceImg[position]);
+            imageView.setImageResource(sourceImg[position]);
             Glide.with(DetailKado.this).load(sourceImg[position]).into(imageView);
             new DownloadImageTask(imageView).execute(String.valueOf(sourceImg[position]));
         }
@@ -204,7 +205,7 @@ public class DetailKado extends AppCompatActivity {
 
         batal.setOnClickListener(view1 -> dialog.dismiss());
         proses.setOnClickListener(view1 -> {
-            sendtocart(id);
+            getCart();
         });
 
 
@@ -388,10 +389,13 @@ public class DetailKado extends AppCompatActivity {
                     namabyid = object.getString("nama");
                     hargabyid = object.getInt("harga");
                     deskripsibyid = object.getString("deskripsi");
-
+                    kodeBarangbyid = object.getString("kode_barang");
+                    Log.d("descharga", "getDetailBarangById: " + hargabyid + " s " + deskripsibyid + " s " + photobyid);
                     nama.setText(namabyid + "(" + kodeBarangbyid + ")");
                     harga.setText("Rp. " + hargabyid);
                     desc.setText(deskripsibyid);
+
+
                 }
             }catch (Exception e){
                 e.printStackTrace();
