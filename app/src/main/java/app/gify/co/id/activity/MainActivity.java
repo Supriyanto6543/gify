@@ -178,8 +178,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                             Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
                                             byte[] imageBytesku = Base64.decode(photoprofile, Base64.DEFAULT);
                                             Bitmap decodedImageku = BitmapFactory.decodeByteArray(imageBytesku, 0, imageBytesku.length);
-                                            cover.setImageBitmap(decodedImage);
-                                            profile.setImageBitmap(decodedImageku);
+                                            if (coverku.equals("cover")){
+                                                cover.setImageResource(R.drawable.login_image);
+                                            }else{
+                                                cover.setImageBitmap(decodedImage);
+                                            }
+                                            if (photoprofile.equals("photo")){
+                                                profile.setImageResource(R.drawable.backgroundprofile);
+                                            }else{
+                                                profile.setImageBitmap(decodedImageku);
+                                            }
+
                                             dialog.dismiss();
 
 

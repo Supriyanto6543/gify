@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -58,7 +60,12 @@ public class PembelianFragment extends Fragment {
         cariKadoPembelian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new HomeFragment());
+                FragmentManager fm = getFragmentManager();
+                assert fm != null;
+                FragmentTransaction ft = fm.beginTransaction();
+                HomeFragment llf = new HomeFragment();
+                ft.replace(R.id.frame, llf);
+                ft.commit();
             }
         });
 

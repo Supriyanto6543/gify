@@ -6,8 +6,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/Theme.AppCompat.Light.NoActionBar"
-    tools:context=".activity.PengaturanFragment">
+    style="@style/Theme.AppCompat.Light.NoActionBar">
 
     <androidx.appcompat.widget.Toolbar
         android:background="#fab60b"
@@ -199,7 +198,7 @@
                     <EditText
                         android:id="@+id/namaDepanPengaturan"
                         android:hint="Nama depan"
-                        android:background="@drawable/dbjadjahdja"
+                        android:background="@drawable/kamdakmdwk"
                         android:textColorHint="#b5a981"
                         android:textStyle="bold"
                         android:textSize="15dp"
@@ -236,7 +235,7 @@
                     <EditText
                         android:id="@+id/namaBelakangPengaturan"
                         android:hint="Nama belakang"
-                        android:background="@drawable/dbjadjahdja"
+                        android:background="@drawable/kamdakmdwk"
                         android:textColorHint="#b5a981"
                         android:textStyle="bold"
                         android:textSize="15dp"
@@ -273,7 +272,7 @@
                     android:layout_height="wrap_content"
                     android:autofillHints="Nama depan"
                     android:hint="0878-9968-xxx"
-                    android:background="@drawable/dbjadjahdja"
+                    android:background="@drawable/kamdakmdwk"
                     android:singleLine="true"
                     android:textColor="#b5a981"
                     android:textColorHint="#b5a981"
@@ -301,7 +300,7 @@
 
                 <EditText
                     android:id="@+id/emailPengaturan"
-                    android:background="@drawable/dbjadjahdja"
+                    android:background="@drawable/kamdakmdwk"
                     android:hint="nasrudin01@gmail.com"
                     android:textColorHint="#b5a981"
                     android:textStyle="bold"
@@ -340,13 +339,14 @@
                         android:layout_width="21dp"
                         android:layout_height="20dp"
                         android:layout_weight="5"
+                        android:layout_gravity="center"
                         android:src="@drawable/maps"
                         android:tint="#dad9d5" />
 
                     <EditText
                         android:id="@+id/edittextAlamatPengaturan"
                         android:visibility="gone"
-                        android:background="@drawable/dbjadjahdja"
+                        android:background="@drawable/kamdakmdwk"
                         android:hint="Jl. Sudirman No. 58"
                         android:textColorHint="#b5a981"
                         android:textStyle="bold"
@@ -390,7 +390,7 @@
                     android:background="#fae59d"
                     android:layout_marginTop="2dp"
                     android:layout_width="match_parent"
-                    android:layout_height="4.5dp"/>
+                    android:layout_height="2.5dp"/>
 
                 <LinearLayout
                     android:id="@+id/pilihKelurahanPengaturan"
@@ -447,7 +447,7 @@
                     android:background="#fae59d"
                     android:layout_marginTop="2dp"
                     android:layout_width="match_parent"
-                    android:layout_height="4.5dp"/>
+                    android:layout_height="2.5dp"/>
 
                 <LinearLayout
                     android:id="@+id/pilihKecamatanPengaturan"
@@ -504,7 +504,7 @@
                     android:background="#fae59d"
                     android:layout_marginTop="2dp"
                     android:layout_width="match_parent"
-                    android:layout_height="4.5dp"/>
+                    android:layout_height="2.5dp"/>
 
                 <LinearLayout
                     android:id="@+id/pilihKotaPengaturan"
@@ -545,7 +545,7 @@
                     android:background="#fae59d"
                     android:layout_marginTop="2dp"
                     android:layout_width="match_parent"
-                    android:layout_height="4.5dp"/>
+                    android:layout_height="2.5dp"/>
 
                 <LinearLayout
                     android:id="@+id/pilihProvinsiPengaturan"
@@ -589,7 +589,7 @@
                     android:background="#fae59d"
                     android:layout_marginTop="2dp"
                     android:layout_width="match_parent"
-                    android:layout_height="4.5dp"/>
+                    android:layout_height="2.5dp"/>
 
                 <View
                     android:layout_width="match_parent"

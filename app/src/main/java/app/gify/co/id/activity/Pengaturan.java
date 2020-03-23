@@ -2,6 +2,10 @@ package app.gify.co.id.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,6 +16,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -33,8 +38,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
@@ -90,6 +98,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     private static final int GALLERY_PHOTO = 1;
     private static final int GALLERY_COVER = 2;
+    private static final int NOTIF = 3;
+    private static final String NOTIFICATION_ID = "notif";
     private static final int PICK_IMAGE_GALLERY_REQUEST_CODE = 3;
     public static final String UPLOAD_URL = UrlJson.IMAGE;
 
@@ -106,6 +116,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     SharedPreferences sharedPreferences;
     Uri cover, profile;
     RequestQueue queue;
+    private NotificationManager mNotificationManager;
     int bitmap_size = 60;
     int max_resolution_image = 800;
     String belomAdaAlamat = "Belum Memasukkan Alamat";
@@ -283,7 +294,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                         });
 
 
-                dialog.dismiss();
                 AkuGantengBanget();
             }
         });
@@ -377,7 +387,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONArray array = response.getJSONArray("YukNgaji");
+                    JSONArray array = response.getJSONArray("GIFY");
                     for (int i = 0; i < array.length(); i++){
                         JSONObject object = array.getJSONObject(i);
                         fotoProfil = object.getString("photo");
@@ -410,48 +420,53 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
 
     private void AkuGantengBanget(){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE +"?id_tetap=" + LID, response -> {
-            Log.d("mmakan bang",response + "");
-            try {
-                if (response.equals("bisa")){
-                    Intent intentku = new Intent(getApplication(), MainActivity.class);
-                    startActivity(intentku);
-                    finish();
-                }else if (response.equals("gagal")){
-                    Toast.makeText(getApplicationContext(), "Gagal Coba Lagi", Toast.LENGTH_LONG).show();
-                    dialog.dismiss();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE +"?id_tetap=" + LID, new Response.Listener<String>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onResponse(String response) {
+                Log.d("mmakan bang", response + "");
+                try {
+                    if (response.equals("bisa")) {
+                        Intent intentku = new Intent(getApplication(), MainActivity.class);
+                        startActivity(intentku);
+                        finish();
+
+                    } else if (response.equals("gagal")) {
+                        Toast.makeText(getApplicationContext(), "Gagal Coba Lagi", Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                    }
+                } catch (Exception e) {
+                    e.getMessage();
+                    Toast.makeText(Pengaturan.this, "isi semua kolom", Toast.LENGTH_SHORT).show();
                 }
-            }catch (Exception e){
-                e.getMessage();
-                Toast.makeText(Pengaturan.this, "isi semua kolom", Toast.LENGTH_SHORT).show();
 
             }
+
         }, error -> {
-            error.printStackTrace();
-            error.getMessage();
+
+
         }){
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-
-                if (getStringImage(Photo).isEmpty()){
+                if(getStringImage(Photo) == null){
+                    params.put("foto", "photo");
                     params.put("cover", getStringImage(Cover));
                     params.put("id_tetap", LID);
-                }else if (getStringImage(Cover).isEmpty()){
+                }else if (getStringImage(Cover) == null){
                     params.put("foto", getStringImage(Photo));
+                    params.put("cover", "cover");
                     params.put("id_tetap", LID);
-                }else{
+                }else {
                     params.put("foto", getStringImage(Photo));
                     params.put("cover", getStringImage(Cover));
                     params.put("id_tetap", LID);
                 }
-                Log.d("Hasil Gambar", getStringImage(Photo) + "" +  getStringImage(Cover) + "");
                 return params;
             }
         };
         queue.add(stringRequest);
     }
-
 
 
 

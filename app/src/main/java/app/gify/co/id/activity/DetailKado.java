@@ -70,7 +70,7 @@ public class DetailKado extends AppCompatActivity {
     AlertDialog.Builder builder;
     AlertDialog dialog;
     Button proses, batal;
-    ImageView tambah, kurang, favorit, unfavorit;
+    ImageView tambah, kurang, favorit, unfavorit, cart;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
     //CarouselView carouselView;
@@ -84,6 +84,13 @@ public class DetailKado extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_barang_nocard);
+        cart = findViewById(R.id.chartDetailKado);
+        cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DetailKado.this, CartActivity.class));
+            }
+        });
 
         back = findViewById(R.id.backDetailKado);
         back.setOnClickListener(new View.OnClickListener() {
