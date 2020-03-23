@@ -27,6 +27,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/tanggalpembelian"
                     android:text="28-02-2020"
                     android:textStyle="bold"
                     android:textColor="#4a4a4a"
@@ -49,6 +50,7 @@
                         android:layout_height="wrap_content"/>
 
                     <TextView
+                        android:id="@+id/invoice"
                         android:text="#20201235"
                         android:textColor="#fd672c"
                         android:gravity="end"
@@ -77,6 +79,7 @@
                         android:layout_height="wrap_content"/>
 
                     <TextView
+                        android:id="@+id/namapembelian"
                         android:text="Dompet Kulit Modern Pria"
                         android:gravity="end"
                         android:layout_weight="65"
@@ -104,6 +107,7 @@
                         android:layout_height="wrap_content"/>
 
                     <TextView
+                        android:id="@+id/penerima"
                         android:text="Nasrudin"
                         android:gravity="end"
                         android:layout_weight="65"
@@ -131,6 +135,7 @@
                         android:layout_height="wrap_content"/>
 
                     <TextView
+                        android:id="@+id/resi"
                         android:text="-"
                         android:gravity="end"
                         android:layout_weight="65"
@@ -175,6 +180,7 @@
                     android:layout_height="wrap_content"/>
 
                 <TextView
+                    android:id="@+id/statuspembelian"
                     android:text="Lunas (Dikirim)"
                     android:textSize="17dp"
                     android:textColor="#fff"
