@@ -51,7 +51,7 @@ public class AdapterListKado extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     class MyKado extends RecyclerView.ViewHolder {
 
-        ImageView photo, favorit;
+        ImageView photo, favorit, favoritku;
         TextView harga, nama;
         LinearLayout linear;
 

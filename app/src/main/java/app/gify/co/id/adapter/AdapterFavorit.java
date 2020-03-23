@@ -94,6 +94,7 @@ public class AdapterFavorit extends RecyclerView.Adapter<RecyclerView.ViewHolder
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         });
+        getFav(position, holder);
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         uid = preferences.getString("uid", "");
         Log.d("uidkua", "onBindViewHolder: " + id_barang + " s " + kados.get(position).getId_barang());
@@ -108,5 +109,29 @@ public class AdapterFavorit extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void filterList(ArrayList<MadolFavorit> filteredList){
         kados = filteredList;
         notifyDataSetChanged();
+    }
+
+    private void getFav(int position, RecyclerView.ViewHolder holder){
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETFAV, null, response -> {
+            try {
+                JSONArray array = response.getJSONArray("YukNgaji");
+                for (int a = 0; a < array.length(); a++){
+                    JSONObject object = array.getJSONObject(a);
+                    String idtetap = object.getString("id_tetap");
+                    if (uid.contains(idtetap)){
+                        int idbarang = object.getInt("id_barang");
+                        if (kados.get(position).getId_barang().equalsIgnoreCase(String.valueOf(idbarang))){
+                            ((MyFav)holder).favorit.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, error -> {
+
+        });
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(objectRequest);
     }
 }

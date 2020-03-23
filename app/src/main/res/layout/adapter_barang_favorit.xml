@@ -67,18 +67,17 @@
 
             <ImageView
                 android:id="@+id/favoritbarang"
-                android:src="@drawable/love"
-                android:visibility="gone"
+                android:src="@drawable/love1"
                 android:layout_marginEnd="5dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_width="20dp"
+                android:layout_width="30dp"
                 android:layout_height="30dp"/>
 
             <ImageView
-                android:visibility="gone"
                 android:id="@+id/favoritku"
-                android:src="@drawable/settings"
+                android:src="@drawable/love"
+                android:visibility="gone"
                 android:layout_marginEnd="5dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
