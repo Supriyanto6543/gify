@@ -86,9 +86,8 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (kuantitas<9){
                 kuantitas = kuantitas + 1;
                 ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
-                ((MyCart)holder).harga.setText(String.valueOf(hargaku*kuantitas));
+                ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku*kuantitas)));
                 int total = hargaku * kuantitas;
-                ((MyCart)holder).harga.setText(format.format(Double.valueOf(total)));
                 Intent intents = new Intent("message_subject_intent");
                 intents.putExtra("name", String.valueOf((total)));
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
@@ -98,7 +97,7 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             if (kuantitas>1){
                 kuantitas = kuantitas - 1;
-                ((MyCart)holder).harga.setText(String.valueOf(hargaku*kuantitas));
+                ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku*kuantitas)));
                 ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
                 int total = hargaku * kuantitas;
                 Intent intents = new Intent("message_subject_intent");
