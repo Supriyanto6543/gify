@@ -79,7 +79,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     EditText NamaDepan, NamaBelakang, NoHp, Email, GantiAlamat, editTextKecamatan, editTextKelurahan;
     LinearLayout changePicture, changeCover;
-    TextView Kelurahan, Kecamatan;
+    TextView Kelurahan, Kecamatan, nama_depan, nama_belakang, No_hp, E_mail;
     String namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi, Lemail, LID, namaUser, emailnama, idku, namanama,
     LNama, LEmail2, Lalamat, LNoHp, Ltanggal, fotoProfil, fotoCover;
     ImageView CheckList, ganti,profileImage, coverImage;
@@ -149,6 +149,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         dialog.show();
 
 
+
+
         callMethos();
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -165,7 +167,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
         mAuth = FirebaseAuth.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
-        currentUserID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        currentUserID = Objects.requireNonNull(mAuth.getCurrentUser().getUid());
 
 
         cobaOngkir1();
@@ -182,8 +184,12 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 LID = dataSnapshot.getKey();
                 Lemail = dataSnapshot.child("email").getValue().toString();
+                String LNoHP = dataSnapshot.child("noHp").getValue().toString();
+                String nama = dataSnapshot.child("nama").getValue().toString();
                 Log.d("cobaL", "email: " + Lemail + " " + "LID: " + LID);
                 Email.setText(Lemail);
+                NoHp.setText(LNoHP);
+                NamaDepan.setText(nama);
             }
 
             @Override
@@ -237,14 +243,14 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             gAlamat = GantiAlamat.getText().toString().trim();
             kota = KotaS.getSelectedItem().toString();
             provinsi = ProvinsiS.getSelectedItem().toString();
-            alamat = gAlamat + "," + " " + kelurahan + "," + " " + kecamatan + "," + " " + kota + "," + " " + profile;
-
+            alamat = gAlamat + "," + " " + kelurahan + "," + " " + kecamatan + "," + " " + kota + "," + " " + provinsi;
+            AkuGantengBanget();
             dialog.show();
 
 
-            if (namadepan.isEmpty() || namabelakang.isEmpty() || noHp.isEmpty() || email.isEmpty() || gAlamat.isEmpty() || kelurahan.isEmpty() || kecamatan.isEmpty() || kota.isEmpty() || provinsi.isEmpty()) {
-                /*Toast.makeText(Pengaturan.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();*/
+            if (namadepan.isEmpty() || noHp.isEmpty() || email.isEmpty() || gAlamat.isEmpty() || kelurahan.isEmpty() || kecamatan.isEmpty() || kota.isEmpty() || provinsi.isEmpty()) {
+                Toast.makeText(Pengaturan.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
             else {
                 RootRef.child("Users").child(currentUserID).child("nama").setValue(nama)
@@ -277,7 +283,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                             dialog.dismiss();
                         });
 
-                AkuGantengBanget();
+
                 dialog.dismiss();
 
             }
@@ -354,6 +360,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         LID = dataSnapshot.getKey();
+                        LNama = dataSnapshot.child("nama").getValue().toString();
+                        LNoHp = dataSnapshot.child("noHp").getValue().toString();
                         dialog.dismiss();
                     }
 
@@ -384,11 +392,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     e.printStackTrace();
                 }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        }, error -> {
 
-            }
         });
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.add(request);
@@ -406,31 +411,25 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
 
     private void AkuGantengBanget(){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE +"?id_tetap=" + LID, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("mmakan bang",response + "");
-                try {
-                    if (response.equals("bisa")){
-                        Intent intentku = new Intent(getApplication(), MainActivity.class);
-                        startActivity(intentku);
-                        finish();
-                    }else if (response.equals("gagal")){
-                        Toast.makeText(getApplicationContext(), "Gagal Coba Lagi", Toast.LENGTH_LONG).show();
-                        dialog.dismiss();
-                    }
-                }catch (Exception e){
-                    e.getMessage();
-                    Toast.makeText(Pengaturan.this, "isi semua kolom", Toast.LENGTH_SHORT).show();
-
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE +"?id_tetap=" + LID, response -> {
+            Log.d("mmakan bang",response + "");
+            try {
+                if (response.equals("bisa")){
+                    Intent intentku = new Intent(getApplication(), MainActivity.class);
+                    startActivity(intentku);
+                    finish();
+                }else if (response.equals("gagal")){
+                    Toast.makeText(getApplicationContext(), "Gagal Coba Lagi", Toast.LENGTH_LONG).show();
+                    dialog.dismiss();
                 }
+            }catch (Exception e){
+                e.getMessage();
+                Toast.makeText(Pengaturan.this, "isi semua kolom", Toast.LENGTH_SHORT).show();
+
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                error.getMessage();
-            }
+        }, error -> {
+            error.printStackTrace();
+            error.getMessage();
         }){
             @Override
             protected Map<String, String> getParams() {
@@ -478,7 +477,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     ProvinsiS.setSelection(0, false);
 
                     ProvinsiS.setOnItemSelectedListener(Pengaturan.this);
-
 
 
                 }
