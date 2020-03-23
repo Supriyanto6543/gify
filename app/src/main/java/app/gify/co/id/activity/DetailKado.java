@@ -75,7 +75,7 @@ public class DetailKado extends AppCompatActivity {
     SharedPreferences.Editor editor;
     //CarouselView carouselView;
     String idbarangku, uid, id, photobyid, kodeBarangbyid, namabyid, deskripsibyid, berat;
-    int id_barang, hargabyid, cingpai, gambar, gambar1, gambar2;
+    int id_barang, hargabyid, cingpai = 1, gambar, gambar1, gambar2;
     int sourceImg[];
     Boolean faforit;
     ImageView buatJadiWistlist, back;

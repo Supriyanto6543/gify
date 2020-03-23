@@ -40,6 +40,7 @@ import org.json.JSONObject;
 
 import java.io.LineNumberReader;
 
+import app.gify.co.id.Fragment.pembelian.PembelianFragment;
 import app.gify.co.id.R;
 import app.gify.co.id.baseurl.UrlJson;
 
@@ -106,7 +107,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         });
 
         prosescekout.setOnClickListener(view -> {
-            Intent intent = new Intent(CheckoutActivity.this, Pembelian.class);
+            Intent intent = new Intent(CheckoutActivity.this, PembelianFragment.class);
             startActivity(intent);
         });
 
