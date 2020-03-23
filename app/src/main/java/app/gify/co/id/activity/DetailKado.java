@@ -53,6 +53,7 @@ import app.gify.co.id.R;
 import app.gify.co.id.adapter.AdapterFavorit;
 
 import static app.gify.co.id.baseurl.UrlJson.DETAILKADO;
+import static app.gify.co.id.baseurl.UrlJson.CHECKCART;
 import static app.gify.co.id.baseurl.UrlJson.GETCART;
 import static app.gify.co.id.baseurl.UrlJson.GETFAV;
 import static app.gify.co.id.baseurl.UrlJson.SENDCART;
@@ -223,27 +224,16 @@ public class DetailKado extends AppCompatActivity {
     }
 
     private void getCart(){
-        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETCART, null, response -> {
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, CHECKCART+"?idtetap="+uid+"&idbarang="+idbarangku, null, response -> {
             try {
                 JSONArray array = response.getJSONArray("YukNgaji");
                 Log.d("trycart", "getCart: " + response + array.length());
-                for (int a = 0; a < array.length(); a++){
-                    JSONObject object = array.getJSONObject(a);
-                    String id_tetapku = object.getString("id_tetap");
-                    Log.d("testgetcart", "getCart: " + uid + " s " + id_tetapku);
-                    if (uid.equalsIgnoreCase(id_tetapku)){
-                        id_barang = object.getInt("id_barang");
-                        Log.d("testgetcartif", "getCart: ");
-                        if (id_barang == Integer.parseInt(idbarangku)){
-                            Toast.makeText(this, "Barang sudah ada di keranjang", Toast.LENGTH_SHORT).show();
-                        }else {
-                            Log.d("testgetcartelse", "getCart: ");
-                            sendtocart(String.valueOf(idbarangku));
-                        }
-                    }
+                Log.d("nullsebelum", "getCart: " + array.toString());
+                if (array.isNull(0)){
+                    sendtocart(idbarangku);
+                }else {
+                    Toast.makeText(this, "Barang sudah ada di cart", Toast.LENGTH_SHORT).show();
                 }
-
-
             } catch (JSONException e) {
                 Log.d("exceptioncart", "getCart: " + e.getMessage());
                 e.printStackTrace();

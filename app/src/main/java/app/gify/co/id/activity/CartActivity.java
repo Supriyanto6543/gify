@@ -122,11 +122,11 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
             //Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
             preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             editor = preferences.edit();
-            editor.remove("namaRange");
-            editor.remove("namaAcara");
-            editor.remove("buatAcara");
+            editor.remove("range");
+            editor.remove("acara");
+            editor.remove("buat");
             editor.apply();
-            senderEmail();
+//            senderEmail();
             //startActivity(intent);
 
         });
@@ -188,7 +188,6 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETCART, null, response -> {
             try {
                 JSONArray array = response.getJSONArray("YukNgaji");
-                Log.d("bujar", response + "");
                 for (int a = 0; a < array.length(); a++){
                     JSONObject object = array.getJSONObject(a);
                     String id_tetap = object.getString("id_tetap");
@@ -244,11 +243,55 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
             MadolCart madolCart = madolCarts.get(viewHolder.getAdapterPosition());
             int deleteIndex =  viewHolder.getAdapterPosition();
 
+            Log.d("taptap", "onSwipe: " + madolCarts.get(viewHolder.getAdapterPosition()).getNamacart());
+
+            GETBARANG(madolCarts.get(viewHolder.getAdapterPosition()).getNamacart());
+
             adapterCart.removeItem(viewHolder.getAdapterPosition());
+        }
+    }
+
+    private void deletecart(String id_barang){
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, DELETECART+"?idtetap="+uidku+"&idbarang="+id_barang, response -> {
+            try {
+                if (response.equalsIgnoreCase("bisa")){
+                    Toast.makeText(CartActivity.this, "Barang telah di hapus", Toast.LENGTH_SHORT).show();
+                    Log.d("bisabarangcart", "GETBARANG: " );
+                }
+            }catch (Exception e){
+                Log.d("ekscartactivity", "deletecart: " + e.getMessage());
+            }
+        }, error -> {
+            Log.d("ernocartdel", "deletecart: " + error.getMessage());
+        });
+        RequestQueue queue = Volley.newRequestQueue(CartActivity.this);
+        queue.add(stringRequest);
+    }
 
             Log.d("udins", madolCart + " " + deleteIndex + "");
 
         }
+    private void GETBARANG(String namas){
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETBARANG,null, response -> {
+            try {
+                JSONArray array = response.getJSONArray("YukNgaji");
+                for (int a = 0; a < array.length(); a++){
+                    JSONObject object = array.getJSONObject(a);
+                    String nama = object.getString("nama");
+                    if (nama.equalsIgnoreCase(namas)){
+                        Log.d("namabarang", "GETBARANG: " + nama + " s " + namas);
+                        String id = object.getString("id");
+                        deletecart(id);
+                    }
+                }
+            }catch (Exception e){
+                Log.d("barangexce", "GETBARANG: " + e.getMessage());
+            }
+        }, error -> {
+            Log.d("errorgetbrng", "GETBARANG: " + error.getMessage());
+        });
+        RequestQueue queue = Volley.newRequestQueue(CartActivity.this);
+        queue.add(objectRequest);
     }
 
     private void deleteCart(int delete){
