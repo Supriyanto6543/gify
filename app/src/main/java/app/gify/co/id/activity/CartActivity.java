@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.navigation.NavigationView;
 
@@ -51,7 +52,7 @@ import app.gify.co.id.R;
 import app.gify.co.id.adapter.AdapterCart;
 import app.gify.co.id.modal.MadolCart;
 import app.gify.co.id.thirdparty.GMailSender;
-import app.gify.co.id.thirdparty.SenderAgent;
+//import app.gify.co.id.thirdparty.SenderAgent;
 import app.gify.co.id.widgets.RecyclerTouchDelete;
 
 import static app.gify.co.id.baseurl.UrlJson.DELETECART;
@@ -131,6 +132,9 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
 
         });
 
+        harga = getIntent().getStringExtra("harga");
+        Log.d("daus", harga + "");
+
         LocalBroadcastManager.getInstance(this).registerReceiver(passValue, new IntentFilter("message_subject_intent"));
 
         ItemTouchHelper.SimpleCallback callback = new RecyclerTouchDelete(0, ItemTouchHelper.LEFT, this);
@@ -179,10 +183,10 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         return original.substring(0, original.length() - 3) + replace;
     }
 
-    private void senderEmail(){
-        SenderAgent senderAgent = new SenderAgent("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CartActivity.this);
-        senderAgent.execute();
-    }
+//    private void senderEmail(){
+//        SenderAgent senderAgent = new SenderAgent("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CartActivity.this);
+//        senderAgent.execute();
+//    }
 
     private void getCart(){
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETCART, null, response -> {
@@ -268,9 +272,6 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         queue.add(stringRequest);
     }
 
-            Log.d("udins", madolCart + " " + deleteIndex + "");
-
-        }
     private void GETBARANG(String namas){
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETBARANG,null, response -> {
             try {

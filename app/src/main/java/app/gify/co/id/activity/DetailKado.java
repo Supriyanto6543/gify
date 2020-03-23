@@ -61,7 +61,7 @@ import static app.gify.co.id.baseurl.UrlJson.SENDFAV;
 
 public class DetailKado extends AppCompatActivity {
 
-    CarouselView slide;
+    ImageView slide;
     TextView nama, harga, desc, namapopup, jumlah, hargapopuptop, hargapopupdown, kodebarang;
     Button belikadodetail;
     AlertDialog.Builder builder;
@@ -70,8 +70,8 @@ public class DetailKado extends AppCompatActivity {
     ImageView tambah, kurang, favorit, unfavorit;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
-    CarouselView carouselView;
-    String idbarangku, uid, id, photobyid, kodeBarangbyid, namabyid, deskripsibyid;
+    //CarouselView carouselView;
+    String idbarangku, uid, id, photobyid, kodeBarangbyid, namabyid, deskripsibyid, berat;
     int id_barang, hargabyid, cingpai, gambar, gambar1, gambar2;
     int sourceImg[];
     Boolean faforit;
@@ -90,10 +90,12 @@ public class DetailKado extends AppCompatActivity {
             }
         });
 
+        Log.d("jinjin", hargabyid + "");
+
         belikadodetail = findViewById(R.id.belikadodetail);
         slide = findViewById(R.id.carousel);
         nama = findViewById(R.id.namadetail);
-        kodebarang = findViewById(R.id.kodebarang);
+        //kodebarang = findViewById(R.id.kodebarang);
         harga = findViewById(R.id.hargadetail);
         desc = findViewById(R.id.descdetail);
         favorit = findViewById(R.id.favoritdeta);
@@ -107,9 +109,9 @@ public class DetailKado extends AppCompatActivity {
         sourceImg = new int[]{gambar, gambar1, gambar2};
 
         //carousel
-        carouselView = (CarouselView) findViewById(R.id.carousel);
-        carouselView.setPageCount(sourceImg.length);
-        carouselView.setImageListener(slideImage);
+//        carouselView = (CarouselView) findViewById(R.id.carousel);
+//        carouselView.setPageCount(sourceImg.length);
+//        carouselView.setImageListener(slideImage);
 
         idbarangku = getIntent().getStringExtra("idbarang");
         preferences = PreferenceManager.getDefaultSharedPreferences(DetailKado.this);
@@ -141,15 +143,13 @@ public class DetailKado extends AppCompatActivity {
         @Override
         public void setImageForPosition(int position, ImageView imageView) {
             //imageView.setImageResource(sourceImg[position]);
-            Glide.with(DetailKado.this).load(sourceImg[position]).into(imageView);
-            new DownloadImageTask(imageView).execute(String.valueOf(sourceImg[position]));
+
+            //new DownloadImageTask(imageView).execute(String.valueOf(sourceImg[position]));
         }
     };
     private void delfav() {
 
     }
-
-    ImageListener slideImage = (position, imageView) -> imageView.setImageResource(sourceImg[position]);
 
     private void popup() {
 
@@ -222,6 +222,8 @@ public class DetailKado extends AppCompatActivity {
                 params.put("id_tetap", uid);
                 params.put("id_barang", idbarang);
                 params.put("jumlah", String.valueOf(cingpai));
+                params.put("berat", berat);
+                params.put("harga", String.valueOf(hargabyid));
                 return params;
             }
         };
@@ -376,9 +378,11 @@ public class DetailKado extends AppCompatActivity {
                     namabyid = object.getString("nama");
                     hargabyid = object.getInt("harga");
                     deskripsibyid = object.getString("deskripsi");
+                    berat = object.getString("berat");
 
-                    nama.setText(namabyid);
-                    kodebarang.setText(kodeBarangbyid);
+                    nama.setText(namabyid + kodeBarangbyid);
+                    Glide.with(DetailKado.this).load(photobyid).into(slide);
+                    //kodebarang.setText(kodeBarangbyid);
                     harga.setText("Rp. " + hargabyid);
                     desc.setText(deskripsibyid);
                 }
