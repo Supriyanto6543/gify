@@ -66,16 +66,16 @@ public class CheckoutActivity extends AppCompatActivity {
         back.setOnClickListener(v -> finish());
 
         prosescekout.setOnClickListener(view -> {
-            Intent intent = new Intent(CheckoutActivity.this, Pembelian.class);
+            Intent intent = new Intent(CheckoutActivity.this, PembelianFragment.class);
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "notify_001");
 
             NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
             bigText.setBigContentTitle("Pembelian Berhasil");
-            bigText.setSummaryText("Bayar hadiah ke penjual sekarang");
+            bigText.setSummaryText("silahkan lakukan pembayaran");
 
             mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
             mBuilder.setContentTitle("Pembelian Berhasil");
-            mBuilder.setContentText("Bayar hadiah ke penjual sekarang");
+            mBuilder.setContentText("silahkan lakukan pembayaran");
             mBuilder.setPriority(Notification.PRIORITY_MAX);
             mBuilder.setStyle(bigText);
 
