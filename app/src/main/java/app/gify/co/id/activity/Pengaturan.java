@@ -16,7 +16,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -38,7 +37,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -87,7 +85,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     EditText NamaDepan, NamaBelakang, NoHp, Email, GantiAlamat, editTextKecamatan, editTextKelurahan;
     LinearLayout changePicture, changeCover;
-    TextView Kelurahan, Kecamatan;
+    TextView Kelurahan, Kecamatan, nama_depan, nama_belakang, No_hp, E_mail;
     String namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi, Lemail, LID, namaUser, emailnama, idku, namanama,
     LNama, LEmail2, Lalamat, LNoHp, Ltanggal, fotoProfil, fotoCover;
     ImageView CheckList, ganti,profileImage, coverImage;
@@ -160,6 +158,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         dialog.show();
 
 
+
+
         callMethos();
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -176,7 +176,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
         mAuth = FirebaseAuth.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
-        currentUserID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        currentUserID = Objects.requireNonNull(mAuth.getCurrentUser().getUid());
 
 
         cobaOngkir1();
@@ -193,8 +193,12 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 LID = dataSnapshot.getKey();
                 Lemail = dataSnapshot.child("email").getValue().toString();
+                String LNoHP = dataSnapshot.child("noHp").getValue().toString();
+                String nama = dataSnapshot.child("nama").getValue().toString();
                 Log.d("cobaL", "email: " + Lemail + " " + "LID: " + LID);
                 Email.setText(Lemail);
+                NoHp.setText(LNoHP);
+                NamaDepan.setText(nama);
             }
 
             @Override
@@ -248,14 +252,11 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             gAlamat = GantiAlamat.getText().toString().trim();
             kota = KotaS.getSelectedItem().toString();
             provinsi = ProvinsiS.getSelectedItem().toString();
-            alamat = gAlamat + "," + " " + kelurahan + "," + " " + kecamatan + "," + " " + kota + "," + " " + profile;
-
-            /*dialog.show();*/
-
-            AkuGantengBanget();
+            alamat = gAlamat + "," + " " + kelurahan + "," + " " + kecamatan + "," + " " + kota + "," + " " + provinsi;
+            dialog.show();
 
 
-            if (namadepan.isEmpty() || namabelakang.isEmpty() || noHp.isEmpty() || email.isEmpty() || gAlamat.isEmpty() || kelurahan.isEmpty() || kecamatan.isEmpty() || kota.isEmpty() || provinsi.isEmpty()) {
+            if (namadepan.isEmpty() || noHp.isEmpty() || email.isEmpty() || gAlamat.isEmpty() || kelurahan.isEmpty() || kecamatan.isEmpty() || kota.isEmpty() || provinsi.isEmpty()) {
                 Toast.makeText(Pengaturan.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
@@ -291,7 +292,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                         });
 
 
-
+                AkuGantengBanget();
             }
         });
 
@@ -366,6 +367,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         LID = dataSnapshot.getKey();
+                        LNama = dataSnapshot.child("nama").getValue().toString();
+                        LNoHp = dataSnapshot.child("noHp").getValue().toString();
                         dialog.dismiss();
                     }
 
@@ -396,11 +399,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     e.printStackTrace();
                 }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        }, error -> {
 
-            }
         });
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.add(request);
@@ -437,14 +437,10 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     e.getMessage();
                     Toast.makeText(Pengaturan.this, "isi semua kolom", Toast.LENGTH_SHORT).show();
 
-                }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                error.getMessage();
-            }
+        }, error -> {
+            error.printStackTrace();
+            error.getMessage();
         }){
             @Override
             protected Map<String, String> getParams() {
@@ -492,7 +488,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     ProvinsiS.setSelection(0, false);
 
                     ProvinsiS.setOnItemSelectedListener(Pengaturan.this);
-
 
 
                 }

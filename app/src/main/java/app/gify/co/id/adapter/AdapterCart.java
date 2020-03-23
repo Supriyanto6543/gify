@@ -8,18 +8,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
-
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 import app.gify.co.id.R;
@@ -69,12 +68,12 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         kuantitas = carts.get(position).getJumlah();
-        int hargaku = carts.get(position).getHarga();
+        int hargaku = carts.get(position).getHarga() * kuantitas;
 
         Locale locale = new Locale("id", "ID");
         NumberFormat format = NumberFormat.getCurrencyInstance(locale);
 
-        ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku*kuantitas)));
+        ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku)));
         ((MyCart)holder).nama.setText(carts.get(position).getNamacart());
         Glide.with(view).load(carts.get(position).getGambar()).into(((MyCart)holder).gambar);
         Intent intent = new Intent("message_subject_intent");
@@ -82,17 +81,18 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         intent.putExtra("berat", String.valueOf((beratCart(carts))));
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
         ((MyCart)holder).tambah.setOnClickListener(view1 -> {
             if (kuantitas<9){
                 kuantitas = kuantitas + 1;
                 ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
                 ((MyCart)holder).harga.setText(String.valueOf(hargaku*kuantitas));
                 int total = hargaku * kuantitas;
+                ((MyCart)holder).harga.setText(format.format(Double.valueOf(total)));
                 Intent intents = new Intent("message_subject_intent");
                 intents.putExtra("name", String.valueOf((total)));
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
             }
-
         });
         ((MyCart)holder).kurang.setOnClickListener(view -> {
 
@@ -144,4 +144,5 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         notifyItemInserted(item);
     }
+
 }
