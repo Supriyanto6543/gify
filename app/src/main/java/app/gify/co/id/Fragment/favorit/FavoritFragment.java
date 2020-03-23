@@ -17,6 +17,7 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -166,17 +167,22 @@ public class FavoritFragment extends Fragment {
                             adapterFavorit = new AdapterFavorit(kados, getContext());
                             recyclerView.setAdapter(adapterFavorit);
                             dialog.dismiss();
+                        }else {
+                            dialog.dismiss();
+                            Toast.makeText(getContext(), "Tidak ada barang", Toast.LENGTH_SHORT).show();
                         }
                         Log.d("listkadoharga", "onResponse: " + harga + tipe + " s " + idbarang);
 
                     }
                 } catch (JSONException e) {
+                    dialog.dismiss();
                     Log.d("jsonbarangerror", "onResponse: " + e.getMessage());
                     e.printStackTrace();
                 }
 
             }
         }, error -> {
+            dialog.dismiss();
             Log.d("errorlistkadojson", "getBarang: " + error.getMessage());
         });
         RequestQueue queue = Volley.newRequestQueue(getContext());
@@ -187,6 +193,10 @@ public class FavoritFragment extends Fragment {
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETFAV,null, response -> {
             try {
                 JSONArray array = response.getJSONArray("YukNgaji");
+                if (array.length() == 0){
+                    dialog.dismiss();
+                    Toast.makeText(getContext(), "Tidak ada barang favorit", Toast.LENGTH_SHORT).show();
+                }
                 for (int a = 0; a < array.length(); a++){
                     JSONObject object = array.getJSONObject(a);
                     String id_tetap = object.getString("id_tetap");
@@ -196,13 +206,16 @@ public class FavoritFragment extends Fragment {
                         Log.d("idbarangku", "getFavorit: " + id_tetap + uid + id_barang);
                         getBarang(id_barang);
                     }else {
+                        Log.d("idkuberhenti", "getFavorit: ");
                         dialog.dismiss();
                     }
                 }
             } catch (JSONException e) {
+                dialog.dismiss();
                 e.printStackTrace();
             }
         }, error -> {
+            dialog.dismiss();
             Log.d("adapterlist", "getFavorit: " + error.getMessage());
         });
         RequestQueue queue = Volley.newRequestQueue(getContext());

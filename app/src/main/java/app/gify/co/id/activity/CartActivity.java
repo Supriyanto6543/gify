@@ -119,7 +119,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         recyclerView.setLayoutManager(glm);
 
         Checkout.setOnClickListener(view -> {
-            //Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
+            Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
             preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             editor = preferences.edit();
             editor.remove("range");
@@ -127,7 +127,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
             editor.remove("buat");
             editor.apply();
 //            senderEmail();
-            //startActivity(intent);
+            startActivity(intent);
 
         });
 
