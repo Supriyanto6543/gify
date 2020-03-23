@@ -54,6 +54,7 @@ import app.gify.co.id.thirdparty.GMailSender;
 import app.gify.co.id.thirdparty.SenderAgent;
 import app.gify.co.id.widgets.RecyclerTouchDelete;
 
+import static app.gify.co.id.baseurl.UrlJson.DELETECART;
 import static app.gify.co.id.baseurl.UrlJson.GETBARANG;
 import static app.gify.co.id.baseurl.UrlJson.GETCART;
 
@@ -187,6 +188,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETCART, null, response -> {
             try {
                 JSONArray array = response.getJSONArray("YukNgaji");
+                Log.d("bujar", response + "");
                 for (int a = 0; a < array.length(); a++){
                     JSONObject object = array.getJSONObject(a);
                     String id_tetap = object.getString("id_tetap");
@@ -244,6 +246,25 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
 
             adapterCart.removeItem(viewHolder.getAdapterPosition());
 
+            Log.d("udins", madolCart + " " + deleteIndex + "");
+
         }
+    }
+
+    private void deleteCart(int delete){
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, DELETECART+delete, null, response -> {
+            try {
+                JSONArray array = response.getJSONArray("YukNgaji");
+                for (int k = 0; k < array.length(); k++){
+
+                }
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+        }, error -> {
+            Log.d("deleteAction", error.getMessage());
+        });
+        RequestQueue queue = Volley.newRequestQueue(CartActivity.this);
+        queue.add(request);
     }
 }
