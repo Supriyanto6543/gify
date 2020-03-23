@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -37,6 +38,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -422,25 +424,27 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(String response) {
-                Log.d("mmakan bang",response + "");
+                Log.d("mmakan bang", response + "");
                 try {
-                    if (response.equals("bisa")){
+                    if (response.equals("bisa")) {
                         Intent intentku = new Intent(getApplication(), MainActivity.class);
                         startActivity(intentku);
                         finish();
 
-                    }else if (response.equals("gagal")){
+                    } else if (response.equals("gagal")) {
                         Toast.makeText(getApplicationContext(), "Gagal Coba Lagi", Toast.LENGTH_LONG).show();
                         dialog.dismiss();
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.getMessage();
                     Toast.makeText(Pengaturan.this, "isi semua kolom", Toast.LENGTH_SHORT).show();
+                }
 
             }
+
         }, error -> {
-            error.printStackTrace();
-            error.getMessage();
+
+
         }){
             @Override
             protected Map<String, String> getParams() {
@@ -463,7 +467,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         };
         queue.add(stringRequest);
     }
-
 
 
 

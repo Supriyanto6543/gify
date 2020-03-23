@@ -51,7 +51,6 @@ import java.util.Random;
 import app.gify.co.id.R;
 import app.gify.co.id.adapter.AdapterCart;
 import app.gify.co.id.modal.MadolCart;
-import app.gify.co.id.thirdparty.GMailSender;
 //import app.gify.co.id.thirdparty.SenderAgent;
 import app.gify.co.id.widgets.RecyclerTouchDelete;
 
