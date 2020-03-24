@@ -130,7 +130,7 @@
 
                 <ImageView
                     android:id="@+id/favoritdeta"
-                    android:src="@drawable/love"
+                    android:src="@drawable/love1"
                     android:layout_gravity="end"
                     android:layout_weight="10"
                     android:layout_width="30dp"
@@ -139,7 +139,7 @@
                 <ImageView
                     android:id="@+id/unfavoritdet"
                     android:visibility="gone"
-                    android:src="@drawable/settings"
+                    android:src="@drawable/love"
                     android:layout_gravity="end"
                     android:layout_weight="10"
                     android:layout_width="30dp"

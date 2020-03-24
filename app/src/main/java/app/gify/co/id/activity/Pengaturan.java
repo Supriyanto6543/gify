@@ -88,10 +88,11 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     EditText NamaDepan, NamaBelakang, NoHp, Email, GantiAlamat, editTextKecamatan, editTextKelurahan;
     LinearLayout changePicture, changeCover;
     TextView Kelurahan, Kecamatan, nama_depan, nama_belakang, No_hp, E_mail;
-    String namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi, Lemail, LID, namaUser, emailnama, idku, namanama,
+    String  cobaAgar, province, namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi, Lemail, LID, namaUser, emailnama, idku, namanama,
     LNama, LEmail2, Lalamat, LNoHp, Ltanggal, fotoProfil, fotoCover;
     ImageView CheckList, ganti,profileImage, coverImage;
     ImageView Back;
+    String province_id;
     TextView gantiAlamat;
     ProgressDialog loadingBar;
     HintArrayAdapter hintAdapter, hintadapterku;
@@ -244,6 +245,9 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         });
 
         CheckList.setOnClickListener(v -> {
+            if (ProvinsiS.getSelectedItem().toString() == province){
+
+            }
             namadepan = NamaDepan.getText().toString().trim();
             namabelakang = NamaBelakang.getText().toString().trim();
             nama = namadepan + " " + namabelakang;
@@ -479,20 +483,18 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 for (int i = 0; i < array.length(); i++) {
 
                     JSONObject object = array.getJSONObject(i);
-                    int province_id = object.getInt("province_id");
-                    String province = object.getString("province");
+                    province_id = object.getString("province_id");
+                    province = object.getString("province");
 
                     hintadapterku.add(province);
 
                     ProvinsiS.setAdapter(hintadapterku);
 
-
-
                     ProvinsiS.setSelection(0, false);
 
                     ProvinsiS.setOnItemSelectedListener(Pengaturan.this);
 
-
+                    cobaAgar = province + province_id;
                 }
             } catch (JSONException e) {
                 Log.d("err10", "Response: ");
@@ -585,8 +587,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             if(position == 0){
                 view = inflater.inflate(R.layout.spinner_hint_list_item_layout, parent, false); // Hide first row
             } else {
-                view = inflater.inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
-                TextView texview = (TextView) view.findViewById(android.R.id.text1);
+                view = inflater.inflate(R.layout.spinner_text, parent, false);
+                TextView texview = (TextView) view.findViewById(R.id.goku);
                 texview.setText(getItem(position).toString());
             }
 
