@@ -21,8 +21,8 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -30,6 +30,7 @@
                 <TextView
                     android:id="@+id/tanggalpembelian"
                     android:text="28-02-2020"
+                    android:textSize="13dp"
                     android:textStyle="bold"
                     android:textColor="#4a4a4a"
                     android:layout_width="match_parent"
@@ -45,7 +46,8 @@
                         android:text="ID Pesanan/Invoice"
                         android:textColor="#fd672c"
                         android:layout_weight="50"
-                        android:textSize="13dp"
+                        android:textSize="12dp"
+                        android:singleLine="true"
                         android:textStyle="bold"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
@@ -56,7 +58,7 @@
                         android:textColor="#fd672c"
                         android:gravity="end"
                         android:layout_weight="50"
-                        android:textSize="13dp"
+                        android:textSize="12dp"
                         android:textStyle="bold"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
@@ -73,7 +75,7 @@
                     <TextView
                         android:text="Jenis Kado:"
                         android:layout_weight="35"
-                        android:textSize="13dp"
+                        android:textSize="12dp"
                         android:textColor="#4a4a4a"
                         android:textStyle="bold"
                         android:layout_width="0dp"
@@ -84,8 +86,8 @@
                         android:text="Dompet Kulit Modern Pria"
                         android:gravity="end"
                         android:layout_weight="65"
-                        android:textSize="13dp"
-
+                        android:textSize="12dp"
+                        android:singleLine="true"
                         android:textColor="#4a4a4a"
                         android:textStyle="bold"
                         android:layout_width="0dp"
@@ -102,7 +104,7 @@
                     <TextView
                         android:text="Penerima  :"
                         android:layout_weight="35"
-                        android:textSize="13dp"
+                        android:textSize="12dp"
                         android:textColor="#4a4a4a"
                         android:textStyle="bold"
                         android:layout_width="0dp"
@@ -114,7 +116,8 @@
                         android:gravity="end"
                         android:layout_weight="65"
                         android:textColor="#4a4a4a"
-                        android:textSize="13dp"
+                        android:textSize="12dp"
+                        android:singleLine="true"
                         android:textStyle="bold"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
@@ -130,7 +133,7 @@
                     <TextView
                         android:text="No. Resi"
                         android:layout_weight="35"
-                        android:textSize="13dp"
+                        android:textSize="12dp"
                         android:textColor="#4a4a4a"
                         android:textStyle="bold"
                         android:layout_width="0dp"
@@ -141,7 +144,8 @@
                         android:text="-"
                         android:gravity="end"
                         android:layout_weight="65"
-                        android:textSize="13dp"
+                        android:singleLine="true"
+                        android:textSize="12dp"
                         android:textColor="#4a4a4a"
                         android:textStyle="bold"
                         android:layout_width="0dp"
@@ -179,7 +183,7 @@
                     android:text="Status:"
                     android:textStyle="bold"
                     android:textColor="#fff"
-                    android:textSize="13dp"
+                    android:textSize="12dp"
                     android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
@@ -187,7 +191,7 @@
                 <TextView
                     android:id="@+id/statuspembelian"
                     android:text="Lunas (Dikirim)"
-                    android:textSize="13dp"
+                    android:textSize="12dp"
                     android:textColor="#fff"
                     android:textStyle="bold"
                     android:gravity="center"
