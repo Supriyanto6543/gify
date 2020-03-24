@@ -30,6 +30,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -55,6 +57,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.Fragment.pembelian.PembelianFragment;
 import app.gify.co.id.R;
 import app.gify.co.id.baseurl.UrlJson;
@@ -154,6 +157,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
             sendCart(getDateTime());
             Intent intent = new Intent(CheckoutActivity.this, MainActivity.class);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame, new PembelianFragment()).addToBackStack(null).commit();
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "notify_001");
 
             NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
@@ -180,7 +185,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             }
 
             mNotificationManager.notify(0, mBuilder.build());
-            startActivity(intent);
         });
 
 //        cobaOngkir1();
@@ -234,8 +238,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             if(position == 0){
                 view = inflater.inflate(R.layout.spinner_hint_list_item_layout, parent, false); // Hide first row
             } else {
-                view = inflater.inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
-                TextView texview = (TextView) view.findViewById(android.R.id.text1);
+                view = inflater.inflate(R.layout.spinner_text, parent, false);
+                TextView texview = (TextView) view.findViewById(R.id.goku);
                 texview.setText(getItem(position).toString());
             }
 

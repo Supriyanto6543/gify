@@ -53,6 +53,7 @@ import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.R;
 import app.gify.co.id.adapter.AdapterFavorit;
 
+import static app.gify.co.id.baseurl.UrlJson.CHECKFAV;
 import static app.gify.co.id.baseurl.UrlJson.DETAILKADO;
 import static app.gify.co.id.baseurl.UrlJson.CHECKCART;
 import static app.gify.co.id.baseurl.UrlJson.DELETEFAV;
@@ -146,7 +147,7 @@ public class DetailKado extends AppCompatActivity {
             popup();
         });
 
-        Toast.makeText(getApplicationContext(), "Id mu adalah " + id, Toast.LENGTH_LONG).show();
+        /*Toast.makeText(getApplicationContext(), "Id mu adalah " + id, Toast.LENGTH_LONG).show();*/
     }
 
     ImageListener slideImage = new ImageListener() {
@@ -236,6 +237,7 @@ public class DetailKado extends AppCompatActivity {
                 if (response.equalsIgnoreCase("bisa")){
                     Intent intent = new Intent(DetailKado.this, CartActivity.class);
                     startActivity(intent);
+                    finish();
                     Log.d("sendtocartif", "getCart: ");
                 }
             }catch (Exception e){
@@ -316,25 +318,18 @@ public class DetailKado extends AppCompatActivity {
     }
 
     private void getFav(){
-        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETFAV, null, response -> {
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, CHECKFAV+uid+"&idbarang="+idbarangku, null, response -> {
             try {
                 JSONArray array = response.getJSONArray("YukNgaji");
-                for (int a = 0; a < array.length(); a++){
-                    JSONObject object = array.getJSONObject(a);
-                    String id_tetap = object.getString("id_tetap");
-                    Log.d("masukgetfav", "getFav: " + id_tetap + " s " + uid);
-                    if (id_tetap.contains(uid)){
-                        String id_barang = object.getString("id_barang");
-                        Log.d("uidgetfav", "getFav: " + id_barang + " s " + idbarangku);
-                        if (id_barang.equalsIgnoreCase(idbarangku)){
-                            Toast.makeText(this, "barang sudah ada di favorit", Toast.LENGTH_SHORT).show();
-                            Log.d("idbarangequalfav", "getFav: " + id_barang + " s " + idbarangku);
-                        }
-                    }else {
-                        sendFavorit();
-                    }
+                Log.d("trycart", "getCart: " + response + array.length());
+                Log.d("nullsebelum", "getCart: " + array.toString());
+                if (array.isNull(0)){
+                    sendFavorit();
+                }else {
+                    Toast.makeText(this, "Barang sudah ada di cart", Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
+                Log.d("exceptioncart", "getCart: " + e.getMessage());
                 e.printStackTrace();
             }
         }, error -> {

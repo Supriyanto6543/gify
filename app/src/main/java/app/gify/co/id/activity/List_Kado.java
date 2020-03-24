@@ -87,7 +87,7 @@ public class List_Kado extends AppCompatActivity {
                 .placeholder(R.drawable.gifygif)
                 .centerCrop()
                 .into(imageViewTarget);
-        //dialog.show();
+        dialog.show();
 
         searchView = findViewById(R.id.listKadoEdittext);
         searchView.addTextChangedListener(new TextWatcher() {
@@ -191,6 +191,11 @@ public class List_Kado extends AppCompatActivity {
             if (item.getNama().toLowerCase().contains(text.toLowerCase()))
                 filterKu.add(item);
         }
-        adapterListKado.filterList(filterKu);
+
+        if (adapterListKado == null){
+            Toast.makeText(getApplicationContext(), "Kado tidak ditemukan", Toast.LENGTH_SHORT).show();
+        }else{
+            adapterListKado.filterList(filterKu);
+        }
     }
 }
