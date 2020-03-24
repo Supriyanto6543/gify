@@ -64,7 +64,7 @@ public class AdapterPembelian extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((MyPembelian)holder).status.setText("Cancel / Return");
         }
         if (pembelians.get(position).getStatus() == 5){
-            ((MyPembelian)holder).status.setText("Return");
+            ((MyPembelian)holder).status.setText("Selesai");
         }
 
         ((MyPembelian)holder).invoice.setText(String.valueOf(pembelians.get(position).getIdpesanan()));

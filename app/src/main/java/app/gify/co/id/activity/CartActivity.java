@@ -96,8 +96,6 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
 
         format = NumberFormat.getCurrencyInstance(id);
 
-        Log.d("usros", idharga + "");
-
         random = new Random();
         lastNumber = 0;
 
@@ -122,6 +120,8 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
 
         Checkout.setOnClickListener(view -> {
             Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
+            intent.putExtra("idharga", idharga);
+            intent.putExtra("title", namacart);
             preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             editor = preferences.edit();
             editor.remove("range");
@@ -195,6 +195,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
     public BroadcastReceiver passValue = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            namacart = intent.getStringExtra("title");
             totalbelanjar.setText(idharga + "");
             totalberat.setText(idberat + "");
             template = "<h2> Gify Transaction </h2> " +

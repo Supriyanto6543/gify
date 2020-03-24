@@ -81,7 +81,7 @@
                         android:layout_height="wrap_content"/>
 
                     <EditText
-                        android:id="@+id/namaPenerimaCheckout"
+                        android:id="@+id/nama"
                         android:hint="Nasrudin Nawawi"
                         android:textColorHint="#b5a981"
                         android:textColor="#aa7a00"
@@ -98,7 +98,7 @@
                         android:layout_height="wrap_content"/>
 
                     <EditText
-                        android:id="@+id/noHPPenerimaCheckout"
+                        android:id="@+id/hp"
                         android:hint="Nasrudin Nawawi"
                         android:textColorHint="#b5a981"
                         android:textColor="#aa7a00"
@@ -134,53 +134,24 @@
                                 android:layout_height="20dp"/>
 
                             <EditText
-                                android:id="@+id/edittextAlamatCheckout"
-                                android:visibility="gone"
-                                android:hint="nasrudin01@gmail.com"
-                                android:textColorHint="#b5a981"
-                                android:textStyle="bold"
-                                android:textSize="15dp"
-                                android:layout_marginStart="2dp"
-                                android:textColor="#fff"
-                                android:layout_weight="85"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:autofillHints="Nama depan" />
-
-
-                            <TextView
-                                android:id="@+id/textviewAlamatCheckout"
+                                android:id="@+id/jalan"
                                 android:hint="Jl."
                                 android:textColorHint="#b5a981"
                                 android:textStyle="bold"
-                                android:textColor="#b5a981"
-                                android:layout_marginStart="2dp"
-                                android:layout_weight="89"
-                                android:layout_width="0dp"
                                 android:textSize="15dp"
+                                android:layout_marginStart="2dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:autofillHints="Nama depan" />
 
-                            <ImageView
-                                android:id="@+id/gantiAlamatCheckout"
-                                android:src="@drawable/edit"
-                                android:tint="#dad9d5"
-                                android:layout_weight="6"
-                                android:layout_width="0dp"
-                                android:layout_height="20dp"/>
-
-
-
 
                         </LinearLayout>
-
 
                         <View
                             android:background="#fae59d"
                             android:layout_marginTop="2dp"
                             android:layout_width="match_parent"
                             android:layout_height="2.5dp"/>
-
 
                         <LinearLayout
                             android:id="@+id/pilihKelurahanCheckout"
@@ -192,40 +163,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <TextView
-                                android:text="Kelurahan"
-                                android:layout_gravity="center"
-                                android:textStyle="bold"
-                                android:textColor="#b5a981"
-                                android:textSize="15dp"
-                                android:layout_weight="30"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"/>
-
                             <EditText
-                                android:id="@+id/kelurahanCheckout"
+                                android:id="@+id/kelurahan"
+                                android:hint="Kelurahan"
                                 android:layout_gravity="center"
-                                android:gravity="center"
                                 android:textStyle="bold"
+                                android:textColorHint="#b5a981"
                                 android:textSize="15dp"
-                                android:layout_marginStart="5dp"
-                                android:textColor="#b5a981"
-                                android:layout_weight="70"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:visibility="gone"/>
-
-                            <TextView
-                                android:id="@+id/kelurahanCheckoutText"
-                                android:text="Tenjolaya"
-                                android:layout_gravity="center"
-                                android:gravity="center"
-                                android:textStyle="bold"
-                                android:textSize="15dp"
-                                android:layout_marginStart="5dp"
-                                android:textColor="#b5a981"
-                                android:layout_weight="70"
-                                android:layout_width="0dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"/>
 
                         </LinearLayout>
@@ -246,40 +191,16 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <TextView
-                                android:text="Kecamatan"
-                                android:layout_gravity="center"
-                                android:textStyle="bold"
-                                android:textColor="#b5a981"
-                                android:textSize="15dp"
-                                android:layout_weight="30"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"/>
-
                             <EditText
-                                android:id="@+id/kecamatanCheckout"
-                                android:text="Kesugihan"
+                                android:id="@+id/kecamatan"
+                                android:hint="Kecamatan"
                                 android:layout_gravity="center"
                                 android:textStyle="bold"
-                                android:gravity="center"
-                                android:layout_marginStart="5dp"
-                                android:textColor="#b5a981"
+                                android:textColorHint="#b5a981"
                                 android:textSize="15dp"
-                                android:layout_weight="70"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:visibility="gone"/>
-
-                            <TextView                                android:id="@+id/kecamatanCheckoutText"
-                                android:layout_gravity="center"
-                                android:textStyle="bold"
-                                android:gravity="center"
-                                android:layout_marginStart="5dp"
-                                android:textColor="#b5a981"
-                                android:textSize="15dp"
-                                android:layout_weight="70"
-                                android:layout_width="0dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"/>
+
 
                         </LinearLayout>
 
@@ -299,39 +220,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <TextView
-                                android:text="Kota"
+                            <EditText
+                                android:id="@+id/kota"
+                                android:hint="Kota"
                                 android:layout_gravity="center"
                                 android:textStyle="bold"
                                 android:textSize="15dp"
-                                android:textColor="#b5a981"
-                                android:layout_weight="30"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"/>
-
-                            <Spinner
-                                android:id="@+id/kotaCheckout"
-                                android:layout_gravity="center"
-                                android:textSize="15dp"
-                                android:textStyle="bold"
-                                android:layout_marginStart="5dp"
-                                android:textColor="#b5a981"
-                                android:layout_weight="70"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:visibility="gone"/>
-
-                            <TextView
-                                android:id="@+id/kotaCheckoutText"
-                                android:text="-- pilih --"
-                                android:layout_gravity="center"
-                                android:gravity="center"
-                                android:textSize="15dp"
-                                android:textStyle="bold"
-                                android:layout_marginStart="5dp"
-                                android:textColor="#b5a981"
-                                android:layout_weight="70"
-                                android:layout_width="0dp"
+                                android:textColorHint="#b5a981"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"/>
 
                         </LinearLayout>
@@ -352,26 +248,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <TextView
-                                android:id="@+id/provinsiCheckOutText"
-                                android:text="Provinsi"
+                            <EditText
+                                android:id="@+id/provinsi"
+                                android:hint="Provinsi"
                                 android:layout_gravity="center"
                                 android:textStyle="bold"
-                                android:textColor="#b5a981"
-                                android:layout_weight="30"
+                                android:textColorHint="#b5a981"
                                 android:textSize="15dp"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"/>
-
-                            <Spinner
-                                android:id="@+id/provinsiCheckout"
-                                android:layout_gravity="center"
-                                android:textStyle="bold"
-                                android:layout_marginStart="5dp"
-                                android:textColor="#b5a981"
-                                android:layout_weight="30"
-                                android:textSize="15dp"
-                                android:layout_width="0dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"/>
 
                         </LinearLayout>
@@ -385,29 +269,17 @@
 
                     </LinearLayout>
 
-                    <TextView
-                        android:text="Ucapan"
-                        android:layout_marginTop="10dp"
-                        android:textStyle="bold"
-                        android:textColor="#aa7a00"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
                     <EditText
-                        android:id="@+id/ucapanCheckout"
+                        android:id="@+id/ucapan"
                         android:background="@drawable/goku"
+                        android:hint="Ucapan"
                         android:textColorHint="#b5a981"
                         android:layout_marginBottom="30dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         tools:ignore="LabelFor" />
 
-
-
-
                 </LinearLayout>
-
-
 
             </androidx.cardview.widget.CardView>
 
