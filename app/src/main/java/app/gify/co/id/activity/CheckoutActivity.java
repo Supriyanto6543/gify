@@ -236,8 +236,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         queue.add(objectRequest);
     }
 
-
-
     private void cobaOngkir1() {
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, UrlJson.CITY, null, response -> {
             try {
@@ -273,5 +271,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         queue.add(objectRequest);
     }
 
+    private void sendCart(){
 
+    }
 }

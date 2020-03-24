@@ -2,6 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:layout_marginRight="20dp"
+    android:layout_marginLeft="20dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -116,16 +118,17 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"/>
 
-                <TextView
-                    android:id="@+id/text_view"
+                <com.cepheuen.elegantnumberbutton.view.ElegantNumberButton
+                    android:id="@+id/quantity"
                     android:visibility="gone"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:background="#000"
-                    android:layout_width="60dp"
-                    android:layout_height="30dp"
-                    android:layout_centerInParent="true"
-                    android:text="0" />
+                    app:initialNumber="1"
+                    android:layout_width="80dp"
+                    android:layout_marginRight="10dp"
+                    app:backGroundColor="@color/colorPrimary"
+                    app:textSize="8sp"
+                    android:layout_marginTop="18dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 

@@ -85,6 +85,7 @@
 
                 <ImageView
                     android:id="@+id/carousel"
+                    android:scaleType="centerCrop"
                     android:layout_width="match_parent"
                     android:layout_height="230dp"/>
 
@@ -111,7 +112,7 @@
 
                 <TextView
                     android:id="@+id/namadetail"
-                    android:text="Dompet Klulit Moder Pria Inficlo (SPP509)"
+                    android:text=""
                     android:textStyle="bold"
                     android:textSize="19dp"
                     android:textColor="#ffffff"
@@ -155,7 +156,7 @@
 
                 <TextView
                     android:id="@+id/hargadetail"
-                    android:text="Rp 120.000,;"
+                    android:text=""
                     android:textColor="#fd672c"
                     android:textStyle="bold"
                     android:textSize="16dp"
