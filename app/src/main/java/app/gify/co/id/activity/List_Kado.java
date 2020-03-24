@@ -191,6 +191,11 @@ public class List_Kado extends AppCompatActivity {
             if (item.getNama().toLowerCase().contains(text.toLowerCase()))
                 filterKu.add(item);
         }
-        adapterListKado.filterList(filterKu);
+
+        if (adapterListKado == null){
+            Toast.makeText(getApplicationContext(), "Kado tidak ditemukan", Toast.LENGTH_SHORT).show();
+        }else{
+            adapterListKado.filterList(filterKu);
+        }
     }
 }

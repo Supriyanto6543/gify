@@ -27,6 +27,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -45,6 +47,7 @@ import org.json.JSONObject;
 
 import java.io.LineNumberReader;
 
+import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.Fragment.pembelian.PembelianFragment;
 import app.gify.co.id.R;
 import app.gify.co.id.baseurl.UrlJson;
@@ -113,7 +116,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         });
 
         prosescekout.setOnClickListener(view -> {
-            Intent intent = new Intent(CheckoutActivity.this, PembelianFragment.class);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame, new PembelianFragment()).addToBackStack(null).commit();
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "notify_001");
 
             NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
@@ -140,7 +144,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             }
 
             mNotificationManager.notify(0, mBuilder.build());
-            startActivity(intent);
         });
 
         cobaOngkir1();
