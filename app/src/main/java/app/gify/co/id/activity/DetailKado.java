@@ -220,7 +220,6 @@ public class DetailKado extends AppCompatActivity {
         batal.setOnClickListener(view1 -> dialog.dismiss());
         proses.setOnClickListener(view1 -> {
             getCart();
-            Log.d("hargaTop",  getJumlah + "");
         });
 
 
@@ -253,6 +252,8 @@ public class DetailKado extends AppCompatActivity {
                 params.put("jumlah", String.valueOf(cingpai));
                 params.put("berat", berat);
                 params.put("harga", String.valueOf(hargabyid));
+                params.put("quantity", getJumlah);
+                Log.d("lele", getJumlah + "");
                 return params;
             }
         };

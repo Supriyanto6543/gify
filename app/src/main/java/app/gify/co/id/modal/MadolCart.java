@@ -3,7 +3,7 @@ package app.gify.co.id.modal;
 public class MadolCart {
     private int harga,jumlah, kode;
     private String namacart, gambar;
-    private int berat;
+    private int berat, quantity;
 
     public MadolCart(String gambar, int harga, String namacart, int kode, int jumlah, int berat) {
         this.gambar = gambar;
@@ -12,6 +12,7 @@ public class MadolCart {
         this.kode = kode;
         this.jumlah = jumlah;
         this.berat = berat;
+        this.quantity = quantity;
     }
 
     public int getBerat() {
@@ -60,5 +61,13 @@ public class MadolCart {
 
     public void setJumlah(int jumlah) {
         this.jumlah = jumlah;
+    }
+
+    public int getQuantity(){
+        return quantity;
+    }
+
+    public void setQuantity(int quantity){
+        this.quantity = quantity;
     }
 }

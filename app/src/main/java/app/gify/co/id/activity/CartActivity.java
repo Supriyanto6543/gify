@@ -206,7 +206,6 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
                     + "<h2>Salam, Gify Team</h2>";
             
             templateConvert = Html.fromHtml(template);
-//            Toast.makeText(getApplicationContext(), format.format(Double.valueOf(replaceNumberOfAmount(idberat, lastNumber))), Toast.LENGTH_LONG).show();
         }
     };
 
