@@ -53,6 +53,7 @@ import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.R;
 import app.gify.co.id.adapter.AdapterFavorit;
 
+import static app.gify.co.id.baseurl.UrlJson.CHECKFAV;
 import static app.gify.co.id.baseurl.UrlJson.DETAILKADO;
 import static app.gify.co.id.baseurl.UrlJson.CHECKCART;
 import static app.gify.co.id.baseurl.UrlJson.DELETEFAV;
@@ -74,7 +75,7 @@ public class DetailKado extends AppCompatActivity {
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
     //CarouselView carouselView;
-    String idbarangku, uid, id, photobyid, kodeBarangbyid, namabyid, deskripsibyid, berat;
+    String idbarangku, uid, id, photobyid, kodeBarangbyid, namabyid, deskripsibyid, berat, getJumlah;
     int id_barang, hargabyid, cingpai = 1, gambar, gambar1, gambar2;
     int sourceImg[];
     Boolean faforit;
@@ -112,9 +113,9 @@ public class DetailKado extends AppCompatActivity {
         unfavorit = findViewById(R.id.unfavoritdet);
 
         id = getIntent().getStringExtra("id");
-        gambar = getIntent().getIntExtra("gambar", 0);
-        gambar1 = getIntent().getIntExtra("gambar1", 0);
-        gambar2 = getIntent().getIntExtra("gambar2", 0);
+//        gambar = getIntent().getIntExtra("gambar", 0);
+//        gambar1 = getIntent().getIntExtra("gambar1", 0);
+//        gambar2 = getIntent().getIntExtra("gambar2", 0);
 
         sourceImg = new int[]{gambar, gambar1, gambar2};
 
@@ -200,6 +201,7 @@ public class DetailKado extends AppCompatActivity {
                 cingpai = cingpai + 1;
             }
             jumlah.setText(String.valueOf(cingpai));
+            getJumlah = jumlah.getText().toString();
             hargapopupdown.setText("Rp. " + hargabyid*cingpai);
         });
         kurang.setOnClickListener(view1 -> {
@@ -210,8 +212,11 @@ public class DetailKado extends AppCompatActivity {
             }
 
             jumlah.setText(String.valueOf(cingpai));
+            getJumlah = jumlah.getText().toString();
             hargapopupdown.setText("Rp. " + hargabyid*cingpai);;
         });
+
+
 
         batal.setOnClickListener(view1 -> dialog.dismiss());
         proses.setOnClickListener(view1 -> {
@@ -232,6 +237,7 @@ public class DetailKado extends AppCompatActivity {
                 if (response.equalsIgnoreCase("bisa")){
                     Intent intent = new Intent(DetailKado.this, CartActivity.class);
                     startActivity(intent);
+                    finish();
                     Log.d("sendtocartif", "getCart: ");
                 }
             }catch (Exception e){
@@ -248,6 +254,8 @@ public class DetailKado extends AppCompatActivity {
                 params.put("jumlah", String.valueOf(cingpai));
                 params.put("berat", berat);
                 params.put("harga", String.valueOf(hargabyid));
+                params.put("quantity", getJumlah);
+                Log.d("lele", getJumlah + "");
                 return params;
             }
         };
@@ -310,25 +318,18 @@ public class DetailKado extends AppCompatActivity {
     }
 
     private void getFav(){
-        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETFAV, null, response -> {
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, CHECKFAV+uid+"&idbarang="+idbarangku, null, response -> {
             try {
                 JSONArray array = response.getJSONArray("YukNgaji");
-                for (int a = 0; a < array.length(); a++){
-                    JSONObject object = array.getJSONObject(a);
-                    String id_tetap = object.getString("id_tetap");
-                    Log.d("masukgetfav", "getFav: " + id_tetap + " s " + uid);
-                    if (id_tetap.contains(uid)){
-                        String id_barang = object.getString("id_barang");
-                        Log.d("uidgetfav", "getFav: " + id_barang + " s " + idbarangku);
-                        if (id_barang.equalsIgnoreCase(idbarangku)){
-                            Toast.makeText(this, "barang sudah ada di favorit", Toast.LENGTH_SHORT).show();
-                            Log.d("idbarangequalfav", "getFav: " + id_barang + " s " + idbarangku);
-                        }
-                    }else {
-                        sendFavorit();
-                    }
+                Log.d("trycart", "getCart: " + response + array.length());
+                Log.d("nullsebelum", "getCart: " + array.toString());
+                if (array.isNull(0)){
+                    sendFavorit();
+                }else {
+                    Toast.makeText(this, "Barang sudah ada di cart", Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
+                Log.d("exceptioncart", "getCart: " + e.getMessage());
                 e.printStackTrace();
             }
         }, error -> {

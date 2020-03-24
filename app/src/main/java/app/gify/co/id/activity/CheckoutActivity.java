@@ -197,8 +197,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             if(position == 0){
                 view = inflater.inflate(R.layout.spinner_hint_list_item_layout, parent, false); // Hide first row
             } else {
-                view = inflater.inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
-                TextView texview = (TextView) view.findViewById(android.R.id.text1);
+                view = inflater.inflate(R.layout.spinner_text, parent, false);
+                TextView texview = (TextView) view.findViewById(R.id.goku);
                 texview.setText(getItem(position).toString());
             }
 
@@ -239,8 +239,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         queue.add(objectRequest);
     }
 
-
-
     private void cobaOngkir1() {
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, UrlJson.CITY, null, response -> {
             try {
@@ -276,5 +274,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         queue.add(objectRequest);
     }
 
+    private void sendCart(){
 
+    }
 }

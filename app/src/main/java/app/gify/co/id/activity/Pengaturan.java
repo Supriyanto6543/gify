@@ -87,12 +87,13 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     EditText NamaDepan, NamaBelakang, NoHp, Email, GantiAlamat, editTextKecamatan, editTextKelurahan;
     LinearLayout changePicture, changeCover;
-    TextView Kelurahan, Kecamatan, nama_depan, nama_belakang, No_hp, E_mail;
-    String  cobaAgar, province, namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat, kota, provinsi, Lemail, LID, namaUser, emailnama, idku, namanama,
+    TextView Kelurahan, Kecamatan, nama_depan, nama_belakang, No_hp, E_mail, textAlamat;
+    String  cobaAgar, province, namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat2, gAlamat, kota, provinsi, Lemail, LID, namaUser, emailnama, idku, namanama,
     LNama, LEmail2, Lalamat, LNoHp, Ltanggal, fotoProfil, fotoCover;
     ImageView CheckList, ganti,profileImage, coverImage;
     ImageView Back;
     String province_id;
+    int province_idku;
     TextView gantiAlamat;
     ProgressDialog loadingBar;
     HintArrayAdapter hintAdapter, hintadapterku;
@@ -140,6 +141,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         GantiAlamat = findViewById(R.id.edittextAlamatPengaturan);
         ganti = findViewById(R.id.gantiAlamatPengaturan);
         viewTerserah = findViewById(R.id.viewTerserah);
+        textAlamat = findViewById(R.id.textviewAlamatPengaturan);
         viewKecamatan = findViewById(R.id.Viewkecamatan);
         viewKelurahan = findViewById(R.id.Viewkelurahan);
         editTextKelurahan = findViewById(R.id.edittextkelurahan);
@@ -186,11 +188,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         cobaOngkir2();
         cekprofile();
 
-
-
-
-
-
         RootRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -198,10 +195,17 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 Lemail = dataSnapshot.child("email").getValue().toString();
                 String LNoHP = dataSnapshot.child("noHp").getValue().toString();
                 String nama = dataSnapshot.child("nama").getValue().toString();
+                if (dataSnapshot.child("alamat").exists()){
+                    Lalamat = dataSnapshot.child("alamat").getValue().toString();
+                }
+                else {
+                    Lalamat = null;
+                }
                 Log.d("cobaL", "email: " + Lemail + " " + "LID: " + LID);
                 Email.setText(Lemail);
                 NoHp.setText(LNoHP);
                 NamaDepan.setText(nama);
+                GantiAlamat.setText(Lalamat);
             }
 
             @Override
@@ -231,20 +235,14 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         });
 
         ganti.setOnClickListener(v -> {
-            gantiAlamat.setVisibility(View.GONE);
             Kelurahan.setVisibility(View.GONE);
             Kecamatan.setVisibility(View.GONE);
 
             editTextKecamatan.setVisibility(View.VISIBLE);
             editTextKelurahan.setVisibility(View.VISIBLE);
-            GantiAlamat.setVisibility(View.VISIBLE);
-
         });
 
         CheckList.setOnClickListener(v -> {
-            if (ProvinsiS.getSelectedItem().toString() == province){
-
-            }
             namadepan = NamaDepan.getText().toString().trim();
             namabelakang = NamaBelakang.getText().toString().trim();
             nama = namadepan + " " + namabelakang;
@@ -255,15 +253,27 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             gAlamat = GantiAlamat.getText().toString().trim();
             kota = KotaS.getSelectedItem().toString();
             provinsi = ProvinsiS.getSelectedItem().toString();
-            alamat = gAlamat + "," + " " + kelurahan + "," + " " + kecamatan + "," + " " + kota + "," + " " + provinsi;
+            if (Lalamat == null) {
+                alamat = gAlamat + "," + " " + kelurahan + "," + " " + kecamatan + "," + " " + kota + "," + " " + provinsi;
+            }
+            else if (!gAlamat.isEmpty()) {
+                alamat = gAlamat;
+            }
+            else if (!provinsi.isEmpty() && !kota.isEmpty() && !kecamatan.isEmpty() && !kelurahan.isEmpty()){
+                alamat = gAlamat + "," + " " + kelurahan + "," + " " + kecamatan + "," + " " + kota + "," + " " + provinsi;
+            }
+            else {
+                Toast.makeText(Pengaturan.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
+            }
             dialog.show();
 
 
-            if (namadepan.isEmpty() || noHp.isEmpty() || email.isEmpty() || gAlamat.isEmpty() || kelurahan.isEmpty() || kecamatan.isEmpty() || kota.isEmpty() || provinsi.isEmpty()) {
+            if (namadepan.isEmpty() || noHp.isEmpty() || email.isEmpty() || gAlamat.isEmpty()) {
                 Toast.makeText(Pengaturan.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
             else {
+                AkuGantengBanget();
                 RootRef.child("Users").child(currentUserID).child("nama").setValue(nama)
                         .addOnCompleteListener(task -> {
                             NamaDepan.setText("");
@@ -294,8 +304,9 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                             dialog.dismiss();
                         });
 
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
 
-                AkuGantengBanget();
             }
         });
 
@@ -487,7 +498,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
                     ProvinsiS.setAdapter(hintadapterku);
 
-                    ProvinsiS.setSelection(0, false);
+                    ProvinsiS.setSelection(0,  false);
 
                     ProvinsiS.setOnItemSelectedListener(Pengaturan.this);
 
@@ -513,7 +524,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject object = array.getJSONObject(i);
                     int city_id = object.getInt("city_id");
-                    int province_id = object.getInt("province_id");
+                    province_idku = object.getInt("province_id");
                     String province = object.getString("province");
                     String type = object.getString("type");
                     String city_name = object.getString("city_name");
