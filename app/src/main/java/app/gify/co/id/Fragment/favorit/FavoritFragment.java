@@ -169,7 +169,6 @@ public class FavoritFragment extends Fragment {
                             dialog.dismiss();
                         }else {
                             dialog.dismiss();
-                            Toast.makeText(getContext(), "Tidak ada barang", Toast.LENGTH_SHORT).show();
                         }
                         Log.d("listkadoharga", "onResponse: " + harga + tipe + " s " + idbarang);
 

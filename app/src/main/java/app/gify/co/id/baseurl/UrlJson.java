@@ -7,6 +7,7 @@ public class UrlJson {
     public static final String GETKATEGORI = ROOT + "kado.php";
     public static final String GETACARA = ROOT + "acara.php";
     public static final String GETRANGE = ROOT + "range.php";
+    public static final String CHECKFAV = ROOT + "getfav.php?idtetap=";
     public static final String GETFAV = ROOT + "favorit.php";
     public static final String REGISTER = ROOT + "register.php";
     public static final String IMAGE = ROOT + "image.php";
