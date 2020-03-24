@@ -74,7 +74,7 @@ public class DetailKado extends AppCompatActivity {
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
     //CarouselView carouselView;
-    String idbarangku, uid, id, photobyid, kodeBarangbyid, namabyid, deskripsibyid, berat;
+    String idbarangku, uid, id, photobyid, kodeBarangbyid, namabyid, deskripsibyid, berat, getJumlah;
     int id_barang, hargabyid, cingpai = 1, gambar, gambar1, gambar2;
     int sourceImg[];
     Boolean faforit;
@@ -112,9 +112,9 @@ public class DetailKado extends AppCompatActivity {
         unfavorit = findViewById(R.id.unfavoritdet);
 
         id = getIntent().getStringExtra("id");
-        gambar = getIntent().getIntExtra("gambar", 0);
-        gambar1 = getIntent().getIntExtra("gambar1", 0);
-        gambar2 = getIntent().getIntExtra("gambar2", 0);
+//        gambar = getIntent().getIntExtra("gambar", 0);
+//        gambar1 = getIntent().getIntExtra("gambar1", 0);
+//        gambar2 = getIntent().getIntExtra("gambar2", 0);
 
         sourceImg = new int[]{gambar, gambar1, gambar2};
 
@@ -200,6 +200,7 @@ public class DetailKado extends AppCompatActivity {
                 cingpai = cingpai + 1;
             }
             jumlah.setText(String.valueOf(cingpai));
+            getJumlah = jumlah.getText().toString();
             hargapopupdown.setText("Rp. " + hargabyid*cingpai);
         });
         kurang.setOnClickListener(view1 -> {
@@ -210,12 +211,16 @@ public class DetailKado extends AppCompatActivity {
             }
 
             jumlah.setText(String.valueOf(cingpai));
+            getJumlah = jumlah.getText().toString();
             hargapopupdown.setText("Rp. " + hargabyid*cingpai);;
         });
+
+
 
         batal.setOnClickListener(view1 -> dialog.dismiss());
         proses.setOnClickListener(view1 -> {
             getCart();
+            Log.d("hargaTop",  getJumlah + "");
         });
 
 

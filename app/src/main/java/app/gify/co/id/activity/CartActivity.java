@@ -96,6 +96,8 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
 
         format = NumberFormat.getCurrencyInstance(id);
 
+        Log.d("usros", idharga + "");
+
         random = new Random();
         lastNumber = 0;
 
@@ -131,30 +133,11 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
 
         });
 
-
         LocalBroadcastManager.getInstance(this).registerReceiver(passValue, new IntentFilter("message_subject_intent"));
 
         ItemTouchHelper.SimpleCallback callback = new RecyclerTouchDelete(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(callback).attachToRecyclerView(recyclerView);
     }
-
-    public BroadcastReceiver passValue = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            totalbelanjar.setText(idharga + "");
-            totalberat.setText(idberat + "");
-            template = "<h2> Gify Transaction </h2> " +
-                    "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
-                    + "<p><b> Nama barang: </p></b>"
-                    + "<p><b> Harga barang" + format.format(Double.valueOf(replaceNumberOfAmount(idharga, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
-                    + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
-                    + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
-                    + "<h2>Salam, Gify Team</h2>";
-
-            templateConvert = Html.fromHtml(template);
-//            Toast.makeText(getApplicationContext(), format.format(Double.valueOf(replaceNumberOfAmount(idberat, lastNumber))), Toast.LENGTH_LONG).show();
-        }
-    };
 
     public String LoadData(String inFile) {
         String tContents = "";
@@ -208,6 +191,24 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         RequestQueue queue = Volley.newRequestQueue(CartActivity.this);
         queue.add(objectRequest);
     }
+
+    public BroadcastReceiver passValue = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            totalbelanjar.setText(idharga + "");
+            totalberat.setText(idberat + "");
+            template = "<h2> Gify Transaction </h2> " +
+                    "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
+                    + "<p><b> Nama barang: </p></b>"
+                    + "<p><b> Harga barang" + format.format(Double.valueOf(replaceNumberOfAmount(idharga, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
+                    + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
+                    + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
+                    + "<h2>Salam, Gify Team</h2>";
+            
+            templateConvert = Html.fromHtml(template);
+//            Toast.makeText(getApplicationContext(), format.format(Double.valueOf(replaceNumberOfAmount(idberat, lastNumber))), Toast.LENGTH_LONG).show();
+        }
+    };
 
     private void getBerat(int idbarang){
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETBARANG, null, response -> {

@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:name=".MyApplication"
         android:theme="@style/Theme.AppCompat.NoActionBar"
-        tools:targetApi="n">
+        tools:targetApi="n"
+        tools:replace="android:allowBackup,icon,theme,label">
 
         <meta-data
             android:name="android.support.FILE_PROVIDER_PATHS"
