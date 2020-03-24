@@ -345,18 +345,16 @@
 
                     <EditText
                         android:id="@+id/edittextAlamatPengaturan"
-                        android:visibility="gone"
-                        android:background="@drawable/kamdakmdwk"
-                        android:hint="Jl. Sudirman No. 58"
-                        android:textColorHint="#b5a981"
-                        android:textStyle="bold"
-                        android:textSize="15dp"
-                        android:layout_marginStart="2dp"
-                        android:textColor="#000"
-                        android:layout_weight="85"
-                        android:layout_width="0dp"
+                        android:layout_width="237dp"
                         android:layout_height="wrap_content"
-                        android:autofillHints="Nama depan" />
+                        android:layout_marginStart="2dp"
+                        android:layout_weight="85"
+                        android:autofillHints="Nama depan"
+                        android:hint="Jl. Sudirman No. 58"
+                        android:textColor="#000"
+                        android:textColorHint="#b5a981"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
 
 
                     <TextView
@@ -370,7 +368,8 @@
                         android:textColor="#b5a981"
                         android:textColorHint="#b5a981"
                         android:textSize="15dp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
 
 
                     <ImageView
@@ -395,7 +394,7 @@
                 <LinearLayout
                     android:id="@+id/pilihKelurahanPengaturan"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="22dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="5dp"
@@ -403,10 +402,10 @@
                     android:weightSum="100">
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:layout_weight="30"
+                        android:layout_weight="26"
                         android:text="Kelurahan"
                         android:textColor="#b5a981"
                         android:textSize="15dp"
@@ -414,18 +413,19 @@
 
                     <EditText
                         android:id="@+id/edittextkelurahan"
-                        android:visibility="gone"
-                        android:background="@drawable/dbjadjahdja"
-                        android:hint="Sukajadi"
-                        android:textColorHint="#b5a981"
-                        android:textStyle="bold"
-                        android:textSize="15dp"
-                        android:layout_marginStart="2dp"
-                        android:textColor="#000"
-                        android:layout_weight="85"
+                        android:gravity="center"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:autofillHints="Nama depan" />
+                        android:layout_marginStart="2dp"
+                        android:layout_weight="66"
+                        android:autofillHints="Nama depan"
+                        android:background="@drawable/dbjadjahdja"
+                        android:hint="Sukajadi"
+                        android:textColor="#000"
+                        android:textColorHint="#b5a981"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/kelurahan"
@@ -438,7 +438,8 @@
                         android:text="-- pilih --"
                         android:textColor="#b5a981"
                         android:textSize="15dp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                         />
 
                 </LinearLayout>
 
@@ -451,51 +452,53 @@
 
                 <LinearLayout
                     android:id="@+id/pilihKecamatanPengaturan"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="5dp"
-                    android:weightSum="100"
-                    android:layout_gravity="center"
                     android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:weightSum="100">
 
                     <TextView
-                        android:text="Kecamatan"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:textStyle="bold"
+                        android:layout_weight="30"
+                        android:text="Kecamatan"
                         android:textColor="#b5a981"
                         android:textSize="15dp"
-                        android:layout_weight="30"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
+                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/edittextkecamatan"
-                        android:visibility="gone"
-                        android:background="@drawable/dbjadjahdja"
-                        android:hint="Tenjolaya"
-                        android:textColorHint="#b5a981"
-                        android:textStyle="bold"
-                        android:textSize="15dp"
-                        android:layout_marginStart="2dp"
-                        android:textColor="#000"
-                        android:layout_weight="85"
+                        android:gravity="center"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:autofillHints="Nama depan" />
+                        android:layout_marginStart="2dp"
+                        android:layout_weight="62"
+                        android:autofillHints="Nama depan"
+                        android:background="@drawable/dbjadjahdja"
+                        android:hint="Tenjolaya"
+                        android:textColor="#000"
+                        android:visibility="gone"
+                        android:textColorHint="#b5a981"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/kecamatan"
-                        android:text="-- pilih --"
-                        android:gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:textStyle="bold"
                         android:layout_marginStart="5dp"
+                        android:layout_weight="61"
+                        android:gravity="center"
+                        android:text="-- pilih --"
                         android:textColor="#b5a981"
                         android:textSize="15dp"
-                        android:layout_weight="65"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
+                        android:textStyle="bold"
+                         />
 
                 </LinearLayout>
 
