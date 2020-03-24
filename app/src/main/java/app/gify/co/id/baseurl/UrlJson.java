@@ -24,4 +24,5 @@ public class UrlJson {
     public static final String GETPEMBELIAN = ROOT + "getpembelian.php";
     public static final String DELETECART = ROOT + "deletecart.php";
     public static final String DELETEFAV = ROOT + "delfav.php";
+    public static final String ORDER = ROOT + "order.php";
 }

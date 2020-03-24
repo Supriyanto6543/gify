@@ -180,6 +180,7 @@ public class FavoritFragment extends Fragment {
                             dialog.dismiss();
                         }else {
                             dialog.dismiss();
+
                         }
                         Log.d("listkadoharga", "onResponse: " + harga + tipe + " s " + idbarang);
 

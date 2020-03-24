@@ -2,6 +2,7 @@ package app.gify.co.id.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 import app.gify.co.id.R;
+import app.gify.co.id.activity.List_Kado;
 import app.gify.co.id.modal.MadolCart;
 
 public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -82,8 +84,7 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Glide.with(view).load(carts.get(position).getGambar()).into(((MyCart)holder).gambar);
         Intent intent = new Intent("message_subject_intent");
         intent.putExtra("name", String.valueOf((totalCart(carts))));
-        intent.putExtra("berat", String.valueOf((beratCart(carts))));
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        intent.putExtra("title", String.valueOf((getName(carts))));
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
 //        ((MyCart) holder).quantity.setOnValueChangeListener(new ElegantNumberButton.OnValueChangeListener() {
@@ -207,6 +208,16 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         return totalBerat;
+    }
+
+    public String getName(List<MadolCart> name){
+
+        String ku = "";
+        for (int i = 0; i < name.size(); i++){
+            ku += name.get(i).getNamacart() + ", ";
+        }
+
+        return ku;
     }
 
     public void removeItem(int item){

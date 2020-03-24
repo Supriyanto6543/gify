@@ -101,12 +101,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.loading);
         ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
-        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
         Glide.with(getContext())
-                .load(R.drawable.gifygif)
-                .placeholder(R.drawable.gifygif)
+                .load(R.drawable.gifylogogif)
                 .centerCrop()
-                .into(imageViewTarget);
+                .into(gifImageView);
         dialog.show();
 
         hintAdapter = new HintArrayAdapter<String>(getContext(), 0);

@@ -1,6 +1,7 @@
 package app.gify.co.id.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,6 +17,7 @@ import android.text.Spanned;
 import android.text.SpannedString;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +36,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
@@ -81,6 +85,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
     Random random;
     int lastNumber, idbarang;
     String template, idberat, idharga;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,12 +96,22 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
             Intent intent = new Intent(getApplicationContext(), List_Kado.class);
             startActivity(intent);
         });
+        dialog  = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.loading);
+        ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
+        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
+        Glide.with(this)
+                .load(R.drawable.gifygif)
+                .placeholder(R.drawable.gifygif)
+                .centerCrop()
+                .into(imageViewTarget);
+        dialog.show();
 
         id = new Locale("id", "ID");
 
         format = NumberFormat.getCurrencyInstance(id);
-
-        Log.d("usros", idharga + "");
 
         random = new Random();
         lastNumber = 0;
@@ -122,6 +137,8 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
 
         Checkout.setOnClickListener(view -> {
             Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
+            intent.putExtra("idharga", idharga);
+            intent.putExtra("title", namacart);
             preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             editor = preferences.edit();
             editor.remove("range");
@@ -195,6 +212,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
     public BroadcastReceiver passValue = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            namacart = intent.getStringExtra("title");
             totalbelanjar.setText(idharga + "");
             totalberat.setText(idberat + "");
             template = "<h2> Gify Transaction </h2> " +

@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,9 +33,11 @@ import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -46,6 +51,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.LineNumberReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.Fragment.pembelian.PembelianFragment;
@@ -57,10 +67,9 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     Button prosescekout;
     ImageView back;
 
-    EditText NamaPenerima, NoPenerima, alamatUbah, kelurahan, kecamatan;
+    EditText nama, hp, jalan, kelurahan, kecamatan, kota, provinsi, ucapan;
     String currentUserID, Lnama, LNohp, Lalamat;
     ImageView gantiAlamat;
-    TextView textViewCheckOutAlamat, alamat, kelurahan2, kecemetan, kota, provinsi;
 
     HintArrayAdapter hintArrayAdapter, hintArrayAdapterKu;
 
@@ -70,6 +79,9 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     FirebaseAuth mAuth;
     NotificationManager mNotificationManager;
 
+    String idtetaporder, ttlorder, penerimaorder, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, resiorder, statusorder, namabarangorder, ucapanorder;
+    SharedPreferences preferences;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,20 +90,31 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         RootRef = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
-        textViewCheckOutAlamat = findViewById(R.id.textviewAlamatCheckout);
-        NamaPenerima = findViewById(R.id.namaPenerimaCheckout);
-        NoPenerima = findViewById(R.id.noHPPenerimaCheckout);
-        alamatUbah = findViewById(R.id.edittextAlamatCheckout);
-        alamat = findViewById(R.id.textviewAlamatCheckout);
-        kelurahan2 = findViewById(R.id.kelurahanCheckoutText);
-        kecemetan = findViewById(R.id.kecamatanCheckoutText);
-        kecamatan = findViewById(R.id.kecamatanCheckout);
-        kelurahan = findViewById(R.id.kelurahanCheckout);
-        kota = findViewById(R.id.kotaCheckoutText);
-        provinsi = findViewById(R.id.provinsiCheckOutText);
-        gantiAlamat = findViewById(R.id.gantiAlamatCheckout);
-        Kota = findViewById(R.id.kotaCheckout);
-        Provinsi = findViewById(R.id.provinsiCheckout);
+
+        // initialization
+        nama = findViewById(R.id.nama);
+        hp = findViewById(R.id.hp);
+        jalan = findViewById(R.id.jalan);
+        kelurahan = findViewById(R.id.kelurahan);
+        kecamatan = findViewById(R.id.kecamatan);
+        kota = findViewById(R.id.kota);
+        provinsi =findViewById(R.id.provinsi);
+        ucapan = findViewById(R.id.ucapan);
+
+//        textViewCheckOutAlamat = findViewById(R.id.textviewAlamatCheckout);
+//        NamaPenerima = findViewById(R.id.namaPenerimaCheckout);
+//        NoPenerima = findViewById(R.id.noHPPenerimaCheckout);
+//        alamatUbah = findViewById(R.id.edittextAlamatCheckout);
+//        alamat = findViewById(R.id.textviewAlamatCheckout);
+//        kelurahan2 = findViewById(R.id.kelurahanCheckoutText);
+//        kecemetan = findViewById(R.id.kecamatanCheckoutText);
+//        kecamatan = findViewById(R.id.kecamatanCheckout);
+//        kelurahan = findViewById(R.id.kelurahanCheckout);
+//        kota = findViewById(R.id.kotaCheckoutText);
+//        provinsi = findViewById(R.id.provinsiCheckOutText);
+//        gantiAlamat = findViewById(R.id.gantiAlamatCheckout);
+//        Kota = findViewById(R.id.kotaCheckout);
+//        Provinsi = findViewById(R.id.provinsiCheckout);
 
         hintArrayAdapter = new HintArrayAdapter<String>(getApplicationContext(), 0);
         hintArrayAdapterKu = new HintArrayAdapter<String>(getApplicationContext(), 0);
@@ -102,20 +125,38 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         back = findViewById(R.id.backCheckout);
         back.setOnClickListener(v -> finish());
 
-        gantiAlamat.setOnClickListener(v -> {
-            alamatUbah.setVisibility(View.VISIBLE);
-            alamat.setVisibility(View.GONE);
-            kelurahan.setVisibility(View.VISIBLE);
-            kelurahan2.setVisibility(View.GONE);
-            kecamatan.setVisibility(View.VISIBLE);
-            kecemetan.setVisibility(View.GONE);
-            kota.setVisibility(View.GONE);
-            Kota.setVisibility(View.VISIBLE);
-            provinsi.setVisibility(View.GONE);
-            Provinsi.setVisibility(View.VISIBLE);
-        });
+//        gantiAlamat.setOnClickListener(v -> {
+//            alamatUbah.setVisibility(View.VISIBLE);
+//            alamat.setVisibility(View.GONE);
+//            kelurahan.setVisibility(View.VISIBLE);
+//            kelurahan2.setVisibility(View.GONE);
+//            kecamatan.setVisibility(View.VISIBLE);
+//            kecemetan.setVisibility(View.GONE);
+//            kota.setVisibility(View.GONE);
+//            Kota.setVisibility(View.VISIBLE);
+//            provinsi.setVisibility(View.GONE);
+//            Provinsi.setVisibility(View.VISIBLE);
+//        });
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(CheckoutActivity.this);
+
+        //get value
+        idtetaporder = preferences.getString("uid", "");
 
         prosescekout.setOnClickListener(view -> {
+
+            //get value form inner class
+            penerimaorder = nama.getText().toString();
+            alamatorder = jalan.getText().toString();
+            kelurahanorder = kelurahan.getText().toString();
+            kecamatanorder = kecamatan.getText().toString();
+            kotaorder = kota.getText().toString();
+            provinsiorder = provinsi.getText().toString();
+            ucapanorder = ucapan.getText().toString();
+            namabarangorder = getIntent().getStringExtra("title");
+
+            sendCart(getDateTime());
+            Intent intent = new Intent(CheckoutActivity.this, MainActivity.class);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame, new PembelianFragment()).addToBackStack(null).commit();
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "notify_001");
@@ -146,8 +187,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             mNotificationManager.notify(0, mBuilder.build());
         });
 
-        cobaOngkir1();
-        cobaOngkir2();
+//        cobaOngkir1();
+//        cobaOngkir2();
 
     }
 
@@ -274,7 +315,47 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         queue.add(objectRequest);
     }
 
-    private void sendCart(){
+    private void sendCart(String date){
+        StringRequest request = new StringRequest(Request.Method.POST, UrlJson.ORDER, response -> {
+            Log.d("bahrus", response + "");
+            try {
 
+                if (response.equals("bisa")){
+                    Intent intent = new Intent(CheckoutActivity.this, CartActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }, error -> {
+            Log.d("usro", error.getMessage());
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> param = new HashMap<>();
+                param.put("id_tetap", idtetaporder);
+                param.put("ttl", date);
+                param.put("penerima", penerimaorder);
+                param.put("alamat", alamatorder);
+                param.put("kelurahan", kelurahanorder);
+                param.put("kecamatan", kecamatanorder);
+                param.put("kota", kotaorder);
+                param.put("provinsi", provinsiorder);
+                param.put("resi", "");
+                param.put("status", String.valueOf(1));
+                param.put("nama_barang", namabarangorder);
+                param.put("ucapan", ucapanorder);
+                return param;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(request);
+    }
+
+    private String getDateTime() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 }
