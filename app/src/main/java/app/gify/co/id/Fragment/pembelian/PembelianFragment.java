@@ -1,5 +1,6 @@
 package app.gify.co.id.Fragment.pembelian;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -24,6 +26,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,6 +55,7 @@ public class PembelianFragment extends Fragment {
     SharedPreferences preferences;
     ArrayList<MadolPembelian> pembelians;
     AdapterPembelian adapterPembelian;
+    private Dialog dialog;
 
     @Nullable
     @Override
@@ -68,6 +73,18 @@ public class PembelianFragment extends Fragment {
                 ft.commit();
             }
         });
+        dialog  = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.loading);
+        ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
+        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
+        Glide.with(getActivity())
+                .load(R.drawable.gifygif)
+                .placeholder(R.drawable.gifygif)
+                .centerCrop()
+                .into(imageViewTarget);
+        dialog.show();
 
         pembelians = new ArrayList<>();
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -139,7 +156,9 @@ public class PembelianFragment extends Fragment {
                     pembelians.add(pembelian);
                     adapterPembelian = new AdapterPembelian(pembelians, getContext());
                     rc.setAdapter(adapterPembelian);
+                    dialog.dismiss();
                 }
+                dialog.dismiss();
             } catch (JSONException e) {
                 e.printStackTrace();
                 Log.d("errexget", "onCreateView: " + e.getMessage());
