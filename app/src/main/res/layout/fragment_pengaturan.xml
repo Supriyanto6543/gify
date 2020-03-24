@@ -93,10 +93,11 @@
 
                 <ImageView
                     android:id="@+id/profileimage"
-                    android:src="@drawable/image"
+                    android:background="@drawable/image"
                     android:layout_marginStart="@dimen/padd_10"
                     android:layout_marginEnd="@dimen/padd_10"
                     android:padding="@dimen/padd_10"
+                    android:scaleType="centerCrop"
                     android:layout_width="match_parent"
                     android:layout_height="90dp"/>
 

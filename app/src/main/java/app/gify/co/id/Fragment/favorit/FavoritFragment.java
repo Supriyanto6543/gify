@@ -86,6 +86,17 @@ public class FavoritFragment extends Fragment {
             textView.setVisibility(View.GONE);
 
         });
+        ya.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ya.setVisibility(View.GONE);
+                cari.setVisibility(View.VISIBLE);
+                tulisan.setVisibility(View.VISIBLE);
+                searchViews.setVisibility(View.GONE);
+                textView.setVisibility(View.VISIBLE);
+                searchViews.getText().clear();
+            }
+        });
 
         searchViews.addTextChangedListener(new TextWatcher() {
             @Override
@@ -228,6 +239,12 @@ public class FavoritFragment extends Fragment {
             if (item.getNama().toLowerCase().contains(text.toLowerCase()))
                 filterKu.add(item);
         }
-        adapterFavorit.filterList(filterKu);
+        if (adapterFavorit == null ){
+            Toast.makeText(getContext(), "Kado tidak ditemukan", Toast.LENGTH_SHORT).show();
+        }else if (searchViews.getText().toString().length() == 0){
+
+        }else{
+            adapterFavorit.filterList(filterKu);
+        }
     }
 }
