@@ -79,16 +79,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         tahun=root.findViewById(R.id.tahunCari);
         carikado=root.findViewById(R.id.cariKado);
 
-        /*mDialog = new ProgressDialog(getContext());
-        LayoutInflater inflaterku = getLayoutInflater();
-        View dialogLayout = inflaterku.inflate(R.layout.loading, null);
-        *//*LayoutInflater factory = LayoutInflater.from(getActivity());
-        final View viewku = factory.inflate(R.layout.loading, null);
-        alertadd.setView(viewku);*//*
-        mDialog.setView(dialogLayout);
-        mDialog.setCancelable(false);
-        mDialog.setCanceledOnTouchOutside(false);
-        mDialog.show();*/
         dialog  = new Dialog(getActivity());
         inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.loading, null);
