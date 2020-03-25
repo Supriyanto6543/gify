@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
         dialog.setContentView(layout);
-        dialog.show();
 
         mAuth = FirebaseAuth.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
