@@ -13,7 +13,10 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,18 +48,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
 import app.gify.co.id.Fragment.pembelian.PembelianFragment;
 import app.gify.co.id.R;
 import app.gify.co.id.baseurl.UrlJson;
+import app.gify.co.id.thirdparty.SenderAgent;
 
 public class CheckoutActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    Button prosescekout;
+    Button prosescekout, ongkir;
     ImageView back;
 
     EditText nama, hp, jalan, kelurahan, kecamatan, kota, provinsi, ucapan;
@@ -71,8 +78,13 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     FirebaseAuth mAuth;
     NotificationManager mNotificationManager;
 
-    String idtetaporder, ttlorder, penerimaorder, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, resiorder, statusorder, namabarangorder, ucapanorder;
+    String idtetaporder, ttlorder, penerimaorder, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, resiorder, statusorder, namabarangorder, ucapanorder, template, idharga;
     SharedPreferences preferences;
+    NumberFormat format;
+    Locale id;
+    Random random;
+    int lastNumber;
+    Spanned templateConvert;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -114,6 +126,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         hintArrayAdapterKu.add("hint");
 
         prosescekout = findViewById(R.id.prorsesCheckout);
+        ongkir = findViewById(R.id.ongkir);
         back = findViewById(R.id.backCheckout);
         back.setOnClickListener(v -> finish());
 
@@ -135,6 +148,14 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         //get value
         idtetaporder = preferences.getString("uid", "");
 
+        ongkir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CheckoutActivity.this, ActivityRajaOngkir.class);
+                startActivity(intent);
+            }
+        });
+
         prosescekout.setOnClickListener(view -> {
 
             //get value form inner class
@@ -147,41 +168,65 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             ucapanorder = ucapan.getText().toString();
             namabarangorder = getIntent().getStringExtra("title");
 
-            sendCart(getDateTime());
-            PembelianFragment myFragment  = new PembelianFragment();
-            androidx.fragment.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.frameCheckout, myFragment);
-            fragmentTransaction.commit();
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "notify_001");
+            senderEmail();
+//            PembelianFragment myFragments  = new PembelianFragment();
+//            androidx.fragment.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//            fragmentTransaction.replace(R.id.frameCheckout, myFragment);
+//            fragmentTransaction.commit();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    sendCart(getDateTime());
+                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "notify_001");
 
-            NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
-            bigText.setBigContentTitle("Pembelian Berhasil");
-            bigText.setSummaryText("silahkan lakukan pembayaran");
+                    NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+                    bigText.setBigContentTitle("Pembelian Berhasil");
+                    bigText.setSummaryText("silahkan lakukan pembayaran");
 
-            mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
-            mBuilder.setContentTitle("Pembelian Berhasil");
-            mBuilder.setContentText("silahkan lakukan pembayaran");
-            mBuilder.setPriority(Notification.PRIORITY_MAX);
-            mBuilder.setStyle(bigText);
+                    mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+                    mBuilder.setContentTitle("Pembelian Berhasil");
+                    mBuilder.setContentText("silahkan lakukan pembayaran");
+                    mBuilder.setPriority(Notification.PRIORITY_MAX);
+                    mBuilder.setStyle(bigText);
 
-            mNotificationManager = (NotificationManager) getApplication().getSystemService(Context.NOTIFICATION_SERVICE);
+                    mNotificationManager = (NotificationManager) getApplication().getSystemService(Context.NOTIFICATION_SERVICE);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            {
-                String channelId = "Your_channel_id";
-                NotificationChannel channel = new NotificationChannel(
-                        channelId,
-                        "Channel human readable title",
-                        NotificationManager.IMPORTANCE_HIGH);
-                mNotificationManager.createNotificationChannel(channel);
-                mBuilder.setChannelId(channelId);
-            }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    {
+                        String channelId = "Your_channel_id";
+                        NotificationChannel channel = new NotificationChannel(
+                                channelId,
+                                "Channel human readable title",
+                                NotificationManager.IMPORTANCE_HIGH);
+                        mNotificationManager.createNotificationChannel(channel);
+                        mBuilder.setChannelId(channelId);
+                    }
 
-            mNotificationManager.notify(0, mBuilder.build());
+                    mNotificationManager.notify(0, mBuilder.build());
+                }
+            }, 4000);
         });
 
-//        cobaOngkir1();
-//        cobaOngkir2();
+        id = new Locale("id", "ID");
+
+        format = NumberFormat.getCurrencyInstance(id);
+
+        random = new Random();
+        lastNumber = 0;
+
+        for (int k = 0; k < 3; k++){
+            lastNumber+=(random.nextInt(10)*Math.pow(10, k));
+        }
+
+        template = "<h2> Gify Transaction </h2> " +
+                "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
+                + "<p><b> Nama barang: </p></b>"
+                + "<p><b> Harga barang" + "format.format(Double.valueOf(replaceNumberOfAmount(idharga, lastNumber)))" + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
+                + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
+                + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
+                + "<h2>Salam, Gify Team</h2>";
+
+        templateConvert = Html.fromHtml(template);
 
     }
 
@@ -332,7 +377,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 e.printStackTrace();
             }
         }, error -> {
-            Log.d("usro", error.getMessage());
+
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -360,5 +405,14 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         Date date = new Date();
         return dateFormat.format(date);
+    }
+
+    private String replaceNumberOfAmount(String original, int replace){
+        return original.substring(0, original.length() - 3) + replace;
+    }
+
+    private void senderEmail(){
+        SenderAgent senderAgent = new SenderAgent("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this);
+        senderAgent.execute();
     }
 }

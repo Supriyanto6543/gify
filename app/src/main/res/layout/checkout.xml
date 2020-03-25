@@ -298,6 +298,18 @@
                     android:textColor="#fff"
                     android:textStyle="bold"
                     android:textSize="20dp"
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <Button
+                    android:id="@+id/ongkir"
+                    android:background="@drawable/tombol"
+                    android:text="CEK ONGKIR"
+                    android:textColor="#fff"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:layout_margin="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
