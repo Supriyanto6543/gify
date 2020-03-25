@@ -15,7 +15,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:weightSum="100"
-            android:background="@color/colorPrimaryDark"
+            android:background="#fff"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -161,6 +161,7 @@
                 android:layout_weight="30"
                 android:padding="3dp"
                 android:layout_width="0dp"
+                android:background="@color/colorPrimaryDark"
                 android:layout_height="wrap_content">
 
                 <LinearLayout
@@ -189,7 +190,7 @@
                         android:gravity="center"
                         android:textAlignment="center"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="match_parent"/>
 
                 </LinearLayout>
 
