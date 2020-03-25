@@ -96,7 +96,6 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ((MyCart)holder).nama.setText(carts.get(position).getNamacart());
         Glide.with(view).load(carts.get(position).getGambar()).into(((MyCart)holder).gambar);
 
-
 //        ((MyCart) holder).quantity.setOnValueChangeListener(new ElegantNumberButton.OnValueChangeListener() {
 //            @Override
 //            public void onValueChange(ElegantNumberButton view, int oldValue, int newValue) {
