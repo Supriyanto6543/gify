@@ -107,7 +107,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         inflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.loading, null);
         goku = layout.findViewById(R.id.custom_loading_imageView);
-        goku.animate().rotationBy(360).withEndAction((Runnable) this).setDuration(1000).setInterpolator(new LinearInterpolator()).start();
+        goku.animate().rotationBy(360).setDuration(1000).setInterpolator(new LinearInterpolator()).start();
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
         dialog.setContentView(layout);

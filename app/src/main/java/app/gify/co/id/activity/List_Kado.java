@@ -79,7 +79,7 @@ public class List_Kado extends AppCompatActivity {
                 tulisanListKado.setVisibility(View.GONE);
             }
         });
-        dialog  = new Dialog(getApplicationContext());
+        dialog  = new Dialog(List_Kado.this);
         inflater = (LayoutInflater)getApplication().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.loading, null);
         ImageView goku = layout.findViewById(R.id.custom_loading_imageView);

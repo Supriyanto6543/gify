@@ -54,6 +54,8 @@ import app.gify.co.id.Fragment.pembelian.PembelianFragment;
 import app.gify.co.id.R;
 import app.gify.co.id.baseurl.UrlJson;
 
+import static app.gify.co.id.baseurl.UrlJson.DELETEALLCART;
+
 public class CheckoutActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     Button prosescekout;
@@ -148,10 +150,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             namabarangorder = getIntent().getStringExtra("title");
 
             sendCart(getDateTime());
-            PembelianFragment myFragment  = new PembelianFragment();
-            androidx.fragment.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.frameCheckout, myFragment);
-            fragmentTransaction.commit();
+
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "notify_001");
 
             NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
@@ -324,8 +323,11 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             try {
 
                 if (response.equals("bisa")){
-                    Intent intent = new Intent(CheckoutActivity.this, CartActivity.class);
-                    startActivity(intent);
+                    deleteallcart();
+                    PembelianFragment myFragment  = new PembelianFragment();
+                    androidx.fragment.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.frameCheckout, myFragment);
+                    fragmentTransaction.commit();
                     finish();
                 }
             }catch (Exception e){
@@ -360,5 +362,14 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         Date date = new Date();
         return dateFormat.format(date);
+    }
+
+    private void deleteallcart(){
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, DELETEALLCART+"?idtetap="+currentUserID, response -> {
+        }, error ->  {
+
+        });
+        RequestQueue queue = Volley.newRequestQueue(CheckoutActivity.this);
+        queue.add(stringRequest);
     }
 }
