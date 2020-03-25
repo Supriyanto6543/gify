@@ -3,6 +3,7 @@ package app.gify.co.id.activity;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -14,10 +15,12 @@ import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -87,22 +90,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Dialog dialog;
     SessionManager sessionManager;
     SharedPreferences.Editor editor;
+    LayoutInflater inflater;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        dialog  = new Dialog(MainActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog  = new Dialog(getApplicationContext());
+        inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.loading, null);
+        ImageView goku = layout.findViewById(R.id.custom_loading_imageView);
+        goku.animate().rotationBy(360).setDuration(3000).setInterpolator(new LinearInterpolator()).start();
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
-        dialog.setContentView(R.layout.loading);
-        ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
-        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
-        Glide.with(MainActivity.this)
-                .load(R.drawable.gifygif)
-                .placeholder(R.drawable.gifygif)
-                .centerCrop()
-                .into(imageViewTarget);
+        dialog.setContentView(layout);
+        dialog.show();
 
         mAuth = FirebaseAuth.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();

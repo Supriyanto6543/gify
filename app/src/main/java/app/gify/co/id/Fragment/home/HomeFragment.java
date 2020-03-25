@@ -3,7 +3,6 @@ package app.gify.co.id.Fragment.home;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -34,16 +34,10 @@ import androidx.fragment.app.Fragment;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.request.target.DrawableImageViewTarget;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.security.ProviderInstaller;
-import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.bumptech.glide.Glide;
-import com.makeramen.roundedimageview.RoundedImageView;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,6 +46,7 @@ import org.json.JSONObject;
 import java.util.Calendar;
 
 import app.gify.co.id.R;
+import app.gify.co.id.activity.CartActivity;
 import app.gify.co.id.activity.List_Kado;
 import app.gify.co.id.activity.MainActivity;
 
@@ -61,22 +56,22 @@ import static app.gify.co.id.baseurl.UrlJson.GETRANGE;
 
 
 public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
-    String kadobuatsiapaku, acaraapaku, bulanku, namas;
+    private String kadobuatsiapaku, acaraapaku, bulanku, namas;
     NumberPicker numberpicker;
-    int hariku, tahunku, bulanserver, acaraint, kadoint;
-    Spinner kadobuatsiapa, acarapa;
+    private int hariku, tahunku, bulanserver, acaraint, kadoint;
+    private Spinner kadobuatsiapa, acarapa;
     private Calendar date;
-    TextView tahun,hari, bulan;
-    ImageView navFragmentHome;
-    HintArrayAdapter hintAdapter, hintadapterku;
+    private TextView tahun,hari, bulan;
+    private ImageView navFragmentHome;
+    private HintArrayAdapter hintAdapter, hintadapterku;
     String[] kadolist;
-    Boolean bulanbool=false, haribool=false, tahunbool=false;
-    Button carikado;
+    private Boolean bulanbool=false, haribool=false, tahunbool=false;
+    private Button carikado;
     Dialog alertadd;
-    Dialog dialog;
-    Boolean kategoris = false, acaras = false;
-    SharedPreferences preferences;
-    SharedPreferences.Editor editor;
+    private Dialog dialog;
+    private Boolean kategoris = false, acaras = false;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -88,19 +83,11 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         tahun=root.findViewById(R.id.tahunCari);
         carikado=root.findViewById(R.id.cariKado);
 
-        /*mDialog = new ProgressDialog(getContext());
-        LayoutInflater inflaterku = getLayoutInflater();
-        View dialogLayout = inflaterku.inflate(R.layout.loading, null);
-        *//*LayoutInflater factory = LayoutInflater.from(getActivity());
-        final View viewku = factory.inflate(R.layout.loading, null);
-        alertadd.setView(viewku);*//*
-        mDialog.setView(dialogLayout);
-        mDialog.setCancelable(false);
-        mDialog.setCanceledOnTouchOutside(false);
-        mDialog.show();*/
         dialog  = new Dialog(getActivity());
         inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.loading, null);
+        ImageView goku = layout.findViewById(R.id.custom_loading_imageView);
+        goku.animate().rotationBy(360).setDuration(3000).setInterpolator(new LinearInterpolator()).start();
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
         dialog.setContentView(layout);
@@ -209,13 +196,13 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         };
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),android.R.style.Theme_Holo_Dialog, dateSetListener, currentdate.get(Calendar.YEAR), currentdate.get(Calendar.MONTH), currentdate.get(Calendar.DAY_OF_MONTH));
         if (bulanbool){
-            ((ViewGroup) datePickerDialog.getDatePicker()).findViewById(Resources.getSystem().getIdentifier("month", "id", "android")).setVisibility(View.VISIBLE);
-            ((ViewGroup) datePickerDialog.getDatePicker()).findViewById(Resources.getSystem().getIdentifier("day", "id", "android")).setVisibility(View.GONE);
+            (datePickerDialog.getDatePicker()).findViewById(Resources.getSystem().getIdentifier("month", "id", "android")).setVisibility(View.VISIBLE);
+            (datePickerDialog.getDatePicker()).findViewById(Resources.getSystem().getIdentifier("day", "id", "android")).setVisibility(View.GONE);
         }else if (haribool){
-            ((ViewGroup) datePickerDialog.getDatePicker()).findViewById(Resources.getSystem().getIdentifier("month", "id", "android")).setVisibility(View.GONE);
-            ((ViewGroup) datePickerDialog.getDatePicker()).findViewById(Resources.getSystem().getIdentifier("day", "id", "android")).setVisibility(View.VISIBLE);
+            (datePickerDialog.getDatePicker()).findViewById(Resources.getSystem().getIdentifier("month", "id", "android")).setVisibility(View.GONE);
+            (datePickerDialog.getDatePicker()).findViewById(Resources.getSystem().getIdentifier("day", "id", "android")).setVisibility(View.VISIBLE);
         }
-        ((ViewGroup) datePickerDialog.getDatePicker()).findViewById(Resources.getSystem().getIdentifier("year", "id", "android")).setVisibility(View.GONE);
+        (datePickerDialog.getDatePicker()).findViewById(Resources.getSystem().getIdentifier("year", "id", "android")).setVisibility(View.GONE);
         datePickerDialog.show();
     }
 
@@ -227,8 +214,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             tahunku = year;
         };
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),android.R.style.Theme_Holo_Dialog, dateSetListener, currentdate.get(Calendar.YEAR), currentdate.get(Calendar.MONTH), currentdate.get(Calendar.DAY_OF_MONTH));
-        ((ViewGroup) datePickerDialog.getDatePicker()).findViewById(Resources.getSystem().getIdentifier("day", "id", "android")).setVisibility(View.GONE);
-        ((ViewGroup) datePickerDialog.getDatePicker()).findViewById(Resources.getSystem().getIdentifier("month", "id", "android")).setVisibility(View.GONE);
+        (datePickerDialog.getDatePicker()).findViewById(Resources.getSystem().getIdentifier("day", "id", "android")).setVisibility(View.GONE);
+        (datePickerDialog.getDatePicker()).findViewById(Resources.getSystem().getIdentifier("month", "id", "android")).setVisibility(View.GONE);
         datePickerDialog.show();
     }
 
@@ -421,7 +408,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     e.printStackTrace();
                 }
             }
-        }, error -> Log.d("rangeerror", "onResponse: " + error.getMessage()));
+        }, Throwable::printStackTrace);
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(objectRequest);
     }

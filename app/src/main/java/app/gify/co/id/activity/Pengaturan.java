@@ -27,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -122,6 +123,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     int bitmap_size = 60;
     int max_resolution_image = 800;
     String belomAdaAlamat = "Belum Memasukkan Alamat";
+    LayoutInflater inflater;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -149,17 +151,14 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         profileImage = findViewById(R.id.profileimage);
         coverImage = findViewById(R.id.photo);
         changeCover = findViewById(R.id.changeCoverPengaturan);
-        dialog  = new Dialog(Pengaturan.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog  = new Dialog(getApplicationContext());
+        inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.loading, null);
+        ImageView goku = layout.findViewById(R.id.custom_loading_imageView);
+        goku.animate().rotationBy(360).setDuration(3000).setInterpolator(new LinearInterpolator()).start();
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
-        dialog.setContentView(R.layout.loading);
-        ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
-        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
-        Glide.with(Pengaturan.this)
-                .load(R.drawable.gifygif)
-                .placeholder(R.drawable.gifygif)
-                .centerCrop()
-                .into(imageViewTarget);
+        dialog.setContentView(layout);
         dialog.show();
 
 

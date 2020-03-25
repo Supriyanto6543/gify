@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.LinearInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -122,16 +123,13 @@ public class FavoritFragment extends Fragment {
         });
 
         dialog  = new Dialog(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.loading, null);
+        ImageView goku = layout.findViewById(R.id.custom_loading_imageView);
+        goku.animate().rotationBy(360).setDuration(3000).setInterpolator(new LinearInterpolator()).start();
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
-        dialog.setContentView(R.layout.loading);
-        ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
-        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
-        Glide.with(getActivity())
-                .load(R.drawable.gifygif)
-                .placeholder(R.drawable.gifygif)
-                .centerCrop()
-                .into(imageViewTarget);
+        dialog.setContentView(layout);
         dialog.show();
 
         kados = new ArrayList<>();

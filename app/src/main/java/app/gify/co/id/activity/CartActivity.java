@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -86,6 +87,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
     String template, idberat, idharga;
     private Dialog dialog;
     LayoutInflater inflater;
+    ImageView goku;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,6 +106,8 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         dialog  = new Dialog(CartActivity.this);
         inflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.loading, null);
+        goku = layout.findViewById(R.id.custom_loading_imageView);
+        goku.animate().rotationBy(360).withEndAction((Runnable) this).setDuration(3000).setInterpolator(new LinearInterpolator()).start();
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
         dialog.setContentView(layout);
@@ -216,8 +220,6 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         @Override
         public void onReceive(Context context, Intent intent) {
             namacart = intent.getStringExtra("title");
-            totalbelanjar.setText(idharga + "");
-            totalberat.setText(idberat + "");
             template = "<h2> Gify Transaction </h2> " +
                     "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
                     + "<p><b> Nama barang: </p></b>"
@@ -244,7 +246,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
                         int berat = object.getInt("berat");
                         MadolCart madolCart = new MadolCart(gambar, harga, namacart, idbarang, kuantitas, berat);
                         madolCarts.add(madolCart);
-                        adapterCart = new AdapterCart(madolCarts, CartActivity.this);
+                        adapterCart = new AdapterCart(madolCarts, CartActivity.this, totalbelanjar, totalberat);
                         recyclerView.setAdapter(adapterCart);
                     }
                 }
