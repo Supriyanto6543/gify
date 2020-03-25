@@ -4,7 +4,7 @@
     android:layout_width="100dp"
     android:layout_height="100dp">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/custom_loading_imageView"
         android:src="@drawable/gifylogogif"
         android:layout_width="100dp"

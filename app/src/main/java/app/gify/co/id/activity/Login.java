@@ -1,5 +1,6 @@
 package app.gify.co.id.activity;
 
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -14,6 +15,7 @@ import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +29,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -119,11 +123,20 @@ public class Login extends AppCompatActivity {
 
             email = Email.getText().toString().trim();
             password = Password.getText().toString().trim();
-            progressBar = new ProgressDialog(Login.this);
-            progressBar.setTitle("Sign In");
-            progressBar.setMessage("Harap Tunggu...");
-            progressBar.setCanceledOnTouchOutside(false);
-            progressBar.show();
+            Dialog dialog  = new Dialog(getApplicationContext());
+            LayoutInflater inflater = (LayoutInflater)getApplication().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View layout = inflater.inflate(R.layout.loading, null);
+            ImageView gifImageView = layout.findViewById(R.id.custom_loading_imageView);
+            DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
+            Glide.with(getApplicationContext())
+                    .load(R.drawable.gifygif)
+                    .placeholder(R.drawable.gifygif)
+                    .centerCrop()
+                    .into(imageViewTarget);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.setCancelable(false);
+            dialog.setContentView(layout);
+            dialog.show();
             //wajib di tambahkan untuk menghindari null
             if (email.isEmpty() || password.isEmpty()){
                 Toast.makeText(Login.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
