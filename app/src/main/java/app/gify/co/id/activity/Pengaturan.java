@@ -153,6 +153,13 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         dialog  = new Dialog(getApplicationContext());
         inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.loading, null);
+        ImageView gifImageView = layout.findViewById(R.id.custom_loading_imageView);
+        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
+        Glide.with(getApplicationContext())
+                .load(R.drawable.gifygif)
+                .placeholder(R.drawable.gifygif)
+                .centerCrop()
+                .into(imageViewTarget);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
         dialog.setContentView(layout);

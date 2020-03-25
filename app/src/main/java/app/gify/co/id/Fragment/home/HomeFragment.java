@@ -35,6 +35,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,6 +45,7 @@ import org.json.JSONObject;
 import java.util.Calendar;
 
 import app.gify.co.id.R;
+import app.gify.co.id.activity.CartActivity;
 import app.gify.co.id.activity.List_Kado;
 import app.gify.co.id.activity.MainActivity;
 
@@ -82,6 +85,13 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         dialog  = new Dialog(getActivity());
         inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.loading, null);
+        ImageView gifImageView = layout.findViewById(R.id.custom_loading_imageView);
+        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
+        Glide.with(getActivity())
+                .load(R.drawable.gifygif)
+                .placeholder(R.drawable.gifygif)
+                .centerCrop()
+                .into(imageViewTarget);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
         dialog.setContentView(layout);

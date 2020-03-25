@@ -88,6 +88,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
     String template, idberat, idharga;
     private Dialog dialog;
     LayoutInflater inflater;
+    ImageView goku;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,6 +103,13 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         dialog  = new Dialog(CartActivity.this);
         inflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.loading, null);
+        ImageView gifImageView = layout.findViewById(R.id.custom_loading_imageView);
+        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
+        Glide.with(getApplicationContext())
+                .load(R.drawable.gifygif)
+                .placeholder(R.drawable.gifygif)
+                .centerCrop()
+                .into(imageViewTarget);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
         dialog.setContentView(layout);
