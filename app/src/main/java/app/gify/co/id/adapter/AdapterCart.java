@@ -89,20 +89,17 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             totalberats.setText(String.valueOf(totalBerat));
         }
 
-        for (int i = 0; i == carts.size(); i--){
-
-            totalPrice += carts.get(i).getHarga();
-            totalBerat += carts.get(i).getBerat();
-            totalhargas.setText(String.valueOf(totalPrice));
-            totalberats.setText(String.valueOf(totalBerat));
-        }
-
         Locale locale = new Locale("id", "ID");
         NumberFormat format = NumberFormat.getCurrencyInstance(locale);
 
         ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku)));
         ((MyCart)holder).nama.setText(carts.get(position).getNamacart());
         Glide.with(view).load(carts.get(position).getGambar()).into(((MyCart)holder).gambar);
+        Intent intent = new Intent("message_subject_intent");
+        intent.putExtra("name", String.valueOf((totalCart(carts))));
+        intent.putExtra("title", String.valueOf((getName(carts))));
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
 
 //        ((MyCart) holder).quantity.setOnValueChangeListener(new ElegantNumberButton.OnValueChangeListener() {
 //            @Override
@@ -130,22 +127,18 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //                }
 //            }
 //        });
-
         ((MyCart) holder).tambah.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 int count = Integer.parseInt(((MyCart) holder).quantitas.getText().toString());
-                count++;
+
                 if (count<9){
+                    count += count;
+                    ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku*count)));
                     ((MyCart) holder).quantitas.setText("" + count);
                     totalhargas.setText(String.valueOf(totalCart(carts)));
                     totalberats.setText(String.valueOf(beratCart(carts)));
                 }
-                if (count<9){
-                count = count++;
-                ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku*count)));
-                }
 
 
 //                ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
@@ -155,34 +148,19 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //                LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
             }
         });
-
         ((MyCart) holder).kurang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 int count = Integer.parseInt(((MyCart) holder).quantitas.getText().toString());
-                if (count == 1){
-                    ((MyCart) holder).quantitas.setText("" + count);
-
-                }else if (count>=1){
+                if (count>1){
                     count -=1;
                     ((MyCart) holder).quantitas.setText("" + count);
-
+                    totalhargas.setText(String.valueOf(kurangtotalcart(carts)));
+                    totalberats.setText(String.valueOf(kurangberatCart(carts)));
+                    ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku*count)));
                 }
-                if (count<1){
-                count -= 1;
-//                    totalhargas.setText(String.valueOf(kurangtotalcart(carts)));
-//                    totalberats.setText(String.valueOf(kurangberatCart(carts)));
-                ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku*count)));
-//                ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
-//                int total = hargaku * kuantitas;
-//                Intent intents = new Intent("message_subject_intent");
-//                intents.putExtra("name", String.valueOf((total)));
-//                LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
-            }
 
             }
-        });
 
 //        ((MyCart)holder).tambah.setOnClickListener(view1 -> {
 //            MadolCart madolCart = carts.get(position);
@@ -210,8 +188,8 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //            }
 //
 //        });
-    }
-
+    });
+}
     @Override
     public int getItemCount() {
         return carts.size();
