@@ -16,6 +16,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.SpannedString;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -86,6 +87,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
     int lastNumber, idbarang;
     String template, idberat, idharga;
     private Dialog dialog;
+    LayoutInflater inflater;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,18 +98,14 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
             Intent intent = new Intent(getApplicationContext(), List_Kado.class);
             startActivity(intent);
         });
-        dialog  = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        dialog  = new Dialog(CartActivity.this);
+        inflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.loading, null);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
-        dialog.setContentView(R.layout.loading);
-        ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
-        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
-        Glide.with(this)
-                .load(R.drawable.gifygif)
-                .placeholder(R.drawable.gifygif)
-                .centerCrop()
-                .into(imageViewTarget);
-        /*dialog.show();*/
+        dialog.setContentView(layout);
+        dialog.show();
 
         id = new Locale("id", "ID");
 
@@ -197,6 +195,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
                         idharga = object.getString("harga");
                         idberat = object.getString("berat");
                         getBerat(idbarang);
+                        dialog.dismiss();
                     }
                 }
             } catch (JSONException e) {

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.LightingColorFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -35,6 +36,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -79,16 +81,22 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         tahun=root.findViewById(R.id.tahunCari);
         carikado=root.findViewById(R.id.cariKado);
 
-        dialog  = new Dialog(getContext());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        /*mDialog = new ProgressDialog(getContext());
+        LayoutInflater inflaterku = getLayoutInflater();
+        View dialogLayout = inflaterku.inflate(R.layout.loading, null);
+        *//*LayoutInflater factory = LayoutInflater.from(getActivity());
+        final View viewku = factory.inflate(R.layout.loading, null);
+        alertadd.setView(viewku);*//*
+        mDialog.setView(dialogLayout);
+        mDialog.setCancelable(false);
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.show();*/
+        dialog  = new Dialog(getActivity());
+        inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.loading, null);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
-        dialog.setContentView(R.layout.loading);
-        ImageView gifImageView = dialog.findViewById(R.id.custom_loading_imageView);
-        Glide.with(getContext())
-                .asGif()
-                .load(R.drawable.gifylogogif)
-                .centerCrop()
-                .into(gifImageView);
+        dialog.setContentView(layout);
         dialog.show();
 
         hintAdapter = new HintArrayAdapter<String>(getContext(), 0);

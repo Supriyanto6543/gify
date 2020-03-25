@@ -68,4 +68,5 @@ dependencies {
     implementation 'io.huannguyen.swipeablerv:swipeable-rv:1.0.2'
     implementation "com.daimajia.swipelayout:library:1.2.0@aar"
     implementation 'com.cepheuen.elegant-number-button:lib:1.0.2'
+    implementation 'com.makeramen:roundedimageview:2.3.0'
 }
