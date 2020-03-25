@@ -149,6 +149,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         });
 
         LocalBroadcastManager.getInstance(this).registerReceiver(passValue, new IntentFilter("message_subject_intent"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(totalvalue, new IntentFilter("total"));
 
         ItemTouchHelper.SimpleCallback callback = new RecyclerTouchDelete(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(callback).attachToRecyclerView(recyclerView);
@@ -212,8 +213,6 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         @Override
         public void onReceive(Context context, Intent intent) {
             namacart = intent.getStringExtra("title");
-            totalbelanjar.setText(idharga + "");
-            totalberat.setText(idberat + "");
             template = "<h2> Gify Transaction </h2> " +
                     "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
                     + "<p><b> Nama barang: </p></b>"
@@ -223,6 +222,24 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
                     + "<h2>Salam, Gify Team</h2>";
             
             templateConvert = Html.fromHtml(template);
+        }
+    };
+
+    public BroadcastReceiver totalvalue = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String totalbelanja = intent.getStringExtra("belanja");
+            String totalberats = intent.getStringExtra("berat");
+            totalbelanjar.setText(totalbelanja + "");
+            totalberat.setText(totalberats + "");
+            template = "<h2> Gify Transaction </h2> " +
+                    "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
+                    + "<p><b> Nama barang: </p></b>"
+                    + "<p><b> Harga barang" + format.format(Double.valueOf(replaceNumberOfAmount(idharga, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
+                    + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
+                    + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
+                    + "<h2>Salam, Gify Team</h2>";
+
         }
     };
 
