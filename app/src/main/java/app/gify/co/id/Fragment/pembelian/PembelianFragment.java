@@ -1,5 +1,6 @@
 package app.gify.co.id.Fragment.pembelian;
 
+import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -39,6 +40,7 @@ import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.R;
 import app.gify.co.id.activity.CartActivity;
 import app.gify.co.id.activity.MainActivity;
+import app.gify.co.id.activity.MyServices;
 import app.gify.co.id.adapter.AdapterPembelian;
 import app.gify.co.id.modal.MadolPembelian;
 
@@ -115,8 +117,24 @@ public class PembelianFragment extends Fragment {
         Log.d("uidpembelian", "onCreateView: " + uid);
         getPembelian();
         rc.setLayoutManager(glm);
+
+        if (!isMyServiceRunning()){
+            Intent serviceIntent = new Intent("app.gify.co.id.activity.MyService");
+            getActivity().startService(serviceIntent);
+        }
         return view;
     }
+
+    private boolean isMyServiceRunning() {
+        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (MyServices.class.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 
 
