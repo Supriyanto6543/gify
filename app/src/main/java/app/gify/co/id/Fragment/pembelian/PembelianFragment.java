@@ -156,7 +156,7 @@ public class PembelianFragment extends Fragment {
                     pembelians.add(pembelian);
                     adapterPembelian = new AdapterPembelian(pembelians, getContext());
                     rc.setAdapter(adapterPembelian);
-                    dialog.dismiss();
+                    /*dialog.dismiss();*/
                 }
                 dialog.dismiss();
             } catch (JSONException e) {

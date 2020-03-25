@@ -1,15 +1,16 @@
 package app.gify.co.id.activity;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -24,14 +25,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -40,24 +37,19 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.LineNumberReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.Fragment.pembelian.PembelianFragment;
 import app.gify.co.id.R;
 import app.gify.co.id.baseurl.UrlJson;
@@ -156,9 +148,10 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             namabarangorder = getIntent().getStringExtra("title");
 
             sendCart(getDateTime());
-            Intent intent = new Intent(CheckoutActivity.this, MainActivity.class);
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.frame, new PembelianFragment()).addToBackStack(null).commit();
+            PembelianFragment myFragment  = new PembelianFragment();
+            androidx.fragment.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frameCheckout, myFragment);
+            fragmentTransaction.commit();
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "notify_001");
 
             NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
@@ -190,6 +183,16 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 //        cobaOngkir1();
 //        cobaOngkir2();
 
+    }
+
+    private void loadFragment(Fragment fragment) {
+// create a FragmentManager
+        FragmentManager fm = getFragmentManager();
+// create a FragmentTransaction to begin the transaction and replace the Fragment
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+// replace the FrameLayout with new Fragment
+        fragmentTransaction.replace(R.id.frame, fragment);
+        fragmentTransaction.commit(); // save the changes
     }
 
     @Override

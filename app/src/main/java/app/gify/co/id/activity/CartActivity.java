@@ -107,7 +107,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
                 .placeholder(R.drawable.gifygif)
                 .centerCrop()
                 .into(imageViewTarget);
-        dialog.show();
+        /*dialog.show();*/
 
         id = new Locale("id", "ID");
 
@@ -213,8 +213,8 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         @Override
         public void onReceive(Context context, Intent intent) {
             namacart = intent.getStringExtra("title");
-            totalbelanjar.setText(idharga + "");
-            totalberat.setText(idberat + "");
+            totalbelanjar.setText("Rp. " + idharga + "");
+            totalberat.setText(idberat + " Kg");
             template = "<h2> Gify Transaction </h2> " +
                     "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
                     + "<p><b> Nama barang: </p></b>"
