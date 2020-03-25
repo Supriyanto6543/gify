@@ -81,13 +81,8 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         kuantitas = carts.get(position).getJumlah();
         int hargaku = carts.get(position).getHarga() * kuantitas;
 
-        for (int a = 0; a < carts.size(); a++){
-            Log.d("getbarangkua", "onBindViewHolder: " + carts.get(a).getBerat() + carts.get(a).getNamacart());
-            totalPrice += carts.get(a).getHarga();
-            totalBerat += carts.get(a).getBerat();
-            totalhargas.setText(String.valueOf(totalPrice));
-            totalberats.setText(String.valueOf(totalBerat));
-        }
+        totalhargas.setText(String.valueOf(totalCart(carts)));
+        totalberats.setText(String.valueOf(beratCart(carts)));
 
         Locale locale = new Locale("id", "ID");
         NumberFormat format = NumberFormat.getCurrencyInstance(locale);
@@ -131,9 +126,8 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             @Override
             public void onClick(View v) {
                 int count = Integer.parseInt(((MyCart) holder).quantitas.getText().toString());
-
                 if (count<9){
-                    count += count;
+                    count += 1;
                     ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku*count)));
                     ((MyCart) holder).quantitas.setText("" + count);
                     totalhargas.setText(String.valueOf(totalCart(carts)));
@@ -152,7 +146,7 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             @Override
             public void onClick(View v) {
                 int count = Integer.parseInt(((MyCart) holder).quantitas.getText().toString());
-                if (count>1){
+                if (count>0){
                     count -=1;
                     ((MyCart) holder).quantitas.setText("" + count);
                     totalhargas.setText(String.valueOf(kurangtotalcart(carts)));
