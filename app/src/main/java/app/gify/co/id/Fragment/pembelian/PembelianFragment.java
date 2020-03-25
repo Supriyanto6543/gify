@@ -1,5 +1,6 @@
 package app.gify.co.id.Fragment.pembelian;
 
+import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -39,6 +41,7 @@ import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.R;
 import app.gify.co.id.activity.CartActivity;
 import app.gify.co.id.activity.MainActivity;
+import app.gify.co.id.activity.MyServices;
 import app.gify.co.id.adapter.AdapterPembelian;
 import app.gify.co.id.modal.MadolPembelian;
 
@@ -76,13 +79,8 @@ public class PembelianFragment extends Fragment {
         dialog  = new Dialog(getActivity());
         inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.loading, null);
-        ImageView gifImageView = layout.findViewById(R.id.custom_loading_imageView);
-        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
-        Glide.with(getActivity())
-                .load(R.drawable.gifygif)
-                .placeholder(R.drawable.gifygif)
-                .centerCrop()
-                .into(imageViewTarget);
+        ImageView goku = layout.findViewById(R.id.custom_loading_imageView);
+        goku.animate().rotationBy(360).setDuration(3000).setInterpolator(new LinearInterpolator()).start();
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
         dialog.setContentView(layout);
@@ -115,8 +113,24 @@ public class PembelianFragment extends Fragment {
         Log.d("uidpembelian", "onCreateView: " + uid);
         getPembelian();
         rc.setLayoutManager(glm);
+
+        if (!isMyServiceRunning()){
+            Intent serviceIntent = new Intent(getActivity(),MyServices.class);
+            getActivity().startService(serviceIntent);
+        }
         return view;
     }
+
+    private boolean isMyServiceRunning() {
+        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (MyServices.class.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 
 

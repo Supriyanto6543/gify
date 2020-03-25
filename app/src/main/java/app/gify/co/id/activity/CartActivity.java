@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -72,19 +73,17 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
     AdapterCart adapterCart;
     ArrayList<MadolCart> madolCarts;
     String namacart, gambarcart, uidku;
-    int kuantitas;
     GridLayoutManager glm;
     RecyclerView recyclerView;
     MainActivity mainActivity;
     NavigationView navigationView;
-    public int hargaku, beratku;
+    public int hargaku, beratku, kuantitas, lastNumber, idbarang, getHargaAwal;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
     Spanned templateConvert;
     NumberFormat format;
     Locale id;
     Random random;
-    int lastNumber, idbarang;
     String template, idberat, idharga;
     private Dialog dialog;
     LayoutInflater inflater;
@@ -100,16 +99,15 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
             startActivity(intent);
         });
 
+        getHargaAwal = getIntent().getIntExtra("harga", 0);
+
+        Log.d("setHarga", getHargaAwal + "");
+
         dialog  = new Dialog(CartActivity.this);
         inflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.loading, null);
-        ImageView gifImageView = layout.findViewById(R.id.custom_loading_imageView);
-        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
-        Glide.with(getApplicationContext())
-                .load(R.drawable.gifygif)
-                .placeholder(R.drawable.gifygif)
-                .centerCrop()
-                .into(imageViewTarget);
+        goku = layout.findViewById(R.id.custom_loading_imageView);
+        goku.animate().rotationBy(360).withEndAction((Runnable) this).setDuration(3000).setInterpolator(new LinearInterpolator()).start();
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
         dialog.setContentView(layout);
@@ -206,6 +204,8 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
                         dialog.dismiss();
                     }
                 }
+                dialog.dismiss();
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -227,7 +227,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
                     + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
                     + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
                     + "<h2>Salam, Gify Team</h2>";
-            
+            Log.d("hargalast", idharga + lastNumber);
             templateConvert = Html.fromHtml(template);
         }
     };
