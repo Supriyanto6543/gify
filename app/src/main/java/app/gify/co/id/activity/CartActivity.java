@@ -216,8 +216,6 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         @Override
         public void onReceive(Context context, Intent intent) {
             namacart = intent.getStringExtra("title");
-            totalbelanjar.setText("Rp. " + idharga + "");
-            totalberat.setText(idberat + " Kg");
             template = "<h2> Gify Transaction </h2> " +
                     "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
                     + "<p><b> Nama barang: </p></b>"
@@ -244,7 +242,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
                         int berat = object.getInt("berat");
                         MadolCart madolCart = new MadolCart(gambar, harga, namacart, idbarang, kuantitas, berat);
                         madolCarts.add(madolCart);
-                        adapterCart = new AdapterCart(madolCarts, CartActivity.this);
+                        adapterCart = new AdapterCart(madolCarts, CartActivity.this, totalbelanjar, totalberat);
                         recyclerView.setAdapter(adapterCart);
                     }
                 }
