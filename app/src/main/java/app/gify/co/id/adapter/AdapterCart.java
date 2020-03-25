@@ -163,53 +163,25 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 int count = Integer.parseInt(((MyCart) holder).quantitas.getText().toString());
                 if (count == 1){
                     ((MyCart) holder).quantitas.setText("" + count);
-
-                }else if (count>=1){
+                }else{
                     count -=1;
+                    totalhargas.setText(String.valueOf(kurangtotalcart(carts)));
+                    totalberats.setText(String.valueOf(kurangberatCart(carts)));
+                    ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku*count)));
                     ((MyCart) holder).quantitas.setText("" + count);
-
                 }
-                if (count<1){
-                count -= 1;
-//                    totalhargas.setText(String.valueOf(kurangtotalcart(carts)));
-//                    totalberats.setText(String.valueOf(kurangberatCart(carts)));
-                ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku*count)));
+
+
 //                ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
 //                int total = hargaku * kuantitas;
 //                Intent intents = new Intent("message_subject_intent");
 //                intents.putExtra("name", String.valueOf((total)));
 //                LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
-            }
+
 
             }
         });
 
-//        ((MyCart)holder).tambah.setOnClickListener(view1 -> {
-//            MadolCart madolCart = carts.get(position);
-//            if (kuantitas<9){
-//                kuantitas = kuantitas + 1;
-//                ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
-//                ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku*kuantitas)));
-//                int total = hargaku * kuantitas;
-//                madolCart.setHarga(total);
-//                Intent intents = new Intent("message_subject_intent");
-//                intents.putExtra("name", String.valueOf((total)));
-//                LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
-//            }
-//        });
-//        ((MyCart)holder).kurang.setOnClickListener(view -> {
-//
-//            if (kuantitas>1){
-//                kuantitas = kuantitas - 1;
-//                ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku*kuantitas)));
-//                ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
-//                int total = hargaku * kuantitas;
-//                Intent intents = new Intent("message_subject_intent");
-//                intents.putExtra("name", String.valueOf((total)));
-//                LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
-//            }
-//
-//        });
     }
 
     @Override
