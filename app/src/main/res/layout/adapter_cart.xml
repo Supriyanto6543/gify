@@ -40,6 +40,7 @@
 
         <androidx.cardview.widget.CardView
             app:cardCornerRadius="5dp"
+            android:layout_marginTop="3dp"
             app:cardBackgroundColor="#fff"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -54,9 +55,10 @@
                 <ImageView
                     android:id="@+id/gambarcart"
                     android:src="@drawable/foto_barang"
+                    android:scaleType="centerCrop"
                     android:layout_weight="25"
                     android:layout_width="0dp"
-                    android:layout_height="100dp"/>
+                    android:layout_height="90dp"/>
 
                 <LinearLayout
                     android:layout_marginStart="5dp"
@@ -79,7 +81,7 @@
                         android:text="Dompet Kulit Modern Pria"
                         android:textColor="#4a4a4a"
                         android:textStyle="bold"
-                        android:textSize="20dp"
+                        android:textSize="15dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
