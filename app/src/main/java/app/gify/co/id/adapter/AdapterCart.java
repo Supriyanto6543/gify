@@ -89,6 +89,14 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             totalberats.setText(String.valueOf(totalBerat));
         }
 
+        for (int i = 0; i == carts.size(); i--){
+
+            totalPrice += carts.get(i).getHarga();
+            totalBerat += carts.get(i).getBerat();
+            totalhargas.setText(String.valueOf(totalPrice));
+            totalberats.setText(String.valueOf(totalBerat));
+        }
+
         Locale locale = new Locale("id", "ID");
         NumberFormat format = NumberFormat.getCurrencyInstance(locale);
 
@@ -163,9 +171,9 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 }
                 if (count<1){
-                //count -= 1;
-                    totalhargas.setText(String.valueOf(kurangtotalcart(carts)));
-                    totalberats.setText(String.valueOf(kurangberatCart(carts)));
+                count -= 1;
+//                    totalhargas.setText(String.valueOf(kurangtotalcart(carts)));
+//                    totalberats.setText(String.valueOf(kurangberatCart(carts)));
                 ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku*count)));
 //                ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
 //                int total = hargaku * kuantitas;
