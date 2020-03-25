@@ -76,7 +76,7 @@ public class DetailKado extends AppCompatActivity {
     SharedPreferences.Editor editor;
     //CarouselView carouselView;
     String idbarangku, uid, id, photobyid, kodeBarangbyid, namabyid, deskripsibyid, berat, getJumlah;
-    int id_barang, hargabyid, cingpai = 1, gambar, gambar1, gambar2;
+    int id_barang, hargabyid, cingpai = 1, gambar, gambar1, gambar2, hargaAwal;
     int sourceImg[];
     Boolean faforit;
     ImageView buatJadiWistlist, back;
@@ -203,6 +203,7 @@ public class DetailKado extends AppCompatActivity {
             jumlah.setText(String.valueOf(cingpai));
             getJumlah = jumlah.getText().toString();
             hargapopupdown.setText("Rp. " + hargabyid*cingpai);
+            hargaAwal = hargabyid * cingpai;
         });
         kurang.setOnClickListener(view1 -> {
             if (cingpai==1){
@@ -214,9 +215,12 @@ public class DetailKado extends AppCompatActivity {
             jumlah.setText(String.valueOf(cingpai));
             getJumlah = jumlah.getText().toString();
             hargapopupdown.setText("Rp. " + hargabyid*cingpai);;
+            hargaAwal = hargabyid * cingpai;
         });
 
-
+        hargaAwal = hargabyid;
+        jumlah.setText(String.valueOf(1));
+        getJumlah = jumlah.getText().toString();
 
         batal.setOnClickListener(view1 -> dialog.dismiss());
         proses.setOnClickListener(view1 -> {
@@ -236,6 +240,8 @@ public class DetailKado extends AppCompatActivity {
             try {
                 if (response.equalsIgnoreCase("bisa")){
                     Intent intent = new Intent(DetailKado.this, CartActivity.class);
+                    intent.putExtra("harga", hargaAwal);
+                    Log.d("hargaAwalInt", hargaAwal + "");
                     startActivity(intent);
                     finish();
                     Log.d("sendtocartif", "getCart: ");
@@ -275,7 +281,6 @@ public class DetailKado extends AppCompatActivity {
                     Toast.makeText(this, "Barang sudah ada di cart", Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
-                Log.d("exceptioncart", "getCart: " + e.getMessage());
                 e.printStackTrace();
             }
         }, error -> {
