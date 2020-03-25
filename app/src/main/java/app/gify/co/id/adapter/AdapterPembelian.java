@@ -58,13 +58,13 @@ public class AdapterPembelian extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((MyPembelian)holder).status.setText("Lunas (Proses)");
         }
         if (pembelians.get(position).getStatus() == 3){
-            ((MyPembelian)holder).status.setText("Lunas (Dikirim)");
+            ((MyPembelian)holder).status.setText("Selesai (Dikirim)");
         }
         if (pembelians.get(position).getStatus() == 4){
-            ((MyPembelian)holder).status.setText("Cancel / Return");
+            ((MyPembelian)holder).status.setText("Cancel / Refund");
         }
         if (pembelians.get(position).getStatus() == 5){
-            ((MyPembelian)holder).status.setText("Selesai");
+            ((MyPembelian)holder).status.setText("Return");
         }
 
         ((MyPembelian)holder).invoice.setText(String.valueOf(pembelians.get(position).getIdpesanan()));

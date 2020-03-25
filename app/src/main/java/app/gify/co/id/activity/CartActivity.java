@@ -243,6 +243,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
                         madolCarts.add(madolCart);
                         adapterCart = new AdapterCart(madolCarts, CartActivity.this);
                         recyclerView.setAdapter(adapterCart);
+                        dialog.dismiss();
                     }
                 }
             } catch (JSONException e) {
