@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -85,13 +86,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         dialog  = new Dialog(getActivity());
         inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.loading, null);
-        ImageView gifImageView = layout.findViewById(R.id.custom_loading_imageView);
-        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
-        Glide.with(getActivity())
-                .load(R.drawable.gifygif)
-                .placeholder(R.drawable.gifygif)
-                .centerCrop()
-                .into(imageViewTarget);
+        ImageView goku = layout.findViewById(R.id.custom_loading_imageView);
+        goku.animate().rotationBy(360).setDuration(3000).setInterpolator(new LinearInterpolator()).start();
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
         dialog.setContentView(layout);
