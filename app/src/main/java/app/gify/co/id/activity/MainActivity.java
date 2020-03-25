@@ -96,14 +96,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        dialog  = new Dialog(getApplicationContext());
-        inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = inflater.inflate(R.layout.loading, null);
-        ImageView goku = layout.findViewById(R.id.custom_loading_imageView);
-        goku.animate().rotationBy(360).setDuration(3000).setInterpolator(new LinearInterpolator()).start();
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        dialog.setCancelable(false);
-        dialog.setContentView(layout);
+//        dialog  = new Dialog(MainActivity.this);
+//        inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View layout = inflater.inflate(R.layout.loading, null);
+//        ImageView goku = layout.findViewById(R.id.custom_loading_imageView);
+//        goku.animate().rotationBy(360).setDuration(3000).setInterpolator(new LinearInterpolator()).start();
+//        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+//        dialog.setCancelable(false);
+//        dialog.setContentView(layout);
+//        dialog.show();
 
         mAuth = FirebaseAuth.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();

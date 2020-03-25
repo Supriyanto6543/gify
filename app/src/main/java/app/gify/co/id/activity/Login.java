@@ -17,6 +17,7 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.os.PersistableBundle;
@@ -61,6 +62,8 @@ public class Login extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference userRef;
     private NotificationManager mNotificationManager;
+    private Dialog dialog;
+    private LayoutInflater inflater;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -123,24 +126,20 @@ public class Login extends AppCompatActivity {
 
             email = Email.getText().toString().trim();
             password = Password.getText().toString().trim();
-            Dialog dialog  = new Dialog(getApplicationContext());
-            LayoutInflater inflater = (LayoutInflater)getApplication().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            dialog  = new Dialog(Login.this);
+            inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View layout = inflater.inflate(R.layout.loading, null);
-            ImageView gifImageView = layout.findViewById(R.id.custom_loading_imageView);
-            DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(gifImageView);
-            Glide.with(getApplicationContext())
-                    .load(R.drawable.gifygif)
-                    .placeholder(R.drawable.gifygif)
-                    .centerCrop()
-                    .into(imageViewTarget);
+            ImageView goku = layout.findViewById(R.id.custom_loading_imageView);
+            goku.animate().rotationBy(360).setDuration(3000).setInterpolator(new LinearInterpolator()).start();
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
             dialog.setCancelable(false);
             dialog.setContentView(layout);
             dialog.show();
+
             //wajib di tambahkan untuk menghindari null
             if (email.isEmpty() || password.isEmpty()){
                 Toast.makeText(Login.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
-                progressBar.dismiss();
+                dialog.dismiss();
                 Masuk.setVisibility(View.VISIBLE);
             }else {
                 mAuth.signInWithEmailAndPassword(email, password)
@@ -181,13 +180,13 @@ public class Login extends AppCompatActivity {
                                         });
                                     }
                                 Masuk.setVisibility(View.VISIBLE);
-                                progressBar.dismiss();
+                                dialog.dismiss();
 
                             }
                             else {
                                 String message = task.getException().toString();
                                 Toast.makeText(Login.this, "Email / Sandi salah " , Toast.LENGTH_SHORT).show();
-                                progressBar.dismiss();
+                                dialog.dismiss();
                                 Masuk.setVisibility(View.VISIBLE);
                             }
                         });

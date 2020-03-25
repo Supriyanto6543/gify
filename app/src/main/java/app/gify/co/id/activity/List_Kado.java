@@ -40,6 +40,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import app.gify.co.id.Fragment.favorit.FavoritFragment;
 import app.gify.co.id.Fragment.home.HomeFragment;
