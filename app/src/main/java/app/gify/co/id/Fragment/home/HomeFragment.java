@@ -83,8 +83,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         tahun=root.findViewById(R.id.tahunCari);
         carikado=root.findViewById(R.id.cariKado);
 
-        dialog  = new Dialog(getActivity());
-        inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        dialog  = new Dialog(getContext());
+        inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.loading, null);
         ImageView goku = layout.findViewById(R.id.custom_loading_imageView);
         goku.animate().rotationBy(360).setDuration(1000).setInterpolator(new LinearInterpolator()).start();
