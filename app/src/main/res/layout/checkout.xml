@@ -217,6 +217,7 @@
                                 <EditText
                                     android:id="@+id/kota"
                                     android:hint="Kota"
+                                    android:focusable="false"
                                     android:layout_gravity="center"
                                     android:textStyle="bold"
                                     android:textSize="15dp"
@@ -241,6 +242,7 @@
                                 <EditText
                                     android:id="@+id/provinsi"
                                     android:hint="Provinsi"
+                                    android:focusable="false"
                                     android:layout_gravity="center"
                                     android:textStyle="bold"
                                     android:textColorHint="#b5a981"
@@ -295,17 +297,6 @@
                     android:id="@+id/prorsesCheckout"
                     android:background="@drawable/tombol"
                     android:text="PROSES"
-                    android:textColor="#fff"
-                    android:textStyle="bold"
-                    android:textSize="20dp"
-                    android:layout_margin="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <Button
-                    android:id="@+id/ongkir"
-                    android:background="@drawable/tombol"
-                    android:text="CEK ONGKIR"
                     android:textColor="#fff"
                     android:textStyle="bold"
                     android:textSize="20dp"
