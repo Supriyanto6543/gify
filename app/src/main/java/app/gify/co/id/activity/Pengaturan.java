@@ -339,8 +339,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         coverImage = findViewById(R.id.photo);
         changeCover = findViewById(R.id.changeCoverPengaturan);
         queue = Volley.newRequestQueue(getApplication());
-        KotaS = findViewById(R.id.kota);
-        ProvinsiS = findViewById(R.id.provinsi);
+        KotaS = findViewById(R.id.kotaPengaturan);
+        ProvinsiS = findViewById(R.id.provinsiPengaturan);
     }
 
 
