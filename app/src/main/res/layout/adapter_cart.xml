@@ -122,11 +122,12 @@
 
                 <com.cepheuen.elegantnumberbutton.view.ElegantNumberButton
                     android:id="@+id/quantity"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:initialNumber="1"
                     android:layout_width="80dp"
                     android:layout_marginRight="10dp"
-                    app:backGroundColor="@color/colorPrimary"
+                    app:backGroundColor="#FFFFFF"
+                    app:textColor="#000"
                     app:textSize="8sp"
                     android:layout_marginTop="18dp"
                     android:layout_centerHorizontal="true"

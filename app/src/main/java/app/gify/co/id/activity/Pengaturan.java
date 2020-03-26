@@ -151,7 +151,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         profileImage = findViewById(R.id.profileimage);
         coverImage = findViewById(R.id.photo);
         changeCover = findViewById(R.id.changeCoverPengaturan);
-        dialog  = new Dialog(getApplicationContext());
+
+        dialog  = new Dialog(Pengaturan.this);
         inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.loading, null);
         ImageView goku = layout.findViewById(R.id.custom_loading_imageView);
@@ -160,9 +161,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         dialog.setCancelable(false);
         dialog.setContentView(layout);
         dialog.show();
-
-
-
 
         callMethos();
 
@@ -341,8 +339,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         coverImage = findViewById(R.id.photo);
         changeCover = findViewById(R.id.changeCoverPengaturan);
         queue = Volley.newRequestQueue(getApplication());
-        KotaS = findViewById(R.id.kota);
-        ProvinsiS = findViewById(R.id.provinsi);
+        KotaS = findViewById(R.id.kotaPengaturan);
+        ProvinsiS = findViewById(R.id.provinsiPengaturan);
     }
 
 

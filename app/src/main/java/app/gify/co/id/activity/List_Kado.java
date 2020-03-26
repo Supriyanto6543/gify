@@ -78,6 +78,7 @@ public class List_Kado extends AppCompatActivity {
             public void onClick(View v) {
                 searchView.setVisibility(View.VISIBLE);
                 tulisanListKado.setVisibility(View.GONE);
+
             }
         });
         dialog  = new Dialog(List_Kado.this);
