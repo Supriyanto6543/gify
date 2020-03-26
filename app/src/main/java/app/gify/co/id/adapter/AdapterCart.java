@@ -81,21 +81,8 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         kuantitas = carts.get(position).getJumlah();
         int hargaku = carts.get(position).getHarga() * kuantitas;
 
-        for (int a = 0; a < carts.size(); a++){
-            Log.d("getbarangkua", "onBindViewHolder: " + carts.get(a).getBerat() + carts.get(a).getNamacart());
-            totalPrice += carts.get(a).getHarga();
-            totalBerat += carts.get(a).getBerat();
-            totalhargas.setText(String.valueOf(totalPrice));
-            totalberats.setText(String.valueOf(totalBerat));
-        }
-
-        for (int i = 0; i == carts.size(); i--){
-
-            totalPrice += carts.get(i).getHarga();
-            totalBerat += carts.get(i).getBerat();
-            totalhargas.setText(String.valueOf(totalPrice));
-            totalberats.setText(String.valueOf(totalBerat));
-        }
+        totalhargas.setText(String.valueOf(totalCart(carts)));
+        totalberats.setText(String.valueOf(beratCart(carts)));
 
         Locale locale = new Locale("id", "ID");
         NumberFormat format = NumberFormat.getCurrencyInstance(locale);
@@ -103,6 +90,11 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku)));
         ((MyCart)holder).nama.setText(carts.get(position).getNamacart());
         Glide.with(view).load(carts.get(position).getGambar()).into(((MyCart)holder).gambar);
+        Intent intent = new Intent("message_subject_intent");
+        intent.putExtra("name", String.valueOf((totalCart(carts))));
+        intent.putExtra("title", String.valueOf((getName(carts))));
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
 
         ((MyCart) holder).tambah.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,11 +120,9 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
             }
         });
-
         ((MyCart) holder).kurang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 int count = Integer.parseInt(((MyCart) holder).quantitas.getText().toString());
                 if (count == 1){
                     ((MyCart) holder).quantitas.setText("" + count);

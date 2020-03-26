@@ -80,7 +80,10 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
     public int hargaku, beratku, kuantitas, lastNumber, idbarang, getHargaAwal;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
-
+    Spanned templateConvert;
+    NumberFormat format;
+    Locale id;
+    Random random;
     String template, idberat, idharga;
     private Dialog dialog;
     LayoutInflater inflater;
@@ -98,8 +101,10 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
 
         getHargaAwal = getIntent().getIntExtra("harga", 0);
 
+        Log.d("setHarga", getHargaAwal + "");
+
         dialog  = new Dialog(CartActivity.this);
-        inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.loading, null);
         goku = layout.findViewById(R.id.custom_loading_imageView);
         goku.animate().rotationBy(360).setDuration(3000).setInterpolator(new LinearInterpolator()).start();
@@ -107,6 +112,17 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         dialog.setCancelable(false);
         dialog.setContentView(layout);
         dialog.show();
+
+        id = new Locale("id", "ID");
+
+        format = NumberFormat.getCurrencyInstance(id);
+
+        random = new Random();
+        lastNumber = 0;
+
+        for (int k = 0; k < 3; k++){
+            lastNumber+=(random.nextInt(10)*Math.pow(10, k));
+        }
 
         backCart = findViewById(R.id.backCartNav);
         backCart.setOnClickListener(v -> finish());
@@ -162,6 +178,15 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
 
     }
 
+    private String replaceNumberOfAmount(String original, int replace){
+        return original.substring(0, original.length() - 3) + replace;
+    }
+
+//    private void senderEmail(){
+//        SenderAgent senderAgent = new SenderAgent("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CartActivity.this);
+//        senderAgent.execute();
+//    }
+
     private void getCart(){
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETCART, null, response -> {
             try {
@@ -195,6 +220,16 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         public void onReceive(Context context, Intent intent) {
             namacart = intent.getStringExtra("name");
             Log.d("hargalast", namacart + "");
+            namacart = intent.getStringExtra("title");
+            template = "<h2> Gify Transaction </h2> " +
+                    "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
+                    + "<p><b> Nama barang: </p></b>"
+                    + "<p><b> Harga barang" + format.format(Double.valueOf(replaceNumberOfAmount(idharga, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
+                    + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
+                    + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
+                    + "<h2>Salam, Gify Team</h2>";
+            Log.d("hargalast", idharga + lastNumber);
+            templateConvert = Html.fromHtml(template);
         }
     };
 
