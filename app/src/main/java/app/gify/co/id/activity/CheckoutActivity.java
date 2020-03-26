@@ -256,7 +256,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             ucapanorder = ucapan.getText().toString();
             hpku = hp.getText().toString();
 
-            new SenderOrder("gify.firebase@gmail.com",idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder, ucapanorder, "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this  ).execute();
+            new SenderOrder("gify.firebase@gmail.com",idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,berat, ucapanorder, "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this  ).execute();
 //            PembelianFragment myFragments  = new PembelianFragment();
 //            androidx.fragment.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 //            fragmentTransaction.replace(R.id.frameCheckout, myFragment);
