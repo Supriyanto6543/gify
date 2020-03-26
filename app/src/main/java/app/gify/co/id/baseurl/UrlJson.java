@@ -25,4 +25,5 @@ public class UrlJson {
     public static final String DELETECART = ROOT + "deletecart.php";
     public static final String DELETEFAV = ROOT + "delfav.php";
     public static final String ORDER = ROOT + "order.php";
+    public static final String INSERTTOKEN = ROOT + "insert_token_from_app.php";
 }

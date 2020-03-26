@@ -49,6 +49,7 @@ dependencies {
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'com.synnapps:carouselview:0.1.5'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.google.firebase:firebase-messaging:11.8.0'
     implementation 'com.google.firebase:firebase-database:19.2.1'
     implementation 'com.google.firebase:firebase-auth:19.3.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -77,3 +78,4 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.3.1'
     implementation 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
 }
+apply plugin: 'com.google.gms.google-services'

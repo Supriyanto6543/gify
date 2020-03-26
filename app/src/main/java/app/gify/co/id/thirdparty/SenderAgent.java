@@ -4,6 +4,7 @@ import javax.mail.Authenticator;
 import javax.mail.Message;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.Spanned;
 import android.widget.Toast;
@@ -15,6 +16,9 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import app.gify.co.id.activity.CheckoutActivity;
+import app.gify.co.id.activity.MainActivity;
 
 public class SenderAgent extends AsyncTask<Void, Void, Void> {
 
@@ -37,7 +41,7 @@ public class SenderAgent extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progressDialog = ProgressDialog.show(context, "Menunggu transaksi", "", false);
+        progressDialog = ProgressDialog.show(context, "Please wait. . .", "", false);
     }
 
     @Override
@@ -75,6 +79,8 @@ public class SenderAgent extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         progressDialog.dismiss();
-        Toast.makeText(context, "Berhasil membuat Transaksi", Toast.LENGTH_LONG).show();
+        context.startActivity(new Intent(context, MainActivity.class));
+        //new CheckoutActivity().sendCart(context);
+        new CheckoutActivity().pushNotify(context);
     }
 }

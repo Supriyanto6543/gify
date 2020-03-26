@@ -126,7 +126,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         Checkout.setOnClickListener(view -> {
             Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
             intent.putExtra("idharga", idharga);
-            intent.putExtra("title", namacart);
+            intent.putExtra("name", namacart);
             preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             editor = preferences.edit();
             editor.remove("range");
@@ -193,8 +193,8 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
     public BroadcastReceiver passValue = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            namacart = intent.getStringExtra("title");
-            Log.d("hargalast", idharga + lastNumber);
+            namacart = intent.getStringExtra("name");
+            Log.d("hargalast", namacart + "");
         }
     };
 

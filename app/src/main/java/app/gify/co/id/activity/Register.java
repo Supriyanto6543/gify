@@ -41,6 +41,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -158,7 +160,8 @@ public class Register extends AppCompatActivity {
                                 RootRef.child("Users").child(currentUserID).child("tanggal").setValue(selectedDate.toString());
                                 RootRef.child("Users").child(currentUserID).child("noHp").setValue(noHp);
 
-                                SendUserToMainActivity();
+                                //SendUserToMainActivity();
+                                new FcmInstanceIdService();
                                 Toast.makeText(Register.this, "Selamat! akunmu berhasil dibuat", Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
                             }
@@ -173,24 +176,7 @@ public class Register extends AppCompatActivity {
     }
 
     private void SendUserToMainActivity() {
-        RootRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String Lnama = String.valueOf(dataSnapshot.child("nama").getValue());
-                String Lemail = String.valueOf(dataSnapshot.child("email").getValue());
-                String LnoHp = String.valueOf(dataSnapshot.child("noHp").getValue());
-                String Lpassword = String.valueOf(dataSnapshot.child("password").getValue());
-                String Ltanggal = String.valueOf(dataSnapshot.child("tanggal").getValue());
-                String LID = dataSnapshot.getKey();
-                registertodatabase(LID, Lnama,Ltanggal, Lemail, LnoHp, Lpassword);
-               Log.d("cobalah ",LID + " " + "Nama: " + Lnama + " " + "Email: " + Lemail + " " + "noHp: " + LnoHp + " " + "Password: " + Lpassword + " " + "Tanggal: " + Ltanggal);
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 
     private void showDateTimePicker() {
@@ -218,7 +204,33 @@ public class Register extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private void registertodatabase(final String id_tetap, final String nama, final String ttl, final String email, final String nohp, final String passwords){
+    private class FcmInstanceIdService extends FirebaseInstanceIdService {
+
+        @Override
+        public void onTokenRefresh() {
+            String token = FirebaseInstanceId.getInstance().getToken();
+            RootRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String Lnama = String.valueOf(dataSnapshot.child("nama").getValue());
+                    String Lemail = String.valueOf(dataSnapshot.child("email").getValue());
+                    String LnoHp = String.valueOf(dataSnapshot.child("noHp").getValue());
+                    String Lpassword = String.valueOf(dataSnapshot.child("password").getValue());
+                    String Ltanggal = String.valueOf(dataSnapshot.child("tanggal").getValue());
+                    String LID = dataSnapshot.getKey();
+                    registertodatabase(LID, token, Lnama,Ltanggal, Lemail, LnoHp, Lpassword);
+                    Log.d("cobalah ",LID + " " + "Nama: " + Lnama + " " + "Email: " + Lemail + " " + "noHp: " + LnoHp + " " + "Password: " + Lpassword + " " + "Tanggal: " + Ltanggal);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+    private void registertodatabase(final String id_tetap, String token, final String nama, final String ttl, final String email, final String nohp, final String passwords){
         StringRequest request = new StringRequest(Request.Method.POST, REGISTER, response -> {
             try {
                 Log.d("registertodatabase", "registertodatabase: " + response);
@@ -245,6 +257,7 @@ public class Register extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("id_tetap", id_tetap);
+                params.put("fcm_token", token);
                 params.put("email", email);
                 params.put("nama", nama);
                 params.put("photo", "photo");

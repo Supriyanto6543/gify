@@ -104,33 +104,6 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ((MyCart)holder).nama.setText(carts.get(position).getNamacart());
         Glide.with(view).load(carts.get(position).getGambar()).into(((MyCart)holder).gambar);
 
-//        ((MyCart) holder).quantity.setOnValueChangeListener(new ElegantNumberButton.OnValueChangeListener() {
-//            @Override
-//            public void onValueChange(ElegantNumberButton view, int oldValue, int newValue) {
-//                MadolCart madolCart = carts.get(position);
-//
-//                if (kuantitas<9){
-//                    kuantitas = kuantitas + 1;
-//                    ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
-//                    ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku*kuantitas)));
-//                    int total = hargaku * kuantitas;
-//                    madolCart.setHarga(newValue);
-//                    Intent intents = new Intent("message_subject_intent");
-//                    intents.putExtra("name", String.valueOf((total)));
-//                    LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
-//                }else if (kuantitas>1){
-//                    kuantitas = kuantitas - 1;
-//                    ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku*kuantitas)));
-//                    ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
-//                    int total = hargaku * kuantitas;
-//                    madolCart.setHarga(oldValue);
-//                    Intent intents = new Intent("message_subject_intent");
-//                    intents.putExtra("name", String.valueOf((total)));
-//                    LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
-//                }
-//            }
-//        });
-
         ((MyCart) holder).tambah.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,10 +122,10 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
 //                ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
-//                int total = hargaku * kuantitas;
-//                Intent intents = new Intent("message_subject_intent");
-//                intents.putExtra("name", String.valueOf((total)));
-//                LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
+                int total = hargaku * kuantitas;
+                Intent intents = new Intent("message_subject_intent");
+                intents.putExtra("name", String.valueOf((getName(carts))));
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
             }
         });
 
@@ -173,10 +146,10 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
 //                ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
-//                int total = hargaku * kuantitas;
-//                Intent intents = new Intent("message_subject_intent");
-//                intents.putExtra("name", String.valueOf((total)));
-//                LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
+                int total = hargaku * kuantitas;
+                Intent intents = new Intent("message_subject_intent");
+                intents.putExtra("name", String.valueOf((getName(carts))));
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
 
 
             }
