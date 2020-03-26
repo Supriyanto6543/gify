@@ -132,6 +132,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         totalberat = findViewById(R.id.totalBeratChart);
         recyclerView = findViewById(R.id.rvChart);
 
+
         preferences = PreferenceManager.getDefaultSharedPreferences(CartActivity.this);
         uidku = preferences.getString("uid", "");
         madolCarts = new ArrayList<>();

@@ -1,6 +1,7 @@
 package app.gify.co.id.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -26,6 +27,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -135,6 +137,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     int lastNumber;
     String berat;
     Spanned templateConvert;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -256,7 +259,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             ucapanorder = ucapan.getText().toString();
             hpku = hp.getText().toString();
 
-            new SenderOrder("gify.firebase@gmail.com",idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,berat, ucapanorder, "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this  ).execute();
+            new SenderOrder("gify.firebase@gmail.com",idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder, berat, ucapanorder, "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this).execute();
 //            PembelianFragment myFragments  = new PembelianFragment();
 //            androidx.fragment.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 //            fragmentTransaction.replace(R.id.frameCheckout, myFragment);
@@ -540,7 +543,15 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = ProgressDialog.show(context, "Please wait. . .", "", false);
+            dialog  = new Dialog(getApplicationContext());
+            LayoutInflater inflater = (LayoutInflater)getApplication().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View layout = inflater.inflate(R.layout.loading, null);
+            ImageView goku = layout.findViewById(R.id.custom_loading_imageView);
+            goku.animate().rotationBy(3600).setDuration(10000).setInterpolator(new LinearInterpolator()).start();
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.setCancelable(false);
+            dialog.setContentView(layout);
+            dialog.show();
         }
 
         @Override
