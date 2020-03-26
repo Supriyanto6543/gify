@@ -236,7 +236,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             ucapanorder = ucapan.getText().toString();
             hpku = hp.getText().toString();
 
-            new SenderOrder("gify.firebase@gmail.com",  templateConvert, CheckoutActivity.this, idtetaporder, getDateTime(), penerimaorder, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder, ucapanorder,"Confirmation Transaction Gify",).execute();
+            new SenderOrder("gify.firebase@gmail.com",idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder, ucapanorder, "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this  ).execute();
 //            PembelianFragment myFragments  = new PembelianFragment();
 //            androidx.fragment.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 //            fragmentTransaction.replace(R.id.frameCheckout, myFragment);
@@ -497,7 +497,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
         private ProgressDialog progressDialog;
 
-        public SenderOrder(String mail, String idtetap, String date, String penerima, String nohp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang, String jumlah, String berat, String ucapan, String subject, Spanned message, Context context, ProgressDialog progressDialog) {
+        public SenderOrder(String mail, String idtetap, String date, String penerima, String nohp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang, String jumlah, String berat, String ucapan, String subject, Spanned message, Context context) {
             this.mail = mail;
             this.idtetap = idtetap;
             this.date = date;
@@ -515,7 +515,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             this.subject = subject;
             this.message = message;
             this.context = context;
-            this.progressDialog = progressDialog;
         }
 
         @Override
