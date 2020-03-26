@@ -83,6 +83,7 @@ import app.gify.co.id.rajaongkir.adapterongkir.AdapterCheckCity;
 import app.gify.co.id.rajaongkir.adapterongkir.AdapterProvinsi;
 import app.gify.co.id.rajaongkir.apiongkir.ApiRaja;
 import app.gify.co.id.rajaongkir.apiongkir.BaseApi;
+import app.gify.co.id.rajaongkir.modelongkir.biaya.ItemCost;
 import app.gify.co.id.rajaongkir.modelongkir.kota.ItemCity;
 import app.gify.co.id.rajaongkir.modelongkir.kota.Result;
 import app.gify.co.id.rajaongkir.modelongkir.provinsi.Province;
@@ -132,6 +133,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     Locale id;
     Random random;
     int lastNumber;
+    String berat;
     Spanned templateConvert;
 
     @Override
@@ -174,8 +176,10 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         hintArrayAdapterKu.add("hint");
 
         prosescekout = findViewById(R.id.prorsesCheckout);
-        ongkir = findViewById(R.id.ongkir);
         back = findViewById(R.id.backCheckout);
+
+        berat = getIntent().getStringExtra("berat");
+
         back.setOnClickListener(v -> finish());
 
 //        gantiAlamat.setOnClickListener(v -> {
@@ -225,6 +229,22 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         });*/
 
         prosescekout.setOnClickListener(view -> {
+
+            String Kota = kota.getText().toString();
+            String Provinsi = provinsi.getText().toString();
+
+            if (Kota.equals("")) {
+                kota.setError("Please input your City");
+            } else if (Provinsi.equals("")) {
+                provinsi.setError("Please input your Province");
+            } else {
+                getCoast(
+                        "23",
+                        kota.getTag().toString(),
+                        berat,
+                        "jne"
+                );
+            }
 
             //get value form inner class
             penerimaorder = nama.getText().toString();
@@ -789,5 +809,91 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             }
         });
 
+    }
+
+    public void getCoast(String origin,
+                         String destination,
+                         String weight,
+                         String courier) {
+        ApiRaja apiRaja = BaseApi.callJson();
+        Call<ItemCost> call = apiRaja.getCost(
+                "cfc2d1eac754c1b41f383bbfa6fe45b6",
+                origin,
+                destination,
+                weight,
+                courier
+        );
+
+        call.enqueue(new Callback<ItemCost>() {
+            @Override
+            public void onResponse(Call<ItemCost> call, retrofit2.Response<ItemCost> response) {
+
+                Log.v("wow", "json : " + new Gson().toJson(response));
+                progressDialog.dismiss();
+
+                if (response.isSuccessful()) {
+
+                    int statusCode = response.body().getRajaongkir().getStatus().getCode();
+
+                    if (statusCode == 200){
+                        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        View alertLayout = inflater.inflate(R.layout.rajaongkir_popup_cost, null);
+                        alert = new AlertDialog.Builder(CheckoutActivity.this);
+                        alert.setTitle("Result Cost");
+                        alert.setMessage("this result your search");
+                        alert.setView(alertLayout);
+                        alert.setCancelable(true);
+
+                        ad = alert.show();
+
+                        final TextView tv_origin = (TextView) alertLayout.findViewById(R.id.tv_origin);
+                        TextView tv_destination = (TextView) alertLayout.findViewById(R.id.tv_destination);
+                        TextView tv_expedisi = (TextView) alertLayout.findViewById(R.id.tv_expedisi);
+                        TextView tv_coast = (TextView) alertLayout.findViewById(R.id.tv_coast);
+                        TextView tv_time = (TextView) alertLayout.findViewById(R.id.tv_time);
+
+                        tv_origin.setText(response.body().getRajaongkir().getOriginDetails().getCityName()+" (Postal Code : "+
+                                response.body().getRajaongkir().getOriginDetails().getPostalCode()+")");
+
+                        tv_destination.setText(response.body().getRajaongkir().getDestinationDetails().getCityName()+" (Postal Code : "+
+                                response.body().getRajaongkir().getDestinationDetails().getPostalCode()+")");
+
+                        tv_expedisi.setText(response.body().getRajaongkir().getResults().get(0).getCosts().get(0).getDescription()+" ("+
+                                response.body().getRajaongkir().getResults().get(0).getName()+") ");
+
+                        tv_coast.setText("Rp. "+response.body().getRajaongkir().getResults().get(0).getCosts().get(1).getCost().get(0).getValue().toString());
+
+                        tv_time.setText(response.body().getRajaongkir().getResults().get(0).getCosts().get(0).getCost().get(0).getEtd()+" (Days)");
+
+                        provinsi.setText("");
+                        kota.setText("");
+
+                        ((Button) alertLayout.findViewById(R.id.add_destination)).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(getApplication(), PembelianFragment.class);
+                                startActivity(intent);
+                            }
+                        });
+                    } else {
+
+                        String message = response.body().getRajaongkir().getStatus().getDescription();
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                    }
+
+                } else {
+                    String error = "Error Retrive Data from Server !!!";
+                    Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ItemCost> call, Throwable t) {
+
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), "Message : Error " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
