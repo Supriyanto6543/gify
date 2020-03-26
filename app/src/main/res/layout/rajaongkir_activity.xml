@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:text="From"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"
+                android:textColor="#fff"
                 android:textSize="16sp" />
 
             <LinearLayout
@@ -88,7 +88,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#000"
+                    android:textColor="#fff"
                     android:text="Province : "
                     android:textSize="15dp"  />
 
@@ -106,7 +106,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:textColor="#000"
+                    android:textColor="#fff"
                     android:text="City :"
                     android:textSize="15dp"  />
 
@@ -127,7 +127,7 @@
                 android:layout_marginTop="20dp"
                 android:text="To"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"
+                android:textColor="#fff"
                 android:textSize="16sp" />
 
             <LinearLayout
@@ -139,7 +139,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#000"
+                    android:textColor="#fff"
                     android:text="Province : "
                     android:textSize="15dp"  />
 
@@ -156,7 +156,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#000"
+                    android:textColor="#fff"
                     android:layout_marginTop="5dp"
                     android:text="City :"
                     android:textSize="15dp"  />
@@ -177,7 +177,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="Weight (gram)"
-                android:textColor="@android:color/black"
+                android:textColor="#fff"
                 android:textSize="15sp" />
 
             <EditText
@@ -195,7 +195,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="Courier"
-                android:textColor="@android:color/black"
+                android:textColor="#fff"
                 android:textSize="15dp" />
 
             <EditText

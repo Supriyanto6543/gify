@@ -489,7 +489,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         mNotificationManager.notify(0, mBuilder.build());
     }
 
-    private static class SenderOrder extends AsyncTask<Void, Void, Void>{
+    private class SenderOrder extends AsyncTask<Void, Void, Void>{
         private String mail, idtetap, date, penerima, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, ucapan;
         private String subject;
         private Spanned message;
@@ -557,7 +557,10 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         @Override
         protected void onPostExecute(Void aVoid) {
             progressDialog.dismiss();
-            context.startActivity(new Intent(context, MainActivity.class));
+            PembelianFragment myFragments  = new PembelianFragment();
+            androidx.fragment.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frameCheckout, myFragments);
+            fragmentTransaction.commit();
             new CheckoutActivity().sendCart(context, idtetap, date, penerima, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, ucapan);
             new CheckoutActivity().pushNotify(context);
         }
