@@ -126,7 +126,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     FirebaseAuth mAuth;
     NotificationManager mNotificationManager;
 
-    String idtetaporder, ttlorder, penerimaorder, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, resiorder, statusorder, namabarangorder, ucapanorder, template, idharga;
+    String idtetaporder, ttlorder, penerimaorder, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, resiorder, statusorder, namabarangorder, ucapanorder, template, idharga, qtyku;
     SharedPreferences preferences;
     NumberFormat format;
     Locale id;
@@ -200,7 +200,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         idtetaporder = preferences.getString("uid", "");
         idharga = getIntent().getStringExtra("idharga");
         namabarangorder = getIntent().getStringExtra("name");
-        Log.d("cekstatus", idharga + namabarangorder + "");
+        qtyku = getIntent().getStringExtra("qtyku");
+        Log.d("cekstatus", idharga + namabarangorder + " s " + qtyku);
 
         provinsi.setOnClickListener(v -> {
             popUpProvince(provinsi, kota);
@@ -445,7 +446,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 param.put("status", String.valueOf(1));
                 param.put("nama_barang", namabarang);
                 param.put("ucapan", ucapan);
-
                 return param;
             }
         };
