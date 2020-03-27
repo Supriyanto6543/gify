@@ -85,7 +85,7 @@ public class List_Kado extends AppCompatActivity {
         inflater = (LayoutInflater)getApplication().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.loading, null);
         ImageView goku = layout.findViewById(R.id.custom_loading_imageView);
-        goku.animate().rotationBy(360).setDuration(1000).setInterpolator(new LinearInterpolator()).start();
+        goku.animate().rotationBy(3600).setDuration(10000).setInterpolator(new LinearInterpolator()).start();
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
         dialog.setContentView(layout);
