@@ -534,7 +534,7 @@
                         android:layout_height="wrap_content"/>
 
                     <Spinner
-                        android:id="@+id/kota"
+                        android:id="@+id/kotaPengaturan"
                         android:text="-- pilih --"
                         android:gravity="center"
                         android:layout_gravity="center"
@@ -575,7 +575,7 @@
                         android:layout_height="wrap_content"/>
 
                     <Spinner
-                        android:id="@+id/provinsi"
+                        android:id="@+id/provinsiPengaturan"
                         android:text="-- pilih --"
                         android:layout_gravity="center"
                         android:gravity="center"
