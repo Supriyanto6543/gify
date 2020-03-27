@@ -510,8 +510,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         mNotificationManager.notify(0, mBuilder.build());
     }
 
-    private class SenderOrder extends AsyncTask<Void, Void, Void>{
-        private String mail, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, jumlah, berat, ucapan;
+    private static class SenderOrder extends AsyncTask<Void, Void, Void>{
+        private String mail, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang,jumlah,berat, ucapan, jumlahbrng;
         private String subject;
         private Spanned message;
 
@@ -520,8 +520,11 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
         private ProgressDialog progressDialog;
 
-        public SenderOrder(String mail, String idtetap, String date, String penerima, String nohp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang, String jumlah, String berat, String ucapan, String subject, Spanned message, Context context) {
+        public SenderOrder(String mail, String subject, Spanned message, Context context, String idtetap, String date, String penerima,String nohp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang,String jumlah,String berat, String ucapan, String jumlahbrng) {
             this.mail = mail;
+            this.subject = subject;
+            this.message = message;
+            this.context = context;
             this.idtetap = idtetap;
             this.date = date;
             this.penerima = penerima;
@@ -535,9 +538,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             this.jumlah = jumlah;
             this.berat = berat;
             this.ucapan = ucapan;
-            this.subject = subject;
-            this.message = message;
-            this.context = context;
+            this.jumlahbrng = jumlahbrng;
         }
 
         @Override
