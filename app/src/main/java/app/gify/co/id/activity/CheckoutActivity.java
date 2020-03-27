@@ -129,7 +129,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     FirebaseAuth mAuth;
     NotificationManager mNotificationManager;
 
-    String idtetaporder,hahaha, ttlorder,hpku, penerimaorder, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, resiorder, statusorder, namabarangorder, ucapanorder, template, idharga;
+    String idtetaporder,hahaha, ttlorder,hpku, penerimaorder, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, resiorder, statusorder, namabarangorder, ucapanorder, template, idharga,qtyku;
     SharedPreferences preferences;
     NumberFormat format;
     Locale id;
@@ -260,7 +260,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             provinsiorder = provinsi.getText().toString();
             ucapanorder = ucapan.getText().toString();
 
-            new SenderOrder("gify.firebase@gmail.com",idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,hahaha, berat, ucapanorder, "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this).execute();
+            new SenderOrder("gify.firebase@gmail.com",idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, ucapanorder, "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this).execute();
 //            PembelianFragment myFragments  = new PembelianFragment();
 //            androidx.fragment.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 //            fragmentTransaction.replace(R.id.frameCheckout, myFragment);
@@ -641,7 +641,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
     }
 
-    public void popUpCity(final EditText kota, final EditText provinsi) {
+    public void popUpCity(final TextView kota, final TextView provinsi) {
 
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
