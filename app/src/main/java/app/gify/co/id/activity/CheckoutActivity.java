@@ -261,6 +261,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 kotaorder = kota.getText().toString();
                 provinsiorder = provinsi.getText().toString();
                 ucapanorder = ucapan.getText().toString();
+                hpku = hp.getText().toString();
 
                 new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, ucapanorder).execute();
             }
