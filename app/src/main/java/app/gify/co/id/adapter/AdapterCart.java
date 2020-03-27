@@ -64,6 +64,7 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             quantitas = itemView.findViewById(R.id.quantitas);
             background = itemView.findViewById(R.id.background);
             foreground = itemView.findViewById(R.id.foreground);
+            /*quantity = itemView.findViewById(R.id.quantity);*/
         }
     }
 
@@ -83,8 +84,8 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             Log.d("cartsizeku", "onBindViewHolder: " + carts.size()+ " s " + carts.get(a).getNamacart() + " s " + carts.get(a).getHarga());
             String nama = carts.get(position).getNamacart();
             if (nama.equals(carts.get(a).getNamacart())){
-                totalhargas.setText(String.valueOf(totalCart(carts, carts.get(a).getNamacart())));
-                totalberats.setText(String.valueOf(beratCart(carts, carts.get(a).getNamacart())));
+                totalhargas.setText("Rp." + String.valueOf(totalCart(carts, carts.get(a).getNamacart()))+",-" );
+                totalberats.setText(String.valueOf(beratCart(carts, carts.get(a).getNamacart())) + " gram");
             }
 
         }
@@ -113,8 +114,8 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     int harga = carts.get(position).getHarga()*count;
                     ((MyCart)holder).harga.setText(String.valueOf(format.format(Double.valueOf(harga))));
                     String nama = carts.get(position).getNamacart();
-                    totalhargas.setText(String.valueOf(totalCart(carts, nama)));
-                    totalberats.setText(String.valueOf(beratCart(carts, nama)));
+                    totalhargas.setText("Rp." + String.valueOf(totalCart(carts, nama)) + ",-");
+                    totalberats.setText(String.valueOf(beratCart(carts, nama)) + " gram");
                 }
 
 //                ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
@@ -136,8 +137,8 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     int harga = carts.get(position).getHarga()*count;
                     ((MyCart)holder).harga.setText(String.valueOf(format.format(Double.valueOf(harga))));
                     String nama = carts.get(position).getNamacart();
-                    totalhargas.setText(String.valueOf(kurangtotalcart(carts, nama)));
-                    totalberats.setText(String.valueOf(kurangberatCart(carts, nama)));
+                    totalhargas.setText("Rp." + String.valueOf(kurangtotalcart(carts, nama)) + ",-");
+                    totalberats.setText(String.valueOf(kurangberatCart(carts, nama)) + " gram");
                 }
 
 

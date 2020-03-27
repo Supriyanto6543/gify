@@ -8,6 +8,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#fff"
         app:cardUseCompatPadding="true"
         app:cardCornerRadius="3dp"
         app:cardMaxElevation="2dp">
@@ -22,6 +23,7 @@
                 android:id="@+id/tv_category"
                 android:text="TITLE"
                 android:textStyle="bold"
+                android:textColor="#aa7a00"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -29,6 +31,7 @@
                 android:id="@+id/tv_detail"
                 android:layout_marginTop="5dp"
                 android:text="DETAIL"
+                android:textColor="#aa7a00"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
