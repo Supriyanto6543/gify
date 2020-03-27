@@ -74,7 +74,7 @@ public class AdapterListKado extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((MyKado)holder).nama.setText(kados.get(position).getNama()+"("+kados.get(position).getKode()+")");
+        ((MyKado)holder).nama.setText(kados.get(position).getNama()+" ("+kados.get(position).getKode()+")");
         ((MyKado)holder).harga.setText("Rp. " + kados.get(position).getHarga() + ",-");
 
         if (kados.get(position).getGambar().isEmpty()){
@@ -94,6 +94,7 @@ public class AdapterListKado extends RecyclerView.Adapter<RecyclerView.ViewHolde
             intent.putExtra("harga", kados.get(position).getHarga());
             intent.putExtra("idbarang", kados.get(position).getId_barang());
             intent.putExtra("id", kados.get(position).getId_barang());
+            intent.putExtra("posisibarang", position);
             intent.putExtra("nama", kados.get(position).getNama() + "(" + kados.get(position).getKode() + ")");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);

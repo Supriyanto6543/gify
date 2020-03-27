@@ -95,10 +95,11 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku)));
         ((MyCart)holder).nama.setText(carts.get(position).getNamacart());
+        ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
         Glide.with(view).load(carts.get(position).getGambar()).into(((MyCart)holder).gambar);
         Intent intent = new Intent("message_subject_intent");
 //        intent.putExtra("name", String.valueOf((totalCart(carts))));
-        intent.putExtra("title", String.valueOf((getName(carts))));
+        intent.putExtra("name", String.valueOf((getName(carts))));
         intent.putExtra("qty", String.valueOf((getSeperatedquantity(carts))));
         intent.putExtra("berat", String.valueOf(totalBerat));
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);

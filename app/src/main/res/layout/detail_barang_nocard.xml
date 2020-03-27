@@ -83,22 +83,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/carousel"
+                <!--<ImageView
+
                     android:scaleType="centerCrop"
                     android:layout_width="match_parent"
-                    android:layout_height="230dp"/>
+                    android:layout_height="230dp"/>-->
 
                 <com.synnapps.carouselview.CarouselView
-
-                    android:visibility="gone"
+                    android:id="@+id/carousel"
                     android:layout_width="match_parent"
-                    android:layout_height="230dp"
-                    app:fillColor="@color/description"
+                    android:layout_height="280dp"
+                    app:fillColor="@color/colorPrimary"
                     app:pageColor="#FFFFFF"
+                    app:autoPlay="false"
                     app:radius="6dp"
                     app:slideInterval="3000"
-                    app:strokeColor="@color/description"
+                    app:strokeColor="@color/colorPrimary"
                     app:strokeWidth="1dp"/>
 
             </LinearLayout>
@@ -114,7 +114,7 @@
                     android:id="@+id/namadetail"
                     android:text=""
                     android:textStyle="bold"
-                    android:textSize="19dp"
+                    android:textSize="16dp"
                     android:textColor="#ffffff"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="15dp"
@@ -166,7 +166,7 @@
                 <TextView
                     android:id="@+id/descdetails"
                     android:text=""
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="2dp"
                     android:textStyle="bold"
                     android:textColor="#4a4a4a"
                     android:layout_marginBottom="10dp"
