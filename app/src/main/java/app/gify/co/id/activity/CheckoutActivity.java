@@ -98,7 +98,7 @@ import static app.gify.co.id.baseurl.UrlJson.DELETEALLCART;
 
 public class CheckoutActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    Button prosescekout, ongkir;
+    Button prosescekout;
     ImageView back;
 
     private AdapterProvinsi adapter_province;
@@ -138,6 +138,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     String berat;
     Spanned templateConvert;
     Dialog dialog;
+    String ongkir;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -875,8 +876,11 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
                         tv_time.setText(response.body().getRajaongkir().getResults().get(0).getCosts().get(0).getCost().get(0).getEtd()+" (Days)");
 
+                        String cost = response.body().getRajaongkir().getResults().get(0).getCosts().get(1).getCost().get(0).getValue().toString();
+                        ongkir = cost;
                         provinsi.setText("");
                         kota.setText("");
+                        Toast.makeText(getApplicationContext(), "Cost: " + "Rp." + cost, Toast.LENGTH_SHORT).show();
 
                         ((Button) alertLayout.findViewById(R.id.add_destination)).setOnClickListener(new View.OnClickListener() {
                             @Override
