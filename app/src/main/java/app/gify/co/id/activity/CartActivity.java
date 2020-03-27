@@ -84,7 +84,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
     NumberFormat format;
     Locale id;
     Random random;
-    String template, idberat, idharga;
+    String template, idberat, idharga, watashi;
     private Dialog dialog;
     LayoutInflater inflater;
     ImageView goku;
@@ -144,6 +144,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
             Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
             intent.putExtra("idharga", idharga);
             intent.putExtra("name", namacart);
+            intent.putExtra("watashi", watashi);
             preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             editor = preferences.edit();
             editor.remove("range");
@@ -220,7 +221,9 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         @Override
         public void onReceive(Context context, Intent intent) {
             namacart = intent.getStringExtra("name");
-            Log.d("hargalast", namacart + "");
+            watashi = intent.getStringExtra("kuantitasku");
+            Log.d("jsndjandjkan", watashi + " goku");
+            Log.d("hargalast", namacart + " " );
             namacart = intent.getStringExtra("title");
             template = "<h2> Gify Transaction </h2> " +
                     "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"

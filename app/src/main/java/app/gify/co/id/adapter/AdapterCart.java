@@ -35,7 +35,7 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     View view;
     View viewku;
     Context context;
-    int kuantitas;
+    int kuantitas, totalKuantitas;
     String totalname;
     int totalBerat, totalharga;
     TextView totalhargas, totalberats;
@@ -64,7 +64,6 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             quantitas = itemView.findViewById(R.id.quantitas);
             background = itemView.findViewById(R.id.background);
             foreground = itemView.findViewById(R.id.foreground);
-            /*quantity = itemView.findViewById(R.id.quantity);*/
         }
     }
 
@@ -95,10 +94,14 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku)));
         ((MyCart)holder).nama.setText(carts.get(position).getNamacart());
+        Intent intents = new Intent("message_subject_intent");
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
         Glide.with(view).load(carts.get(position).getGambar()).into(((MyCart)holder).gambar);
         Intent intent = new Intent("message_subject_intent");
 //        intent.putExtra("name", String.valueOf((totalCart(carts))));
+        intents.putExtra("kuantitasku", String.valueOf(getKuantitas(carts, carts.get(position).getNamacart())));
         intent.putExtra("title", String.valueOf((getName(carts))));
+
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
 
@@ -112,7 +115,7 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     int harga = carts.get(position).getHarga()*count;
                     ((MyCart)holder).harga.setText(String.valueOf(format.format(Double.valueOf(harga))));
                     String nama = carts.get(position).getNamacart();
-                    totalhargas.setText("Rp." + String.valueOf(totalCart(carts, nama)) + "'-");
+                    totalhargas.setText("Rp." + String.valueOf(totalCart(carts, nama)) + ",-");
                     totalberats.setText(String.valueOf(beratCart(carts, nama)) + " gram");
                 }
 
@@ -120,6 +123,7 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 int total = hargaku * kuantitas;
                 Intent intents = new Intent("message_subject_intent");
                 intents.putExtra("name", String.valueOf((getName(carts))));
+                intents.putExtra("kuantitasku", String.valueOf(getKuantitas(carts, carts.get(position).getNamacart())));
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
             }
         });
@@ -142,6 +146,7 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 int total = hargaku * kuantitas;
                 Intent intents = new Intent("message_subject_intent");
                 intents.putExtra("name", String.valueOf((getName(carts))));
+                intents.putExtra("kuantitasku", String.valueOf(getKuantitas(carts, carts.get(position).getNamacart())));
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
 
 
@@ -154,6 +159,23 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return carts.size();
     }
 
+    public int getKuantitas(ArrayList<MadolCart> items, String name){
+        /*for (int a = 0; a < items.size(); a++){
+            totalKuantitas = items.get(a).getQuantity();
+        }
+
+        return totalKuantitas;*/
+
+        for(int i = 0 ; i < items.size(); i++) {
+            totalname = items.get(i).getNamacart();
+            if (totalname.equals(name)){
+                totalKuantitas += items.get(i).getQuantity();
+            }
+        }
+        return totalKuantitas;
+
+    }
+
     public int totalCart(ArrayList<MadolCart> items, String name){
 
         for(int i = 0 ; i < items.size(); i++) {
@@ -164,6 +186,8 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
         return totalharga;
     }
+
+
     public int kurangtotalcart(ArrayList<MadolCart> items, String name){
 
         for(int i = 0 ; i < items.size(); i++) {

@@ -129,12 +129,12 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     FirebaseAuth mAuth;
     NotificationManager mNotificationManager;
 
-    String idtetaporder, ttlorder,hpku, penerimaorder, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, resiorder, statusorder, namabarangorder, ucapanorder, template, idharga;
+    String idtetaporder,hahaha, ttlorder,hpku, penerimaorder, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, resiorder, statusorder, namabarangorder, ucapanorder, template, idharga;
     SharedPreferences preferences;
     NumberFormat format;
     Locale id;
     Random random;
-    int lastNumber;
+    int lastNumber, quantity;
     String berat;
     Spanned templateConvert;
     private Dialog dialog;
@@ -183,6 +183,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
         berat = getIntent().getStringExtra("berat");
 
+
         back.setOnClickListener(v -> finish());
 
 //        gantiAlamat.setOnClickListener(v -> {
@@ -204,7 +205,9 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         idtetaporder = preferences.getString("uid", "");
         idharga = getIntent().getStringExtra("idharga");
         namabarangorder = getIntent().getStringExtra("name");
-        Log.d("cekstatus", idharga + namabarangorder + "");
+        hahaha = getIntent().getStringExtra("watashi");
+        Log.d("hahaha", hahaha + " ");
+        Log.d("cekstatus", idharga + namabarangorder + "" + hahaha);
 
         provinsi.setOnClickListener(v -> {
             popUpProvince(provinsi, kota);
@@ -258,8 +261,9 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             provinsiorder = provinsi.getText().toString();
             ucapanorder = ucapan.getText().toString();
             hpku = hp.getText().toString();
+            /*hahaha = String.valueOf(quantity);*/
 
-            new SenderOrder("gify.firebase@gmail.com",idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder, berat, ucapanorder, "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this).execute();
+            new SenderOrder("gify.firebase@gmail.com",idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,hahaha, berat, ucapanorder, "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this).execute();
 //            PembelianFragment myFragments  = new PembelianFragment();
 //            androidx.fragment.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 //            fragmentTransaction.replace(R.id.frameCheckout, myFragment);
