@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -30,6 +31,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
@@ -41,6 +44,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,10 +52,13 @@ import app.gify.co.id.Fragment.favorit.FavoritFragment;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
+import androidx.viewpager.widget.ViewPager;
 
 import app.gify.co.id.Fragment.home.HomeFragment;
 import app.gify.co.id.R;
 import app.gify.co.id.adapter.AdapterFavorit;
+import app.gify.co.id.adapter.AdapterViewPager;
 
 import static app.gify.co.id.baseurl.UrlJson.CHECKFAV;
 import static app.gify.co.id.baseurl.UrlJson.DETAILKADO;
@@ -74,19 +81,22 @@ public class DetailKado extends AppCompatActivity {
     ImageView tambah, kurang, favorit, unfavorit, cart;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
-    //CarouselView carouselView;
-    String idbarangku, uid, id, photobyid, kodeBarangbyid, namabyid, deskripsibyid, berat, getJumlah;
+    CarouselView carouselView;
+    String idbarangku, uid, id, photobyid, kodeBarangbyid, namabyid, deskripsibyid, berat, getJumlah, photobyid1, photobyid2;
     int posisibarang;
     int id_barang, hargabyid, cingpai = 1, gambar, gambar1, gambar2, hargaAwal;
-    int sourceImg[];
+    int[] sourceImg;
     Boolean faforit;
     ImageView buatJadiWistlist, back;
+    ArrayList<String> imgUrls;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_barang_nocard);
         cart = findViewById(R.id.chartDetailKado);
+        imgUrls = new ArrayList<>();
         cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,7 +117,7 @@ public class DetailKado extends AppCompatActivity {
         Log.d("jinjin", hargabyid + "");
 
         belikadodetail = findViewById(R.id.belikadodetail);
-        slide = findViewById(R.id.carousel);
+        carouselView = findViewById(R.id.carousel);
         nama = findViewById(R.id.namadetail);
         //kodebarang = findViewById(R.id.kodebarang);
         harga = findViewById(R.id.hargadetail);
@@ -116,16 +126,6 @@ public class DetailKado extends AppCompatActivity {
         unfavorit = findViewById(R.id.unfavoritdet);
 
         id = getIntent().getStringExtra("id");
-//        gambar = getIntent().getIntExtra("gambar", 0);
-//        gambar1 = getIntent().getIntExtra("gambar1", 0);
-//        gambar2 = getIntent().getIntExtra("gambar2", 0);
-
-        sourceImg = new int[]{gambar, gambar1, gambar2};
-
-        //carousel
-//        carouselView = (CarouselView) findViewById(R.id.carousel);
-//        carouselView.setPageCount(sourceImg.length);
-//        carouselView.setImageListener(slideImage);
 
         idbarangku = getIntent().getStringExtra("idbarang");
         preferences = PreferenceManager.getDefaultSharedPreferences(DetailKado.this);
@@ -153,14 +153,28 @@ public class DetailKado extends AppCompatActivity {
         /*Toast.makeText(getApplicationContext(), "Id mu adalah " + id, Toast.LENGTH_LONG).show();*/
     }
 
-    ImageListener slideImage = new ImageListener() {
+    /*ImageListener imageListener = new ImageListener() {
         @Override
-        public void setImageForPosition(int position, ImageView imageView) {
-            //imageView.setImageResource(sourceImg[position]);
+        public void setImageForPosition(final int position, final ImageView imageView) {
 
-            //new DownloadImageTask(imageView).execute(String.valueOf(sourceImg[position]));
+            Glide.with(DetailKado.this)
+                    .asBitmap()
+                    .load(imgUrls.get(position))
+                    .into(new CustomTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@Nullable Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            imageView.setImageBitmap(resource);
+                        }
+
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                        }
+
+                    });
         }
-    };
+
+    };*/
     private void delfav() {
         StringRequest request = new StringRequest(Request.Method.GET, DELETEFAV+"?idtetap="+uid+"&idbarang="+idbarangku, response -> {
             if (response.equalsIgnoreCase("bisa")){
@@ -177,6 +191,7 @@ public class DetailKado extends AppCompatActivity {
         });
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(request);
+
     }
 
     private void popup() {
@@ -408,6 +423,8 @@ public class DetailKado extends AppCompatActivity {
                 for (int i = 0; i < response.length(); i++){
                     JSONObject object = response.getJSONObject(i);
                     photobyid = object.getString("photo");
+                    photobyid1 = object.getString("photo1");
+                    photobyid2 = object.getString("photo2");
                     namabyid = object.getString("nama");
                     hargabyid = object.getInt("harga");
                     deskripsibyid = object.getString("deskripsi");
@@ -415,9 +432,39 @@ public class DetailKado extends AppCompatActivity {
                     Log.d("descharga", "getDetailBarangById: " + hargabyid + " s " + deskripsibyid + " s " + photobyid);
                     nama.setText(namabyid + "(" + kodeBarangbyid + ")");
                     berat = object.getString("berat");
+                    ImageListener imageListener = new ImageListener() {
+                        @Override
+                        public void setImageForPosition(final int position, final ImageView imageView) {
 
-                    nama.setText(namabyid + kodeBarangbyid);
-                    Glide.with(DetailKado.this).load(photobyid).into(slide);
+                            Glide.with(DetailKado.this)
+                                    .asBitmap()
+                                    .load(imgUrls.get(position))
+                                    .into(new CustomTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(@Nullable Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                            imageView.setImageBitmap(resource);
+                                        }
+
+                                        @Override
+                                        public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                                        }
+
+                                    });
+                        }
+
+                    };
+                    imgUrls.add(photobyid);
+                    imgUrls.add(photobyid1);
+                    imgUrls.add(photobyid2);
+                    carouselView.setImageListener(imageListener);
+                    carouselView.setPageCount(imgUrls.size());
+                    carouselView.isDisableAutoPlayOnUserInteraction();
+
+
+
+                    nama.setText(namabyid + " (" + kodeBarangbyid + ")");
+                    /*Glide.with(DetailKado.this).load(photobyid,photobyid1,photobyid2).into(slide);*/
                     //kodebarang.setText(kodeBarangbyid);
                     harga.setText("Rp. " + hargabyid);
                     desc.setText(deskripsibyid);
