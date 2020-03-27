@@ -177,8 +177,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         prosescekout = findViewById(R.id.prorsesCheckout);
         back = findViewById(R.id.backCheckout);
 
-        berat = getIntent().getStringExtra("berat");
-
         back.setOnClickListener(v -> finish());
 
 //        gantiAlamat.setOnClickListener(v -> {
@@ -201,6 +199,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         idharga = getIntent().getStringExtra("idharga");
         namabarangorder = getIntent().getStringExtra("name");
         qtyku = getIntent().getStringExtra("qtyku");
+        berat = getIntent().getStringExtra("berat");
         Log.d("cekstatus", idharga + namabarangorder + " s " + qtyku);
 
         provinsi.setOnClickListener(v -> {
