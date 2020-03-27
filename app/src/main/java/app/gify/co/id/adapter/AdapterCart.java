@@ -99,6 +99,7 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Intent intent = new Intent("message_subject_intent");
 //        intent.putExtra("name", String.valueOf((totalCart(carts))));
         intent.putExtra("title", String.valueOf((getName(carts))));
+        intent.putExtra("berat", String.valueOf(totalBerat));
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
 
@@ -121,6 +122,7 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     Intent intents = new Intent("message_subject_intent");
                     intents.putExtra("name", String.valueOf((getName(carts))));
                     intents.putExtra("qty", String.valueOf((getSeperatedquantity(carts))));
+                    intents.putExtra("berat", String.valueOf(totalBerat));
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
             }
         });
@@ -144,6 +146,7 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     Intent intents = new Intent("message_subject_intent");
                     intents.putExtra("name", String.valueOf((getName(carts))));
                     intents.putExtra("qty", String.valueOf((getSeperatedquantity(carts))));
+                    intents.putExtra("berat", String.valueOf(totalBerat));
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
 
 
