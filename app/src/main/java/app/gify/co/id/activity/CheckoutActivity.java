@@ -137,7 +137,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     int lastNumber, quantity;
     String berat;
     Spanned templateConvert;
-    private Dialog dialog;
+    Dialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -233,36 +233,36 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
         prosescekout.setOnClickListener(view -> {
 
-            String Kota = kota.getText().toString();
-            String Provinsi = provinsi.getText().toString();
+            if (nama.getText().toString().isEmpty() || hp.getText().toString().isEmpty() || jalan.getText().toString().isEmpty() || kelurahan.getText().toString().isEmpty() || kota.getText().toString().isEmpty() || provinsi.getText().toString().isEmpty() || ucapan.getText().toString().isEmpty()){
+                Toast.makeText(getApplicationContext(), "isi semua kolom yang kosong", Toast.LENGTH_SHORT).show();
+            }else {
+                String Kota = kota.getText().toString();
+                String Provinsi = provinsi.getText().toString();
 
-            if (Kota.equals("")) {
-                kota.setError("Please input your City");
-            } else if (Provinsi.equals("")) {
-                provinsi.setError("Please input your Province");
-            } else {
-                getCoast(
-                        "23",
-                        kota.getTag().toString(),
-                        berat,
-                        "jne"
-                );
+                if (Kota.equals("")) {
+                    kota.setError("Please input your City");
+                } else if (Provinsi.equals("")) {
+                    provinsi.setError("Please input your Province");
+                } else {
+                    getCoast(
+                            "23",
+                            kota.getTag().toString(),
+                            berat,
+                            "jne"
+                    );
+                }
+
+                penerimaorder = nama.getText().toString();
+                alamatorder = jalan.getText().toString();
+                kelurahanorder = kelurahan.getText().toString();
+                kecamatanorder = kecamatan.getText().toString();
+                kotaorder = kota.getText().toString();
+                provinsiorder = provinsi.getText().toString();
+                ucapanorder = ucapan.getText().toString();
+                hpku = hp.getText().toString();
+
+                new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, ucapanorder).execute();
             }
-
-            //get value form inner class
-            penerimaorder = nama.getText().toString();
-            alamatorder = jalan.getText().toString();
-            kelurahanorder = kelurahan.getText().toString();
-            kecamatanorder = kecamatan.getText().toString();
-            kotaorder = kota.getText().toString();
-            provinsiorder = provinsi.getText().toString();
-            ucapanorder = ucapan.getText().toString();
-
-            new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, ucapanorder).execute();
-//            PembelianFragment myFragments  = new PembelianFragment();
-//            androidx.fragment.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//            fragmentTransaction.replace(R.id.frameCheckout, myFragment);
-//            fragmentTransaction.commit();
 
         });
 
@@ -512,6 +512,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         private String mail, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang,jumlah,berat, ucapan, jumlahbrng;
         private String subject;
         private Spanned message;
+        Dialog dialog;
 
         private Context context;
 //        private Session session;
@@ -541,7 +542,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Dialog dialog  = new Dialog(context);
+            dialog  = new Dialog(context);
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View layout = inflater.inflate(R.layout.loading, null);
             ImageView goku = layout.findViewById(R.id.custom_loading_imageView);
@@ -586,7 +587,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            progressDialog.dismiss();
+            dialog.dismiss();
             context.startActivity(new Intent(context, MainActivity.class));
             new CheckoutActivity().sendCart(context, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, jumlah, berat, ucapan);
             new CheckoutActivity().pushNotify(context);
