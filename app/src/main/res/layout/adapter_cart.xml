@@ -120,7 +120,7 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"/>
 
-                <com.cepheuen.elegantnumberbutton.view.ElegantNumberButton
+                <!--<com.cepheuen.elegantnumberbutton.view.ElegantNumberButton
                     android:id="@+id/quantity"
                     android:visibility="visible"
                     app:initialNumber="1"
@@ -131,7 +131,7 @@
                     app:textSize="8sp"
                     android:layout_marginTop="18dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content" />-->
 
             </LinearLayout>
 

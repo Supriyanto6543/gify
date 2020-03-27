@@ -1,6 +1,7 @@
 package app.gify.co.id.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -26,6 +27,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -111,9 +113,10 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
     private ListView mListView;
 
-    EditText nama, hp, jalan, kelurahan, kecamatan, kota, provinsi, ucapan;
+    EditText nama, hp, jalan, kelurahan, kecamatan,  ucapan;
     String currentUserID, Lnama, LNohp, Lalamat;
     ImageView gantiAlamat;
+    TextView kota, provinsi;
 
     private AlertDialog.Builder alert;
     private AlertDialog ad;
@@ -126,14 +129,15 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     FirebaseAuth mAuth;
     NotificationManager mNotificationManager;
 
-    String idtetaporder, ttlorder, penerimaorder, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, resiorder, statusorder, namabarangorder, ucapanorder, template, idharga;
+    String idtetaporder,hahaha, ttlorder,hpku, penerimaorder, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, resiorder, statusorder, namabarangorder, ucapanorder, template, idharga,qtyku;
     SharedPreferences preferences;
     NumberFormat format;
     Locale id;
     Random random;
-    int lastNumber;
+    int lastNumber, quantity;
     String berat;
     Spanned templateConvert;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -177,8 +181,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         prosescekout = findViewById(R.id.prorsesCheckout);
         back = findViewById(R.id.backCheckout);
 
-        berat = getIntent().getStringExtra("berat");
-
         back.setOnClickListener(v -> finish());
 
 //        gantiAlamat.setOnClickListener(v -> {
@@ -200,7 +202,9 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         idtetaporder = preferences.getString("uid", "");
         idharga = getIntent().getStringExtra("idharga");
         namabarangorder = getIntent().getStringExtra("name");
-        Log.d("cekstatus", idharga + namabarangorder + "");
+        qtyku = getIntent().getStringExtra("qtyku");
+        berat = getIntent().getStringExtra("berat");
+        Log.d("cekstatus", idharga + namabarangorder + " s " + qtyku);
 
         provinsi.setOnClickListener(v -> {
             popUpProvince(provinsi, kota);
@@ -218,6 +222,14 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 provinsi.setError("Please chooise your form province");
             }
         });
+
+        /*ongkir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CheckoutActivity.this, ActivityRajaOngkir.class);
+                startActivity(intent);
+            }
+        });*/
 
         prosescekout.setOnClickListener(view -> {
 
@@ -246,8 +258,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             provinsiorder = provinsi.getText().toString();
             ucapanorder = ucapan.getText().toString();
 
-            new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,
-                    idtetaporder, getDateTime(), penerimaorder, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder, ucapanorder).execute();
+            new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, ucapanorder).execute();
 //            PembelianFragment myFragments  = new PembelianFragment();
 //            androidx.fragment.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 //            fragmentTransaction.replace(R.id.frameCheckout, myFragment);
@@ -279,13 +290,10 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private void loadFragment(Fragment fragment) {
-// create a FragmentManager
         FragmentManager fm = getFragmentManager();
-// create a FragmentTransaction to begin the transaction and replace the Fragment
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-// replace the FrameLayout with new Fragment
         fragmentTransaction.replace(R.id.frame, fragment);
-        fragmentTransaction.commit(); // save the changes
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -411,17 +419,14 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         queue.add(objectRequest);
     }
 
-    public void sendCart(Context context, String idtetap, String date, String penerima, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang, String ucapan){
+    public void sendCart(Context context, String idtetap, String date, String penerima,String noHp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang,String jumlah, String berat, String ucapan){
         StringRequest request = new StringRequest(Request.Method.POST, UrlJson.ORDER, response -> {
             Log.d("bahrus", response + "");
             try {
 
                 if (response.equals("bisa")){
                     deleteallcart();
-                    PembelianFragment myFragment  = new PembelianFragment();
-                    androidx.fragment.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.frameCheckout, myFragment);
-                    fragmentTransaction.commit();
+                    context.startActivity(new Intent(context, MainActivity.class));
                     finish();
                 }
             }catch (Exception e){
@@ -436,16 +441,18 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 param.put("id_tetap", idtetap);
                 param.put("ttl", date);
                 param.put("penerima", penerima);
+                param.put("nohp", noHp);
                 param.put("alamat", alamat);
                 param.put("kelurahan", kelurahan);
                 param.put("kecamatan", kecamatan);
                 param.put("kota", kota);
                 param.put("provinsi", provinsi);
-                param.put("resi", "");
+                param.put("resi", "-");
                 param.put("status", String.valueOf(1));
                 param.put("nama_barang", namabarang);
+                param.put("jumlah", jumlah);
+                param.put("berat", berat);
                 param.put("ucapan", ucapan);
-
                 return param;
             }
         };
@@ -502,7 +509,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private static class SenderOrder extends AsyncTask<Void, Void, Void>{
-        private String mail, idtetap, date, penerima, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, ucapan;
+        private String mail, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang,jumlah,berat, ucapan, jumlahbrng;
         private String subject;
         private Spanned message;
 
@@ -511,7 +518,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
         private ProgressDialog progressDialog;
 
-        public SenderOrder(String mail, String subject, Spanned message, Context context, String idtetap, String date, String penerima, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang, String ucapan) {
+        public SenderOrder(String mail, String subject, Spanned message, Context context, String idtetap, String date, String penerima,String nohp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang,String jumlah,String berat, String ucapan) {
             this.mail = mail;
             this.subject = subject;
             this.message = message;
@@ -519,19 +526,30 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             this.idtetap = idtetap;
             this.date = date;
             this.penerima = penerima;
+            this.nohp = nohp;
             this.alamat = alamat;
             this.kelurahan = kelurahan;
             this.kecamatan = kecamatan;
             this.kota = kota;
             this.provinsi = provinsi;
             this.namabarang = namabarang;
+            this.jumlah = jumlah;
+            this.berat = berat;
             this.ucapan = ucapan;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = ProgressDialog.show(context, "Please wait. . .", "", false);
+            Dialog dialog  = new Dialog(context);
+            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View layout = inflater.inflate(R.layout.loading, null);
+            ImageView goku = layout.findViewById(R.id.custom_loading_imageView);
+            goku.animate().rotationBy(3600).setDuration(10000).setInterpolator(new LinearInterpolator()).start();
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.setCancelable(false);
+            dialog.setContentView(layout);
+            dialog.show();
         }
 
         @Override
@@ -570,12 +588,12 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         protected void onPostExecute(Void aVoid) {
             progressDialog.dismiss();
             context.startActivity(new Intent(context, MainActivity.class));
-            new CheckoutActivity().sendCart(context, idtetap, date, penerima, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, ucapan);
+            new CheckoutActivity().sendCart(context, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, jumlah, berat, ucapan);
             new CheckoutActivity().pushNotify(context);
         }
     }
 
-    public void popUpProvince(final EditText provinsi, final EditText kota ) {
+    public void popUpProvince(final TextView provinsi, final TextView kota ) {
 
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -621,7 +639,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
     }
 
-    public void popUpCity(final EditText kota, final EditText provinsi) {
+    public void popUpCity(final TextView kota, final TextView provinsi) {
 
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 

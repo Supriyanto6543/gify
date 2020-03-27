@@ -72,7 +72,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
     TextView totalbelanjar, totalberat;
     AdapterCart adapterCart;
     ArrayList<MadolCart> madolCarts;
-    String namacart, gambarcart, uidku;
+    String namacart, gambarcart, uidku, qtyku;
     GridLayoutManager glm;
     RecyclerView recyclerView;
     MainActivity mainActivity;
@@ -84,7 +84,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
     NumberFormat format;
     Locale id;
     Random random;
-    String template, idberat, idharga;
+    String template, idberat, idharga, berat;
     private Dialog dialog;
     LayoutInflater inflater;
     ImageView goku;
@@ -143,6 +143,8 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
             Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
             intent.putExtra("idharga", idharga);
             intent.putExtra("name", namacart);
+            intent.putExtra("qtyku", qtyku);
+            intent.putExtra("berat", berat);
             preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             editor = preferences.edit();
             editor.remove("range");
@@ -221,6 +223,8 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
             namacart = intent.getStringExtra("name");
             Log.d("hargalast", namacart + "");
             namacart = intent.getStringExtra("title");
+            qtyku = intent.getStringExtra("qty");
+            berat = intent.getStringExtra("berat");
             template = "<h2> Gify Transaction </h2> " +
                     "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
                     + "<p><b> Nama barang: </p></b>"
@@ -228,7 +232,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
                     + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
                     + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
                     + "<h2>Salam, Gify Team</h2>";
-            Log.d("hargalast", idharga + lastNumber);
+            Log.d("hargalast", idharga + lastNumber + " s " + qtyku  + " s " + beratku);
             templateConvert = Html.fromHtml(template);
         }
     };
@@ -245,7 +249,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
                         int harga = object.getInt("harga");
                         String namacart = object.getString("nama");
                         int berat = object.getInt("berat");
-                        MadolCart madolCart = new MadolCart(gambar, harga, namacart, idbarang, kuantitas, berat);
+                        MadolCart madolCart = new MadolCart(gambar, harga, namacart, idbarang, kuantitas, berat, 1);
                         madolCarts.add(madolCart);
                         adapterCart = new AdapterCart(madolCarts, CartActivity.this, totalbelanjar, totalberat);
                         recyclerView.setAdapter(adapterCart);

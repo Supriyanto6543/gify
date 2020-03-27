@@ -214,13 +214,14 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
-                                <EditText
+                                <TextView
                                     android:id="@+id/kota"
                                     android:hint="Kota"
                                     android:focusable="false"
                                     android:layout_gravity="center"
                                     android:textStyle="bold"
                                     android:textSize="15dp"
+                                    android:gravity="center_vertical"
                                     android:background="@drawable/kamdakmdwk"
                                     android:textColor="#aa7a00"
                                     android:textColorHint="#b5a981"
@@ -239,11 +240,12 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
-                                <EditText
+                                <TextView
                                     android:id="@+id/provinsi"
                                     android:hint="Provinsi"
                                     android:focusable="false"
                                     android:layout_gravity="center"
+                                    android:gravity="center_vertical"
                                     android:textStyle="bold"
                                     android:textColorHint="#b5a981"
                                     android:textSize="15dp"
@@ -303,6 +305,17 @@
                     android:layout_margin="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
+
+                <!--<Button
+                    android:id="@+id/ongkir"
+                    android:background="@drawable/tombol"
+                    android:text="CEK ONGKIR"
+                    android:textColor="#fff"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>-->
 
                 <View
                     android:layout_width="match_parent"

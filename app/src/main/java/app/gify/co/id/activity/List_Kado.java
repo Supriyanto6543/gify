@@ -196,6 +196,7 @@ public class List_Kado extends AppCompatActivity {
 
         if (adapterListKado == null){
             Toast.makeText(getApplicationContext(), "Kado tidak ditemukan", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
         }else{
             adapterListKado.filterList(filterKu);
         }
