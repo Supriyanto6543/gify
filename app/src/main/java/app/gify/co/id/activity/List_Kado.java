@@ -153,6 +153,7 @@ public class List_Kado extends AppCompatActivity {
                     Log.d("array", "onResponse: " + array.toString() + response.toString());
                     if (array.length() == 0){
                         Toast.makeText(List_Kado.this, "Belum ada barang", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
                         Intent intent = new Intent(List_Kado.this, MainActivity.class);
                     }
                     for (int a = 0; a < array.length(); a++){
