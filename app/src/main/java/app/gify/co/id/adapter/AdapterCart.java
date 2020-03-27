@@ -64,7 +64,6 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             quantitas = itemView.findViewById(R.id.quantitas);
             background = itemView.findViewById(R.id.background);
             foreground = itemView.findViewById(R.id.foreground);
-            quantity = itemView.findViewById(R.id.quantity);
         }
     }
 
