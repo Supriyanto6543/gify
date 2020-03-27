@@ -248,7 +248,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             ucapanorder = ucapan.getText().toString();
 
             new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,
-                    idtetaporder, getDateTime(), penerimaorder, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder, ucapanorder).execute();
+                    idtetaporder, getDateTime(), penerimaorder, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder, ucapanorder, qtyku).execute();
 //            PembelianFragment myFragments  = new PembelianFragment();
 //            androidx.fragment.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 //            fragmentTransaction.replace(R.id.frameCheckout, myFragment);
@@ -502,7 +502,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private static class SenderOrder extends AsyncTask<Void, Void, Void>{
-        private String mail, idtetap, date, penerima, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, ucapan;
+        private String mail, idtetap, date, penerima, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, ucapan, jumlahbrng;
         private String subject;
         private Spanned message;
 
@@ -511,7 +511,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
         private ProgressDialog progressDialog;
 
-        public SenderOrder(String mail, String subject, Spanned message, Context context, String idtetap, String date, String penerima, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang, String ucapan) {
+        public SenderOrder(String mail, String subject, Spanned message, Context context, String idtetap, String date, String penerima, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang, String ucapan, String jumlahbrng) {
             this.mail = mail;
             this.subject = subject;
             this.message = message;
@@ -526,6 +526,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             this.provinsi = provinsi;
             this.namabarang = namabarang;
             this.ucapan = ucapan;
+            this.jumlahbrng = jumlahbrng;
         }
 
         @Override
