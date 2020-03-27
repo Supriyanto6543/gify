@@ -235,36 +235,35 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
         prosescekout.setOnClickListener(view -> {
 
-            String Kota = kota.getText().toString();
-            String Provinsi = provinsi.getText().toString();
+            if (nama.getText().toString().isEmpty() || hp.getText().toString().isEmpty() || jalan.getText().toString().isEmpty() || kelurahan.getText().toString().isEmpty() || kota.getText().toString().isEmpty() || provinsi.getText().toString().isEmpty() || ucapan.getText().toString().isEmpty()){
+                Toast.makeText(getApplicationContext(), "isi semua kolom yang kosong", Toast.LENGTH_SHORT).show();
+            }else {
+                String Kota = kota.getText().toString();
+                String Provinsi = provinsi.getText().toString();
 
-            if (Kota.equals("")) {
-                kota.setError("Please input your City");
-            } else if (Provinsi.equals("")) {
-                provinsi.setError("Please input your Province");
-            } else {
-                getCoast(
-                        "23",
-                        kota.getTag().toString(),
-                        berat,
-                        "jne"
-                );
+                if (Kota.equals("")) {
+                    kota.setError("Please input your City");
+                } else if (Provinsi.equals("")) {
+                    provinsi.setError("Please input your Province");
+                } else {
+                    getCoast(
+                            "23",
+                            kota.getTag().toString(),
+                            berat,
+                            "jne"
+                    );
+                }
+
+                penerimaorder = nama.getText().toString();
+                alamatorder = jalan.getText().toString();
+                kelurahanorder = kelurahan.getText().toString();
+                kecamatanorder = kecamatan.getText().toString();
+                kotaorder = kota.getText().toString();
+                provinsiorder = provinsi.getText().toString();
+                ucapanorder = ucapan.getText().toString();
+
+                new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, ucapanorder).execute();
             }
-
-            //get value form inner class
-            penerimaorder = nama.getText().toString();
-            alamatorder = jalan.getText().toString();
-            kelurahanorder = kelurahan.getText().toString();
-            kecamatanorder = kecamatan.getText().toString();
-            kotaorder = kota.getText().toString();
-            provinsiorder = provinsi.getText().toString();
-            ucapanorder = ucapan.getText().toString();
-
-            new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, ucapanorder).execute();
-//            PembelianFragment myFragments  = new PembelianFragment();
-//            androidx.fragment.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//            fragmentTransaction.replace(R.id.frameCheckout, myFragment);
-//            fragmentTransaction.commit();
 
         });
 
