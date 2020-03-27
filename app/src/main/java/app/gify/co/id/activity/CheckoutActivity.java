@@ -137,7 +137,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     int lastNumber, quantity;
     String berat;
     Spanned templateConvert;
-    private Dialog dialog;
+    Dialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -512,6 +512,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         private String mail, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang,jumlah,berat, ucapan, jumlahbrng;
         private String subject;
         private Spanned message;
+        Dialog dialog;
 
         private Context context;
 //        private Session session;
@@ -541,7 +542,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Dialog dialog  = new Dialog(context);
+            dialog  = new Dialog(context);
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View layout = inflater.inflate(R.layout.loading, null);
             ImageView goku = layout.findViewById(R.id.custom_loading_imageView);
@@ -586,7 +587,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            progressDialog.dismiss();
+            dialog.dismiss();
             context.startActivity(new Intent(context, MainActivity.class));
             new CheckoutActivity().sendCart(context, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, jumlah, berat, ucapan);
             new CheckoutActivity().pushNotify(context);
