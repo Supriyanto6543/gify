@@ -419,7 +419,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         queue.add(objectRequest);
     }
 
-    public void sendCart(String idtetap, String date, String penerima,String noHp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang,String jumlah, String berat, String ucapan){
+    public void sendCart(Context context, String idtetap, String date, String penerima,String noHp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang,String jumlah, String berat, String ucapan){
         StringRequest request = new StringRequest(Request.Method.POST, UrlJson.ORDER, response -> {
             Log.d("bahrus", response + "");
             try {
@@ -509,7 +509,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private static class SenderOrder extends AsyncTask<Void, Void, Void>{
-        private String mail, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang,jumlah,berat, ucapan;
+        private String mail, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang,jumlah,berat, ucapan, jumlahbrng;
         private String subject;
         private Spanned message;
         Dialog dialog;
@@ -589,7 +589,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         protected void onPostExecute(Void aVoid) {
             dialog.dismiss();
             context.startActivity(new Intent(context, MainActivity.class));
-            new CheckoutActivity().sendCart(idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, jumlah, berat, ucapan);
+            new CheckoutActivity().sendCart(context, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, jumlah, berat, ucapan);
             new CheckoutActivity().pushNotify(context);
         }
     }
