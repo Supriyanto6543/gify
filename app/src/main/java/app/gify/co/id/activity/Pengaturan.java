@@ -21,6 +21,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +36,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +65,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.util.FileUtils;
 import com.google.firebase.database.ValueEventListener;
@@ -76,15 +81,42 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import app.gify.co.id.R;
 import app.gify.co.id.baseurl.UrlJson;
+import app.gify.co.id.rajaongkir.adapterongkir.AdapterCheckCity;
+import app.gify.co.id.rajaongkir.adapterongkir.AdapterProvinsi;
+import app.gify.co.id.rajaongkir.apiongkir.ApiRaja;
+import app.gify.co.id.rajaongkir.apiongkir.BaseApi;
+import app.gify.co.id.rajaongkir.modelongkir.kota.ItemCity;
+import app.gify.co.id.rajaongkir.modelongkir.kota.Result;
+import app.gify.co.id.rajaongkir.modelongkir.provinsi.Province;
+import app.gify.co.id.rajaongkir.modelongkir.provinsi.ResultOngkir;
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
+    private AdapterProvinsi adapter_province;
+    private List<ResultOngkir> ListProvince = new ArrayList<ResultOngkir>();
+
+    private AdapterCheckCity adapter_city;
+    private List<Result> ListCity = new ArrayList<Result>();
+
+    private ProgressDialog progressDialog;
+    private Context context;
+    private EditText searchList;
+
+    private ListView mListView;
+
+    private AlertDialog.Builder alert;
+    private AlertDialog ad;
 
     EditText NamaDepan, NamaBelakang, NoHp, Email, GantiAlamat, editTextKecamatan, editTextKelurahan;
     LinearLayout changePicture, changeCover;
@@ -97,7 +129,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     int province_idku;
     TextView gantiAlamat;
     ProgressDialog loadingBar;
-    HintArrayAdapter hintAdapter, hintadapterku;
 
     private static final int GALLERY_PHOTO = 1;
     private static final int GALLERY_COVER = 2;
@@ -110,7 +141,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     View viewTerserah, viewKecamatan, viewKelurahan;
 
-    Spinner KotaS, ProvinsiS;
+    EditText KotaS, ProvinsiS;
 
     FirebaseAuth mAuth;
     DatabaseReference RootRef;
@@ -168,21 +199,26 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         namaUser = sharedPreferences.getString("nama", "");
         Log.d("nama", namaUser);
 
-
-
-
-        hintAdapter = new HintArrayAdapter<String>(getApplicationContext(), 0);
-        hintadapterku = new HintArrayAdapter<String>(getApplicationContext(), 0);
-        hintAdapter.add("hint");
-        hintadapterku.add("hint");
-
         mAuth = FirebaseAuth.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
         currentUserID = Objects.requireNonNull(mAuth.getCurrentUser().getUid());
 
+        ProvinsiS.setOnClickListener(v -> {
+            popUpProvince(ProvinsiS, KotaS);
+        });
 
-        cobaOngkir1();
-        cobaOngkir2();
+        KotaS.setOnClickListener(v -> {
+            try {
+                if (ProvinsiS.getTag().equals("")) {
+                    ProvinsiS.setError("Please choose Your Province");
+                } else {
+                    popUpCity(KotaS, ProvinsiS);
+                }
+            } catch (NullPointerException e) {
+                ProvinsiS.setError("Please choose Your Province");
+            }
+        });
+
         cekprofile();
 
         RootRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
@@ -248,8 +284,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             kelurahan = editTextKelurahan.getText().toString().trim();
             kecamatan = editTextKecamatan.getText().toString().trim();
             gAlamat = GantiAlamat.getText().toString().trim();
-            kota = KotaS.getSelectedItem().toString();
-            provinsi = ProvinsiS.getSelectedItem().toString();
+            kota = KotaS.getText().toString();
+            provinsi = ProvinsiS.getText().toString();
             if (Lalamat == null) {
                 alamat = gAlamat + "," + " " + kelurahan + "," + " " + kecamatan + "," + " " + kota + "," + " " + provinsi;
             }
@@ -339,9 +375,9 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         coverImage = findViewById(R.id.photo);
         changeCover = findViewById(R.id.changeCoverPengaturan);
         queue = Volley.newRequestQueue(getApplication());
+        KotaS = findViewById(R.id.kotaPengaturan);
+        ProvinsiS = findViewById(R.id.provinsiPengaturan);
     }
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -388,7 +424,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 });
     }
 
-
     public void cekprofile(){
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA + "?id_tetap=" + LID, null, new Response.Listener<JSONObject>() {
             @Override
@@ -415,7 +450,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         requestQueue.add(request);
     }
 
-
     public String getStringImage(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.JPEG, 50, baos);
@@ -423,8 +457,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
     }
-
-
 
     private void AkuGantengBanget(){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE +"?id_tetap=" + LID, new Response.Listener<String>() {
@@ -475,76 +507,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         queue.add(stringRequest);
     }
 
-
-
-
-    private void cobaOngkir2() {
-        JsonObjectRequest objectRequest = new JsonObjectRequest(UrlJson.PROVINCE, null, response -> {
-            try {
-                JSONObject jsonObject = response.getJSONObject("rajaongkir");
-                JSONArray array = jsonObject.getJSONArray("results");
-                for (int i = 0; i < array.length(); i++) {
-
-                    JSONObject object = array.getJSONObject(i);
-                    province_id = object.getString("province_id");
-                    province = object.getString("province");
-
-                    hintadapterku.add(province);
-
-                    ProvinsiS.setAdapter(hintadapterku);
-
-                    ProvinsiS.setSelection(0,  false);
-
-                    ProvinsiS.setOnItemSelectedListener(Pengaturan.this);
-
-                    cobaAgar = province + province_id;
-                }
-            } catch (JSONException e) {
-                Log.d("err10", "Response: ");
-                e.printStackTrace();
-            }
-        }, error -> Log.d("err2", "Error: " + error.getMessage()));
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        queue.add(objectRequest);
-    }
-
-
-
-    private void cobaOngkir1() {
-        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, UrlJson.CITY, null, response -> {
-            try {
-                JSONObject jsonObject = response.getJSONObject("rajaongkir");
-                JSONArray array = jsonObject.getJSONArray("results");
-
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject object = array.getJSONObject(i);
-                    int city_id = object.getInt("city_id");
-                    province_idku = object.getInt("province_id");
-                    String province = object.getString("province");
-                    String type = object.getString("type");
-                    String city_name = object.getString("city_name");
-                    int postal_code = object.getInt("postal_code");
-
-                    hintAdapter.add(city_name);
-
-                    KotaS.setAdapter(hintAdapter);
-
-                    KotaS.setSelection(0, false);
-
-                    KotaS.setOnItemSelectedListener(Pengaturan.this);
-
-
-                }
-
-            } catch (JSONException e) {
-                Log.d("On   ger", "OnResponse: ");
-                e.printStackTrace();
-            }
-        }, error -> Log.d("error7", "Error: " + error.getMessage()));
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        queue.add(objectRequest);
-    }
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
     }
@@ -554,53 +516,230 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     }
 
-    class HintArrayAdapter<T> extends ArrayAdapter<T> {
+    public void popUpProvince(final TextView provinsi, final TextView kota ) {
 
-        Context mContext;
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        public HintArrayAdapter(Context context, int resource) {
-            super(context, resource);
-            this.mContext = context;
-        }
+        View alertLayout = inflater.inflate(R.layout.rajaongkir_popup_search, null);
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        alert = new AlertDialog.Builder(this);
+        alert.setTitle("List ListProvince");
+        alert.setMessage("select your province");
+        alert.setView(alertLayout);
+        alert.setCancelable(true);
 
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.spinnner, parent, false);
-            TextView texview = view.findViewById(android.R.id.text1);
+        ad = alert.show();
 
-            if(position == 0) {
-                texview.setText("-- pilih --");
-                texview.setTextColor(Color.parseColor("#b4b3b3"));
-                texview.setHint(getItem(position).toString()); //"Hint to be displayed"
-            } else {
-                texview.setText(getItem(position).toString());
-            }
+        searchList = (EditText) alertLayout.findViewById(R.id.searchItem);
+        searchList.addTextChangedListener(new Pengaturan.MyTextWatcherProvince(searchList));
+        searchList.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
 
-            return view;
-        }
+        mListView = (ListView) alertLayout.findViewById(R.id.listItem);
 
-        @Override
-        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        ListProvince.clear();
+        adapter_province = new AdapterProvinsi(this, ListProvince);
+        mListView.setClickable(true);
 
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            View view;
+        mListView.setOnItemClickListener((adapterView, view, i, l) -> {
+            Object o = mListView.getItemAtPosition(i);
+            ResultOngkir cn = (ResultOngkir) o;
 
-            if(position == 0){
-                view = inflater.inflate(R.layout.spinner_hint_list_item_layout, parent, false); // Hide first row
-            } else {
-                view = inflater.inflate(R.layout.spinner_text, parent, false);
-                TextView texview = (TextView) view.findViewById(R.id.goku);
-                texview.setText(getItem(position).toString());
-            }
+            provinsi.setError(null);
+            provinsi.setText(cn.getProvince());
+            provinsi.setTag(cn.getProvinceId());
 
-            return view;
-        }
+            kota.setText("");
+            kota.setTag("");
+
+            ad.dismiss();
+        });
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please wait..");
+        progressDialog.show();
+
+        getProvince();
 
     }
 
+    public void popUpCity(final TextView kota, final TextView provinsi) {
 
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        View alertLayout = inflater.inflate(R.layout.rajaongkir_popup_search, null);
 
+        alert = new AlertDialog.Builder(this);
+        alert.setTitle("List City");
+        alert.setMessage("select your city");
+        alert.setView(alertLayout);
+        alert.setCancelable(true);
+
+        ad = alert.show();
+
+        searchList = (EditText) alertLayout.findViewById(R.id.searchItem);
+        searchList.addTextChangedListener(new Pengaturan.MyTextWatcherCity(searchList));
+        searchList.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
+
+        mListView = (ListView) alertLayout.findViewById(R.id.listItem);
+
+        ListCity.clear();
+        adapter_city = new AdapterCheckCity(this, ListCity);
+        mListView.setClickable(true);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Object o = mListView.getItemAtPosition(i);
+                Result cn = (Result) o;
+
+                kota.setError(null);
+                kota.setText(cn.getCityName());
+                kota.setTag(cn.getCityId());
+
+                ad.dismiss();
+            }
+        });
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please wait..");
+        progressDialog.show();
+
+        getCity(provinsi.getTag().toString());
+
+    }
+
+    private class MyTextWatcherProvince implements TextWatcher {
+
+        private View view;
+
+        private MyTextWatcherProvince(View view) {
+            this.view = view;
+        }
+
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void onTextChanged(CharSequence s, int i, int before, int i2) {
+        }
+
+        public void afterTextChanged(Editable editable) {
+            switch (view.getId()) {
+                case R.id.searchItem:
+                    adapter_province.filter(editable.toString());
+                    break;
+            }
+        }
+    }
+
+    private class MyTextWatcherCity implements TextWatcher {
+
+        private View view;
+
+        private MyTextWatcherCity(View view) {
+            this.view = view;
+        }
+
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void onTextChanged(CharSequence s, int i, int before, int i2) {
+        }
+
+        public void afterTextChanged(Editable editable) {
+            switch (view.getId()) {
+                case R.id.searchItem:
+                    adapter_city.filter(editable.toString());
+                    break;
+            }
+        }
+    }
+
+    public void getProvince() {
+        ApiRaja api = BaseApi.callJson();
+        Call<Province> provinceCall = api.getProvince();
+        provinceCall.enqueue(new Callback<Province>() {
+            @Override
+            public void onResponse(Call<Province> call, retrofit2.Response<Province> response) {
+
+                progressDialog.dismiss();
+                Log.v("wow", "json : " + new Gson().toJson(response));
+
+                if (response.isSuccessful()) {
+
+                    int count_data = response.body().getSourceOngkir().getResults().size();
+                    for (int a = 0; a <= count_data - 1; a++) {
+                        ResultOngkir itemProvince = new ResultOngkir(
+                                response.body().getSourceOngkir().getResults().get(a).getProvinceId(),
+                                response.body().getSourceOngkir().getResults().get(a).getProvince()
+                        );
+
+                        ListProvince.add(itemProvince);
+                        mListView.setAdapter(adapter_province);
+                    }
+
+                    adapter_province.setList(ListProvince);
+                    adapter_province.filter("");
+
+                } else {
+                    String error = "Error Retrive Data from Server !!!";
+                    Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Province> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), "Message : Error " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    public void getCity(String id_province) {
+
+        ApiRaja apiRaja = BaseApi.callJson();
+        Call<ItemCity> itemCityCall = apiRaja.getCity(id_province);
+        itemCityCall.enqueue(new Callback<ItemCity>() {
+            @Override
+            public void onResponse(Call<ItemCity> call, retrofit2.Response<ItemCity> response) {
+
+                progressDialog.dismiss();
+                Log.v("wow", "json : " + new Gson().toJson(response));
+
+                if (response.isSuccessful()) {
+
+                    int count_data = response.body().getRajaongkir().getResults().size();
+                    for (int a = 0; a <= count_data - 1; a++) {
+                        Result itemProvince = new Result(
+                                response.body().getRajaongkir().getResults().get(a).getCityId(),
+                                response.body().getRajaongkir().getResults().get(a).getProvinceId(),
+                                response.body().getRajaongkir().getResults().get(a).getProvince(),
+                                response.body().getRajaongkir().getResults().get(a).getType(),
+                                response.body().getRajaongkir().getResults().get(a).getCityName(),
+                                response.body().getRajaongkir().getResults().get(a).getPostalCode()
+                        );
+
+                        ListCity.add(itemProvince);
+                        mListView.setAdapter(adapter_city);
+                    }
+
+                    adapter_city.setList(ListCity);
+                    adapter_city.filter("");
+
+                } else {
+                    String error = "Error Retrive Data from Server !!!";
+                    Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ItemCity> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), "Message : Error " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
 }

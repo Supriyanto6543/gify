@@ -533,7 +533,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
 
-                    <Spinner
+                    <EditText
+                        android:focusable="false"
                         android:id="@+id/kotaPengaturan"
                         android:text="-- pilih --"
                         android:gravity="center"
@@ -574,7 +575,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
 
-                    <Spinner
+                    <EditText
+                        android:focusable="false"
                         android:id="@+id/provinsiPengaturan"
                         android:text="-- pilih --"
                         android:layout_gravity="center"
