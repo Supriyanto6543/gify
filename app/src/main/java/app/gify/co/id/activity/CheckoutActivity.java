@@ -260,7 +260,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             provinsiorder = provinsi.getText().toString();
             ucapanorder = ucapan.getText().toString();
 
-            new SenderOrder("gify.firebase@gmail.com",idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, ucapanorder, "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this).execute();
+            new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, ucapanorder).execute();
 //            PembelianFragment myFragments  = new PembelianFragment();
 //            androidx.fragment.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 //            fragmentTransaction.replace(R.id.frameCheckout, myFragment);
@@ -449,7 +449,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 param.put("kecamatan", kecamatan);
                 param.put("kota", kota);
                 param.put("provinsi", provinsi);
-                param.put("resi", "");
+                param.put("resi", "-");
                 param.put("status", String.valueOf(1));
                 param.put("nama_barang", namabarang);
                 param.put("jumlah", jumlah);
@@ -520,7 +520,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
         private ProgressDialog progressDialog;
 
-        public SenderOrder(String mail, String subject, Spanned message, Context context, String idtetap, String date, String penerima,String nohp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang,String jumlah,String berat, String ucapan, String jumlahbrng) {
+        public SenderOrder(String mail, String subject, Spanned message, Context context, String idtetap, String date, String penerima,String nohp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang,String jumlah,String berat, String ucapan) {
             this.mail = mail;
             this.subject = subject;
             this.message = message;
@@ -538,14 +538,13 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             this.jumlah = jumlah;
             this.berat = berat;
             this.ucapan = ucapan;
-            this.jumlahbrng = jumlahbrng;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog  = new Dialog(getApplicationContext());
-            LayoutInflater inflater = (LayoutInflater)getApplication().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            Dialog dialog  = new Dialog(context);
+            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View layout = inflater.inflate(R.layout.loading, null);
             ImageView goku = layout.findViewById(R.id.custom_loading_imageView);
             goku.animate().rotationBy(3600).setDuration(10000).setInterpolator(new LinearInterpolator()).start();
