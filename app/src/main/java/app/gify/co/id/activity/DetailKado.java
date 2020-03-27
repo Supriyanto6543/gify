@@ -76,6 +76,7 @@ public class DetailKado extends AppCompatActivity {
     SharedPreferences.Editor editor;
     //CarouselView carouselView;
     String idbarangku, uid, id, photobyid, kodeBarangbyid, namabyid, deskripsibyid, berat, getJumlah;
+    int posisibarang;
     int id_barang, hargabyid, cingpai = 1, gambar, gambar1, gambar2, hargaAwal;
     int sourceImg[];
     Boolean faforit;
@@ -92,6 +93,8 @@ public class DetailKado extends AppCompatActivity {
                 startActivity(new Intent(DetailKado.this, CartActivity.class));
             }
         });
+
+        posisibarang = getIntent().getIntExtra("posisibarang", -1);
 
         back = findViewById(R.id.backDetailKado);
         back.setOnClickListener(new View.OnClickListener() {
@@ -198,7 +201,7 @@ public class DetailKado extends AppCompatActivity {
             if (cingpai==9){
 
             }else {
-                cingpai = cingpai + 1;
+                cingpai += 1;
             }
             jumlah.setText(String.valueOf(cingpai));
             getJumlah = jumlah.getText().toString();
@@ -241,6 +244,7 @@ public class DetailKado extends AppCompatActivity {
                 if (response.equalsIgnoreCase("bisa")){
                     Intent intent = new Intent(DetailKado.this, CartActivity.class);
                     intent.putExtra("harga", hargaAwal);
+                    intent.putExtra("quantitys", cingpai);
                     Log.d("hargaAwalInt", hargaAwal + "");
                     startActivity(intent);
                     finish();

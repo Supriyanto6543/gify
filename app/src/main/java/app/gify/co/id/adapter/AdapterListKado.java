@@ -94,6 +94,7 @@ public class AdapterListKado extends RecyclerView.Adapter<RecyclerView.ViewHolde
             intent.putExtra("harga", kados.get(position).getHarga());
             intent.putExtra("idbarang", kados.get(position).getId_barang());
             intent.putExtra("id", kados.get(position).getId_barang());
+            intent.putExtra("posisibarang", position);
             intent.putExtra("nama", kados.get(position).getNama() + "(" + kados.get(position).getKode() + ")");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);

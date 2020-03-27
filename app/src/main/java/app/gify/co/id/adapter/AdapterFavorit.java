@@ -87,6 +87,7 @@ public class AdapterFavorit extends RecyclerView.Adapter<RecyclerView.ViewHolder
             intent.putExtra("gambar", kados.get(position).getGambar());
             intent.putExtra("desc", kados.get(position).getDesc());
             intent.putExtra("harga", kados.get(position).getHarga());
+            intent.putExtra("id", kados.get(position).getId_barang());
             if (((MyFav)holder).favorit.getVisibility()==View.VISIBLE){
                 intent.putExtra("favorit", true);
             }

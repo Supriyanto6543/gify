@@ -154,6 +154,7 @@ public class List_Kado extends AppCompatActivity {
                     if (array.length() == 0){
                         Toast.makeText(List_Kado.this, "Belum ada barang", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(List_Kado.this, MainActivity.class);
+                        startActivity(intent);
                     }
                     for (int a = 0; a < array.length(); a++){
                         JSONObject object = array.getJSONObject(a);

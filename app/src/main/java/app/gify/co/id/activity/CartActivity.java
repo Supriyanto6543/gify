@@ -223,7 +223,6 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         public void onReceive(Context context, Intent intent) {
             namacart = intent.getStringExtra("name");
             Log.d("hargalast", namacart + "");
-            namacart = intent.getStringExtra("title");
             qtyku = intent.getStringExtra("qty");
             berat = intent.getStringExtra("berat");
             template = "<h2> Gify Transaction </h2> " +

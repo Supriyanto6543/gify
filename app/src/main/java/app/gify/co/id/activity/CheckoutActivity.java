@@ -429,10 +429,10 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             try {
                 Log.d("bahruss", response + "");
                 if (response.equals("bisa")){
+                    Log.d("jumajumlah", "sendCart: " + jumlah);
                     deleteallcart();
                     context.startActivity(new Intent(context, MainActivity.class));
                     finish();
-                    Log.d("cekoutparams", "sendCart: " + berat + " s " + jumlah);
                 }
             }catch (Exception e){
                 e.printStackTrace();
@@ -474,10 +474,13 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
     private void deleteallcart(){
         StringRequest stringRequest = new StringRequest(Request.Method.GET, DELETEALLCART+"?idtetap="+currentUserID, response -> {
+            if (response.equals("bisa")){
+                Toast.makeText(context, "cart kosong", Toast.LENGTH_SHORT).show();
+            }
         }, error ->  {
 
         });
-        RequestQueue queue = Volley.newRequestQueue(CheckoutActivity.this);
+        RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(stringRequest);
     }
 
