@@ -205,9 +205,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         idtetaporder = preferences.getString("uid", "");
         idharga = getIntent().getStringExtra("idharga");
         namabarangorder = getIntent().getStringExtra("name");
-        hahaha = getIntent().getStringExtra("watashi");
-        Log.d("hahaha", hahaha + " ");
-        Log.d("cekstatus", idharga + namabarangorder + "" + hahaha);
+        qtyku = getIntent().getStringExtra("qtyku");
+        Log.d("cekstatus", idharga + namabarangorder + " s " + qtyku);
 
         provinsi.setOnClickListener(v -> {
             popUpProvince(provinsi, kota);
@@ -260,8 +259,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             kotaorder = kota.getText().toString();
             provinsiorder = provinsi.getText().toString();
             ucapanorder = ucapan.getText().toString();
-            hpku = hp.getText().toString();
-            /*hahaha = String.valueOf(quantity);*/
 
             new SenderOrder("gify.firebase@gmail.com",idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,hahaha, berat, ucapanorder, "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this).execute();
 //            PembelianFragment myFragments  = new PembelianFragment();
@@ -458,7 +455,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 param.put("jumlah", jumlah);
                 param.put("berat", berat);
                 param.put("ucapan", ucapan);
-
                 return param;
             }
         };
@@ -645,7 +641,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
     }
 
-    public void popUpCity(final TextView kota, final TextView provinsi) {
+    public void popUpCity(final EditText kota, final EditText provinsi) {
 
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 

@@ -35,7 +35,7 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     View view;
     View viewku;
     Context context;
-    int kuantitas, totalKuantitas;
+    int kuantitas;
     String totalname;
     int totalBerat, totalharga;
     TextView totalhargas, totalberats;
@@ -64,6 +64,7 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             quantitas = itemView.findViewById(R.id.quantitas);
             background = itemView.findViewById(R.id.background);
             foreground = itemView.findViewById(R.id.foreground);
+            quantity = itemView.findViewById(R.id.quantity);
         }
     }
 
@@ -94,14 +95,10 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         ((MyCart)holder).harga.setText(format.format(Double.valueOf(hargaku)));
         ((MyCart)holder).nama.setText(carts.get(position).getNamacart());
-        Intent intents = new Intent("message_subject_intent");
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
         Glide.with(view).load(carts.get(position).getGambar()).into(((MyCart)holder).gambar);
         Intent intent = new Intent("message_subject_intent");
 //        intent.putExtra("name", String.valueOf((totalCart(carts))));
-        intents.putExtra("kuantitasku", String.valueOf(getKuantitas(carts, carts.get(position).getNamacart())));
         intent.putExtra("title", String.valueOf((getName(carts))));
-
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
 
@@ -112,6 +109,7 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 if (count<9){
                     count+=1;
                     ((MyCart)holder).quantitas.setText(String.valueOf(count));
+                    carts.get(position).setQuantity(count);
                     int harga = carts.get(position).getHarga()*count;
                     ((MyCart)holder).harga.setText(String.valueOf(format.format(Double.valueOf(harga))));
                     String nama = carts.get(position).getNamacart();
@@ -120,11 +118,10 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 }
 
 //                ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
-                int total = hargaku * kuantitas;
-                Intent intents = new Intent("message_subject_intent");
-                intents.putExtra("name", String.valueOf((getName(carts))));
-                intents.putExtra("kuantitasku", String.valueOf(getKuantitas(carts, carts.get(position).getNamacart())));
-                LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
+                    Intent intents = new Intent("message_subject_intent");
+                    intents.putExtra("name", String.valueOf((getName(carts))));
+                    intents.putExtra("qty", String.valueOf((getSeperatedquantity(carts))));
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
             }
         });
         ((MyCart) holder).kurang.setOnClickListener(new View.OnClickListener() {
@@ -134,6 +131,7 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 if (count>1){
                     count-=1;
                     ((MyCart)holder).quantitas.setText(String.valueOf(count));
+                    carts.get(position).setQuantity(count);
                     int harga = carts.get(position).getHarga()*count;
                     ((MyCart)holder).harga.setText(String.valueOf(format.format(Double.valueOf(harga))));
                     String nama = carts.get(position).getNamacart();
@@ -143,11 +141,10 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
 //                ((MyCart)holder).quantitas.setText(String.valueOf(kuantitas));
-                int total = hargaku * kuantitas;
-                Intent intents = new Intent("message_subject_intent");
-                intents.putExtra("name", String.valueOf((getName(carts))));
-                intents.putExtra("kuantitasku", String.valueOf(getKuantitas(carts, carts.get(position).getNamacart())));
-                LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
+                    Intent intents = new Intent("message_subject_intent");
+                    intents.putExtra("name", String.valueOf((getName(carts))));
+                    intents.putExtra("qty", String.valueOf((getSeperatedquantity(carts))));
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
 
 
             }
@@ -157,23 +154,6 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemCount() {
         return carts.size();
-    }
-
-    public int getKuantitas(ArrayList<MadolCart> items, String name){
-        /*for (int a = 0; a < items.size(); a++){
-            totalKuantitas = items.get(a).getQuantity();
-        }
-
-        return totalKuantitas;*/
-
-        for(int i = 0 ; i < items.size(); i++) {
-            totalname = items.get(i).getNamacart();
-            if (totalname.equals(name)){
-                totalKuantitas += items.get(i).getQuantity();
-            }
-        }
-        return totalKuantitas;
-
     }
 
     public int totalCart(ArrayList<MadolCart> items, String name){
@@ -186,8 +166,6 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
         return totalharga;
     }
-
-
     public int kurangtotalcart(ArrayList<MadolCart> items, String name){
 
         for(int i = 0 ; i < items.size(); i++) {
@@ -227,6 +205,16 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         return ku;
+    }
+
+    public String getSeperatedquantity(List<MadolCart> quantity){
+
+        String kus = "";
+        for (int i = 0; i < quantity.size(); i++){
+            kus += quantity.get(i).getQuantity() + ", ";
+        }
+
+        return kus;
     }
 
     public void removeItem(int item){
