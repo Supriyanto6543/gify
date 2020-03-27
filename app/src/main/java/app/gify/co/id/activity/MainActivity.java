@@ -210,8 +210,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         }
                         Log.d("goky", goku + " ");
 
-                        dialog.dismiss();
-
 
                     }
                 }catch (Exception e){

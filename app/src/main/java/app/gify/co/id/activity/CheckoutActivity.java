@@ -95,10 +95,11 @@ import retrofit2.Callback;
 //import app.gify.co.id.thirdparty.SenderAgent;
 
 import static app.gify.co.id.baseurl.UrlJson.DELETEALLCART;
+import static app.gify.co.id.baseurl.UrlJson.ORDER;
 
 public class CheckoutActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    Button prosescekout, ongkir;
+    Button prosescekout;
     ImageView back;
 
     private AdapterProvinsi adapter_province;
@@ -138,6 +139,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     String berat;
     Spanned templateConvert;
     Dialog dialog;
+    String ongkir;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -157,6 +159,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         kota = findViewById(R.id.kota);
         provinsi = findViewById(R.id.provinsi);
         ucapan = findViewById(R.id.ucapan);
+        berat = getIntent().getStringExtra("berat");
 
 //        textViewCheckOutAlamat = findViewById(R.id.textviewAlamatCheckout);
 //        NamaPenerima = findViewById(R.id.namaPenerimaCheckout);
@@ -202,6 +205,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         idtetaporder = preferences.getString("uid", "");
         idharga = getIntent().getStringExtra("idharga");
         namabarangorder = getIntent().getStringExtra("name");
+        Log.d("kotainantes", "onCreate: " + namabarangorder);
         qtyku = getIntent().getStringExtra("qtyku");
         berat = getIntent().getStringExtra("berat");
         Log.d("cekstatus", idharga + namabarangorder + " s " + qtyku);
@@ -420,20 +424,22 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     }
 
     public void sendCart(Context context, String idtetap, String date, String penerima,String noHp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang,String jumlah, String berat, String ucapan){
-        StringRequest request = new StringRequest(Request.Method.POST, UrlJson.ORDER, response -> {
+        StringRequest request = new StringRequest(Request.Method.POST, ORDER, response -> {
             Log.d("bahrus", response + "");
             try {
-
+                Log.d("bahruss", response + "");
                 if (response.equals("bisa")){
                     deleteallcart();
                     context.startActivity(new Intent(context, MainActivity.class));
                     finish();
+                    Log.d("cekoutparams", "sendCart: " + berat + " s " + jumlah);
                 }
             }catch (Exception e){
                 e.printStackTrace();
+                Log.d("erorca", "sendCart: " + e.getMessage());
             }
         }, error -> {
-
+            Log.d("erorca", "sendCart: " + error.getMessage());
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -588,6 +594,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         @Override
         protected void onPostExecute(Void aVoid) {
             dialog.dismiss();
+            Log.d("dismisskupost", "onPostExecute: " + berat + " s " + jumlah);
             context.startActivity(new Intent(context, MainActivity.class));
             new CheckoutActivity().sendCart(context, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, jumlah, berat, ucapan);
             new CheckoutActivity().pushNotify(context);
@@ -875,8 +882,11 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
                         tv_time.setText(response.body().getRajaongkir().getResults().get(0).getCosts().get(0).getCost().get(0).getEtd()+" (Days)");
 
+                        String cost = response.body().getRajaongkir().getResults().get(0).getCosts().get(1).getCost().get(0).getValue().toString();
+                        ongkir = cost;
                         provinsi.setText("");
                         kota.setText("");
+                        Toast.makeText(getApplicationContext(), "Cost: " + "Rp." + cost, Toast.LENGTH_SHORT).show();
 
                         ((Button) alertLayout.findViewById(R.id.add_destination)).setOnClickListener(new View.OnClickListener() {
                             @Override
