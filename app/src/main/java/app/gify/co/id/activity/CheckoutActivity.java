@@ -71,14 +71,23 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
-//import javax.mail.Authenticator;
-//import javax.mail.Message;
-//import javax.mail.MessagingException;
-//import javax.mail.PasswordAuthentication;
-//import javax.mail.Session;
-//import javax.mail.Transport;
-//import javax.mail.internet.InternetAddress;
-//import javax.mail.internet.MimeMessage;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import app.gify.co.id.Fragment.pembelian.PembelianFragment;
 import app.gify.co.id.R;
 import app.gify.co.id.baseurl.UrlJson;
@@ -93,7 +102,7 @@ import app.gify.co.id.rajaongkir.modelongkir.provinsi.Province;
 import app.gify.co.id.rajaongkir.modelongkir.provinsi.ResultOngkir;
 import retrofit2.Call;
 import retrofit2.Callback;
-//import app.gify.co.id.thirdparty.SenderAgent;
+import app.gify.co.id.thirdparty.SenderAgent;
 
 import static app.gify.co.id.baseurl.UrlJson.DELETEALLCART;
 import static app.gify.co.id.baseurl.UrlJson.ORDER;
@@ -527,7 +536,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         Dialog dialog;
 
         private Context context;
-//        private Session session;
+        private Session session;
 
         private ProgressDialog progressDialog;
 
@@ -576,24 +585,24 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             properties.put("mail.smtp.auth", "true");
             properties.put("mail.smtp.port", "465");
 
-//            session = Session.getDefaultInstance(properties, new Authenticator() {
-//                @Override
-//                protected PasswordAuthentication getPasswordAuthentication() {
-//                    return new PasswordAuthentication("gify.firebase@gmail.com", "Gifyapp01");
-//                }
-//            });
-//
-//            try{
-//                MimeMessage mimeMessage = new MimeMessage(session);
-//
-//                mimeMessage.setFrom(new InternetAddress("gify.firebase@gmail.com"));
-//                mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress("supriyanto150@gmail.com"));
-//                mimeMessage.setSubject(subject);
-//                mimeMessage.setText(String.valueOf(message));
-//                Transport.send(mimeMessage);
-//            }catch (MessagingException m){
-//                m.printStackTrace();
-//            }
+            session = Session.getDefaultInstance(properties, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication("gify.firebase@gmail.com", "Gifyapp01");
+                }
+            });
+
+            try{
+                MimeMessage mimeMessage = new MimeMessage(session);
+
+                mimeMessage.setFrom(new InternetAddress("gify.firebase@gmail.com"));
+                mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress("supriyanto150@gmail.com"));
+                mimeMessage.setSubject(subject);
+                mimeMessage.setText(String.valueOf(message));
+                Transport.send(mimeMessage);
+            }catch (MessagingException m){
+                m.printStackTrace();
+            }
 
             return null;
         }
