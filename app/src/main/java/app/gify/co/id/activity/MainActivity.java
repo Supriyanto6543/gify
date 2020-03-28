@@ -53,6 +53,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ImageView navFragmentHome,cover;
     private long bakPressedTime;
     CircleImageView profile;
-    String Lemail, LID, coverku, photoprofile, Lalamat, LNoHp, currentUserID;
+    String Lemail, LID, coverku, photoprofile, Lalamat, LNoHp, currentUserID, namaku, last_nameku;
     TextView navigationheademail;
     TextView nama;
     Toolbar toolbar;
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     SharedPreferences.Editor editor;
     LayoutInflater inflater;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,14 +143,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cover = headerLayout.findViewById(R.id.coverDrawable);
 
 
-
+        Lemail = sharedPreferences.getString("nama", "");
+        String nama_belakang = sharedPreferences.getString("ln", "");
 
         String email = sharedPreferences.getString("email", "");
-        /*idgua = sharedPreferences.getString("gokuGanteng", "");
-        Log.d("easd", "onCreate: " + email + " s " + sharedPreferences.getString("nama", ""));*/
         navigationheademail.setText(email);
-        Lemail = sharedPreferences.getString("nama", "");
-        nama.setText(Lemail);
+
+        Log.d("TAG," ,"onCreate: " + Lemail +  " s " + nama_belakang);
+        nama.setText(Lemail + " " + nama_belakang);
         lemparMysql();
         loadFragment (new HomeFragment());
 
@@ -183,15 +185,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                             if (coverku.equals("cover")){
                                                 cover.setImageResource(R.drawable.login_image);
                                             }else{
+                                                /*Picasso.get().load(coverku).into(cover);*/
+                                                /*Glide.with(getApplicationContext())  //2
+                                                        .load(coverku) //3
+                                                        .centerCrop()
+                                                        .into(cover);*/
                                                 cover.setImageBitmap(decodedImage);
                                             }
                                             if (photoprofile.equals("photo")){
                                                 profile.setImageResource(R.drawable.backgroundprofile);
                                             }else{
+                                                /*Picasso.get().load(photoprofile).fit().into(profile);*/
+                                                /*Glide.with(getApplicationContext())  //2
+                                                        .load(photoprofile) //3
+                                                        .centerCrop()
+                                                        .into(profile);*/
                                                 profile.setImageBitmap(decodedImageku);
                                             }
 
-                                            dialog.dismiss();
+                                            /*dialog.dismiss();*/
 
 
                                         }

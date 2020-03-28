@@ -39,6 +39,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,14 +53,18 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.PrivateKey;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -95,7 +100,7 @@ import app.gify.co.id.rajaongkir.modelongkir.provinsi.Province;
 import app.gify.co.id.rajaongkir.modelongkir.provinsi.ResultOngkir;
 import retrofit2.Call;
 import retrofit2.Callback;
-//import app.gify.co.id.thirdparty.SenderAgent;
+import app.gify.co.id.thirdparty.SenderAgent;
 
 import static app.gify.co.id.baseurl.UrlJson.DELETEALLCART;
 import static app.gify.co.id.baseurl.UrlJson.ORDER;
@@ -116,9 +121,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     private EditText searchList;
 
     private ListView mListView;
-    private TextView kota, provinsi;
-    AlertDialog.Builder alert;
-    Dialog ad;
 
     EditText nama, hp, jalan, kelurahan, kecamatan,  ucapan;
     String currentUserID, Lnama, LNohp, Lalamat;
@@ -142,6 +144,11 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     Spanned templateConvert;
     Dialog dialog;
     String ongkir;
+    TextView kota, provinsi;
+
+    AlertDialog.Builder alert;
+    AlertDialog ad;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -162,6 +169,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         provinsi = findViewById(R.id.provinsi);
         ucapan = findViewById(R.id.ucapan);
         berat = getIntent().getStringExtra("berat");
+
+        getEmail();
 
 //        textViewCheckOutAlamat = findViewById(R.id.textviewAlamatCheckout);
 //        NamaPenerima = findViewById(R.id.namaPenerimaCheckout);
@@ -592,7 +601,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 MimeMessage mimeMessage = new MimeMessage(session);
 
                 mimeMessage.setFrom(new InternetAddress("gify.firebase@gmail.com"));
-                mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress("qbsdevs@gmail.com"));
+                mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress("supriyanto150@gmail.com"));
                 mimeMessage.setSubject(subject);
                 mimeMessage.setText(String.valueOf(message));
                 Transport.send(mimeMessage);
@@ -619,7 +628,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
         View alertLayout = inflater.inflate(R.layout.rajaongkir_popup_search, null);
 
-        alert = new AlertDialog.Builder(this);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("List ListProvince");
         alert.setMessage("select your province");
         alert.setView(alertLayout);
@@ -929,5 +938,21 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 Toast.makeText(CheckoutActivity.this, "Message : Error " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void getEmail() {
+        RootRef.child("Users").child(currentUserID)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String Lemail = dataSnapshot.child("email").getValue().toString();
+                        Log.d("Lemail", "Email: " + Lemail);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 }

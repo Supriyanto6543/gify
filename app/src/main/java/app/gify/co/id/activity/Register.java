@@ -42,7 +42,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -82,38 +82,22 @@ public class Register extends AppCompatActivity {
 
         InitializeFields();
 
-        TanggalLahir.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDateTimePicker();
-            }
+        TanggalLahir.setOnClickListener(v -> showDateTimePicker());
+
+        lihatPassword.setOnClickListener(view -> {
+            Password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            lihatPassword.setVisibility(View.GONE);
+            hidePassword.setVisibility(View.VISIBLE);
         });
 
-        lihatPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                lihatPassword.setVisibility(View.GONE);
-                hidePassword.setVisibility(View.VISIBLE);
-            }
-        });
-
-        hidePassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Password.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                lihatPassword.setVisibility(View.VISIBLE);
-                hidePassword.setVisibility(View.GONE);
-            }
+        hidePassword.setOnClickListener(view -> {
+            Password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            lihatPassword.setVisibility(View.VISIBLE);
+            hidePassword.setVisibility(View.GONE);
         });
 
 
-        Masuk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CreateNewAccount();
-            }
-        });
+        Masuk.setOnClickListener(v -> CreateNewAccount());
 
 
     }
@@ -160,8 +144,34 @@ public class Register extends AppCompatActivity {
                                 RootRef.child("Users").child(currentUserID).child("tanggal").setValue(selectedDate.toString());
                                 RootRef.child("Users").child(currentUserID).child("noHp").setValue(noHp);
 
+                                FirebaseInstanceId.getInstance().getInstanceId()
+                                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                                if (task.isSuccessful()) {
+                                                    String token = task.getResult().getToken();
+                                                    Log.d("TokenPush", "token: " + token);
+                                                    Toast.makeText(getApplicationContext(), "Token Generate", Toast.LENGTH_SHORT).show();
+                                                    RootRef.child("Users").child(currentUserID).child("token").setValue(token);
+                                                    RootRef.child("Users").child(currentUserID)
+                                                            .addValueEventListener(new ValueEventListener() {
+                                                                @Override
+                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                    String LID = dataSnapshot.getKey();
+                                                                    registertodatabase(LID, token, nama, selectedDate.toString(), email, noHp, password);
+                                                                }
+
+                                                                @Override
+                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                }
+                                                            });
+                                                } else {
+                                                    Toast.makeText(getApplicationContext(), "Token Generate failed", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                                 //SendUserToMainActivity();
-                                new FcmInstanceIdService();
                                 Toast.makeText(Register.this, "Selamat! akunmu berhasil dibuat", Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
                             }
@@ -204,38 +214,13 @@ public class Register extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private class FcmInstanceIdService extends FirebaseInstanceIdService {
-
-        @Override
-        public void onTokenRefresh() {
-            String token = FirebaseInstanceId.getInstance().getToken();
-            RootRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String Lnama = String.valueOf(dataSnapshot.child("nama").getValue());
-                    String Lemail = String.valueOf(dataSnapshot.child("email").getValue());
-                    String LnoHp = String.valueOf(dataSnapshot.child("noHp").getValue());
-                    String Lpassword = String.valueOf(dataSnapshot.child("password").getValue());
-                    String Ltanggal = String.valueOf(dataSnapshot.child("tanggal").getValue());
-                    String LID = dataSnapshot.getKey();
-                    registertodatabase(LID, token, Lnama,Ltanggal, Lemail, LnoHp, Lpassword);
-                    Log.d("cobalah ",LID + " " + "Nama: " + Lnama + " " + "Email: " + Lemail + " " + "noHp: " + LnoHp + " " + "Password: " + Lpassword + " " + "Tanggal: " + Ltanggal);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
-    }
-
-    private void registertodatabase(final String id_tetap, String token, final String nama, final String ttl, final String email, final String nohp, final String passwords){
+    private void registertodatabase(final String id, final String t, final String n, final String ttl, final String em, final String no, final String p){
         StringRequest request = new StringRequest(Request.Method.POST, REGISTER, response -> {
             try {
                 Log.d("registertodatabase", "registertodatabase: " + response);
                 if (response.equals("sama")){
                     Toast.makeText(this, "Email Sudah digunakan", Toast.LENGTH_SHORT).show();
+                    Email.setText("");
                 }else if (response.equals("bisa")){
                     Intent intent = new Intent(getApplicationContext(), Login.class);
                     Log.d("akuss", "berhasil");
@@ -256,16 +241,15 @@ public class Register extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("id_tetap", id_tetap);
-                params.put("fcm_token", token);
-                params.put("email", email);
-                params.put("nama", nama);
+                params.put("id_tetap", id);
+                params.put("fcm_token", t);
+                params.put("email", em);
+                params.put("nama", n);
+                params.put("ttl", ttl);
+                params.put("passwords", p);
+                params.put("nohp", no);
                 params.put("photo", "photo");
                 params.put("cover_foto", "cover");
-                params.put("ttl", ttl);
-                params.put("alamat", "masukkan alamat di setting anda");
-                params.put("passwords", passwords);
-                params.put("nohp", nohp);
                 return params;
             }
         };
