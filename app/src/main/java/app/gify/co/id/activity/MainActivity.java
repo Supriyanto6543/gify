@@ -177,9 +177,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                                             coverku = object.getString("cover_foto");
                                             photoprofile = object.getString("photo");
-                                            byte[] imageBytes = Base64.decode(coverku, Base64.DEFAULT);
+                                            byte[] imageBytes = Base64.decode(coverku, Base64.NO_CLOSE);
                                             Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-                                            byte[] imageBytesku = Base64.decode(photoprofile, Base64.DEFAULT);
+                                            byte[] imageBytesku = Base64.decode(photoprofile, Base64.NO_CLOSE);
                                             Bitmap decodedImageku = BitmapFactory.decodeByteArray(imageBytesku, 0, imageBytesku.length);
                                             if (coverku.equals("cover")){
                                                 cover.setImageResource(R.drawable.login_image);
