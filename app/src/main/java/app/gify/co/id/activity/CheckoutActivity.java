@@ -8,6 +8,7 @@ import android.app.FragmentTransaction;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -492,16 +493,20 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     }
 
     public void pushNotify(Context context){
+        Intent intent = new Intent(this, PembelianFragment.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "notify_001");
 
         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
         bigText.setBigContentTitle("Pembelian Berhasil");
-        bigText.setSummaryText("silahkan lakukan pembayaran");
+        bigText.setSummaryText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran");
 
         mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
         mBuilder.setContentTitle("Pembelian Berhasil");
-        mBuilder.setContentText("silahkan lakukan pembayaran");
+        mBuilder.setContentText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran");
         mBuilder.setPriority(Notification.PRIORITY_MAX);
+        mBuilder.setContentIntent(pendingIntent);
         mBuilder.setStyle(bigText);
 
         mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

@@ -7,7 +7,7 @@
 //import java.security.Security;
 //import java.util.Properties;
 //
-//import javax.activati on.DataHandler;
+//import javax.activation.DataHandler;
 //import javax.activation.DataSource;
 //import javax.mail.Authenticator;
 //import javax.mail.Message;
