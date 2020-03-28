@@ -291,6 +291,11 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             gAlamat = GantiAlamat.getText().toString().trim();
             kota = KotaS.getText().toString();
             provinsi = ProvinsiS.getText().toString();
+            editor = sharedPreferences.edit();
+            editor.remove("nama");
+            editor.putString("nama", nama);
+            /*editor.putString("ln", ln);*/
+            editor.apply();
 
 
             dialog.show();
@@ -456,11 +461,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 try {
                     if (response.equals("bisa")) {
                         Log.d("Test", "onResponse: " + ln + n);
-                        editor = sharedPreferences.edit();
-                        editor.remove("nama");
-                        editor.putString("nama", n);
-                        editor.putString("ln", ln);
-                        editor.apply();
+
                         Intent intentku = new Intent(getApplication(), MainActivity.class);
                         startActivity(intentku);
                         finish();
@@ -483,14 +484,35 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("foto", getStringImage(Photo));
-                params.put("cover", getStringImage(Cover));
-                params.put("email", e);
-                params.put("nama", n);
-                params.put("last_name", ln);
-                params.put("nohp", no);
-                params.put("alamat", a);
-                params.put("id_tetap", LID);
+                if (getStringImage(Cover) == null){
+                    params.put("foto", getStringImage(Photo));
+                    params.put("cover", "cover");
+                    params.put("email", e);
+                    params.put("nama", n);
+                    params.put("last_name", ln);
+                    params.put("nohp", no);
+                    params.put("alamat", a);
+                    params.put("id_tetap", LID);
+                }else if (getStringImage(Photo) == null){
+                    params.put("foto", "foto");
+                    params.put("cover", getStringImage(Cover));
+                    params.put("email", e);
+                    params.put("nama", n);
+                    params.put("last_name", ln);
+                    params.put("nohp", no);
+                    params.put("alamat", a);
+                    params.put("id_tetap", LID);
+                }else {
+                    params.put("foto", getStringImage(Photo));
+                    params.put("cover", getStringImage(Cover));
+                    params.put("email", e);
+                    params.put("nama", n);
+                    params.put("last_name", ln);
+                    params.put("nohp", no);
+                    params.put("alamat", a);
+                    params.put("id_tetap", LID);
+                }
+
                 return params;
             }
         };
