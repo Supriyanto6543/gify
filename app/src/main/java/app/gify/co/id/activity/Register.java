@@ -42,7 +42,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -160,8 +160,34 @@ public class Register extends AppCompatActivity {
                                 RootRef.child("Users").child(currentUserID).child("tanggal").setValue(selectedDate.toString());
                                 RootRef.child("Users").child(currentUserID).child("noHp").setValue(noHp);
 
+                                FirebaseInstanceId.getInstance().getInstanceId()
+                                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                                if (task.isSuccessful()) {
+                                                    RootRef.child("Users").child(currentUserID)
+                                                            .addValueEventListener(new ValueEventListener() {
+                                                                @Override
+                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                    String token = task.getResult().getToken();
+                                                                    String LID = dataSnapshot.getKey();
+                                                                    Log.d("TokenPush", "token: " + token);
+                                                                    Toast.makeText(getApplicationContext(), "Token Generate", Toast.LENGTH_SHORT).show();
+                                                                    RootRef.child("Users").child(currentUserID).child("token").setValue(token);
+                                                                    registertodatabase(LID, token, nama, selectedDate.toString(), email, noHp, password);
+                                                                }
+
+                                                                @Override
+                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                }
+                                                            });
+                                                } else {
+                                                    Toast.makeText(getApplicationContext(), "Token Generate failed", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                                 //SendUserToMainActivity();
-                                new FcmInstanceIdService();
                                 Toast.makeText(Register.this, "Selamat! akunmu berhasil dibuat", Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
                             }
@@ -202,32 +228,6 @@ public class Register extends AppCompatActivity {
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, dateSetListener, currentdate.get(Calendar.YEAR), currentdate.get(Calendar.MONTH), currentdate.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         datePickerDialog.show();
-    }
-
-    private class FcmInstanceIdService extends FirebaseInstanceIdService {
-
-        @Override
-        public void onTokenRefresh() {
-            String token = FirebaseInstanceId.getInstance().getToken();
-            RootRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String Lnama = String.valueOf(dataSnapshot.child("nama").getValue());
-                    String Lemail = String.valueOf(dataSnapshot.child("email").getValue());
-                    String LnoHp = String.valueOf(dataSnapshot.child("noHp").getValue());
-                    String Lpassword = String.valueOf(dataSnapshot.child("password").getValue());
-                    String Ltanggal = String.valueOf(dataSnapshot.child("tanggal").getValue());
-                    String LID = dataSnapshot.getKey();
-                    registertodatabase(LID, token, Lnama,Ltanggal, Lemail, LnoHp, Lpassword);
-                    Log.d("cobalah ",LID + " " + "Nama: " + Lnama + " " + "Email: " + Lemail + " " + "noHp: " + LnoHp + " " + "Password: " + Lpassword + " " + "Tanggal: " + Ltanggal);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
     }
 
     private void registertodatabase(final String id_tetap, String token, final String nama, final String ttl, final String email, final String nohp, final String passwords){
