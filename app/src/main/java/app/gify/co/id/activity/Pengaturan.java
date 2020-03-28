@@ -288,47 +288,39 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
 
             dialog.show();
-            if (gAlamat.isEmpty() || kelurahan.isEmpty() || kecamatan.isEmpty()||  kota.isEmpty() || provinsi.isEmpty() ){
-                Toast.makeText(getApplicationContext(), "isi alamat lengkap terlebih dahulu",Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }else if (getStringImage(Photo).isEmpty() || getStringImage(Cover).isEmpty()){
-                Toast.makeText(getApplicationContext(), "ambil gambar terkebih dahulu",Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }else {
-                AkuGantengBanget(email,noHp,namadepan, namabelakang,gAlamat + ", " + kelurahan + ", " + kecamatan + ", " + kota + ", " + provinsi);
-                RootRef.child("Users").child(currentUserID).child("nama").setValue(nama)
-                        .addOnCompleteListener(task -> {
-                            NamaDepan.setText("");
-                            NamaBelakang.setText("");
-                            dialog.dismiss();
-                        });
-                RootRef.child("Users").child(currentUserID).child("noHp").setValue(noHp)
-                        .addOnCompleteListener(task -> {
-                            NoHp.setText("");
-                            dialog.dismiss();
-                        });
-                RootRef.child("Users").child(currentUserID).child("email").setValue(email)
-                        .addOnCompleteListener(task -> {
-                            Email.setText("");
-                            dialog.dismiss();
-                        });
-                RootRef.child("Users").child(currentUserID).child("alamat").setValue(alamat)
-                        .addOnCompleteListener(task -> {
-                            editTextKelurahan.setText("");
-                            editTextKecamatan.setText("");
+            AkuGantengBanget(email,noHp,namadepan, namabelakang,gAlamat + ", " + kelurahan + ", " + kecamatan + ", " + kota + ", " + provinsi);
+            RootRef.child("Users").child(currentUserID).child("nama").setValue(nama)
+                    .addOnCompleteListener(task -> {
+                        NamaDepan.setText("");
+                        NamaBelakang.setText("");
+                        dialog.dismiss();
+                    });
+            RootRef.child("Users").child(currentUserID).child("noHp").setValue(noHp)
+                    .addOnCompleteListener(task -> {
+                        NoHp.setText("");
+                        dialog.dismiss();
+                    });
+            RootRef.child("Users").child(currentUserID).child("email").setValue(email)
+                    .addOnCompleteListener(task -> {
+                        Email.setText("");
+                        dialog.dismiss();
+                    });
+            RootRef.child("Users").child(currentUserID).child("alamat").setValue(alamat)
+                    .addOnCompleteListener(task -> {
+                        editTextKelurahan.setText("");
+                        editTextKecamatan.setText("");
 
-                            editTextKelurahan.setVisibility(View.GONE);
-                            editTextKecamatan.setVisibility(View.GONE);
+                        editTextKelurahan.setVisibility(View.GONE);
+                        editTextKecamatan.setVisibility(View.GONE);
 
-                            viewKecamatan.setVisibility(View.VISIBLE);
-                            viewKelurahan.setVisibility(View.VISIBLE);
+                        viewKecamatan.setVisibility(View.VISIBLE);
+                        viewKelurahan.setVisibility(View.VISIBLE);
 
-                            dialog.dismiss();
-                        });
+                        dialog.dismiss();
+                    });
 
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-            }
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
 
 
 
