@@ -67,6 +67,8 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import app.gify.co.id.Fragment.pembelian.PembelianFragment;
 import app.gify.co.id.R;
 import app.gify.co.id.baseurl.UrlJson;
 //import app.gify.co.id.thirdparty.SenderAgent;

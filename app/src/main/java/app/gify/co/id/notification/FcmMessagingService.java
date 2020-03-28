@@ -26,7 +26,7 @@ public class FcmMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
-        String title = remoteMessage.getData().get("title");
+        String title = remoteMessage.getData().get("");
         Intent intent = new Intent(this, MainActivity.class);
         intent.getIntExtra(title, 0);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
