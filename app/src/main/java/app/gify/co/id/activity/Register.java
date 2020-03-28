@@ -214,12 +214,13 @@ public class Register extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private void registertodatabase(final String id_tetap, final String token, final String nama, final String ttl, final String email, final String nohp, final String passwords){
+    private void registertodatabase(final String id, final String t, final String n, final String ttl, final String em, final String no, final String p){
         StringRequest request = new StringRequest(Request.Method.POST, REGISTER, response -> {
             try {
                 Log.d("registertodatabase", "registertodatabase: " + response);
                 if (response.equals("sama")){
                     Toast.makeText(this, "Email Sudah digunakan", Toast.LENGTH_SHORT).show();
+                    Email.setText("");
                 }else if (response.equals("bisa")){
                     Intent intent = new Intent(getApplicationContext(), Login.class);
                     Log.d("akuss", "berhasil");
@@ -240,13 +241,13 @@ public class Register extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("id_tetap", id_tetap);
-                params.put("fcm_token", token);
-                params.put("email", email);
-                params.put("nama", nama);
+                params.put("id_tetap", id);
+                params.put("fcm_token", t);
+                params.put("email", em);
+                params.put("nama", n);
                 params.put("ttl", ttl);
-                params.put("passwords", passwords);
-                params.put("nohp", nohp);
+                params.put("passwords", p);
+                params.put("nohp", no);
                 params.put("photo", "photo");
                 params.put("cover_foto", "cover");
                 return params;
