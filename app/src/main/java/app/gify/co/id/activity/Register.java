@@ -149,53 +149,47 @@ public class Register extends AppCompatActivity {
             loadingBar.show();
 
             mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                currentUserID = mAuth.getCurrentUser().getUid();
-                                RootRef.child("Users").child(currentUserID).child("nama").setValue(nama);
-                                RootRef.child("Users").child(currentUserID).child("email").setValue(email);
-                                RootRef.child("Users").child(currentUserID).child("password").setValue(password);
-                                RootRef.child("Users").child(currentUserID).child("tanggal").setValue(selectedDate.toString());
-                                RootRef.child("Users").child(currentUserID).child("noHp").setValue(noHp);
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            currentUserID = mAuth.getCurrentUser().getUid();
+                            RootRef.child("Users").child(currentUserID).child("nama").setValue(nama);
+                            RootRef.child("Users").child(currentUserID).child("email").setValue(email);
+                            RootRef.child("Users").child(currentUserID).child("password").setValue(password);
+                            RootRef.child("Users").child(currentUserID).child("tanggal").setValue(selectedDate.toString());
+                            RootRef.child("Users").child(currentUserID).child("noHp").setValue(noHp);
 
-                                FirebaseInstanceId.getInstance().getInstanceId()
-                                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                                                if (task.isSuccessful()) {
-                                                    RootRef.child("Users").child(currentUserID)
-                                                            .addValueEventListener(new ValueEventListener() {
-                                                                @Override
-                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                                    String token = task.getResult().getToken();
-                                                                    String LID = dataSnapshot.getKey();
-                                                                    Log.d("TokenPush", "token: " + token);
-                                                                    Toast.makeText(getApplicationContext(), "Token Generate", Toast.LENGTH_SHORT).show();
-                                                                    RootRef.child("Users").child(currentUserID).child("token").setValue(token);
-                                                                    registertodatabase(LID, token, nama, selectedDate.toString(), email, noHp, password);
-                                                                }
+                            FirebaseInstanceId.getInstance().getInstanceId()
+                                    .addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+                                            String token = task1.getResult().getToken();
+                                            Log.d("TokenPush", "token: " + token);
+                                            Toast.makeText(getApplicationContext(), "Token Generate", Toast.LENGTH_SHORT).show();
+                                            RootRef.child("Users").child(currentUserID).child("token").setValue(token);
+                                            RootRef.child("Users").child(currentUserID)
+                                                    .addValueEventListener(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                            String LID = dataSnapshot.getKey();
+                                                            registertodatabase(LID, token, nama, selectedDate.toString(), email, noHp, password);
+                                                        }
 
-                                                                @Override
-                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                                                }
-                                                            });
-                                                } else {
-                                                    Toast.makeText(getApplicationContext(), "Token Generate failed", Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        });
-                                //SendUserToMainActivity();
-                                Toast.makeText(Register.this, "Selamat! akunmu berhasil dibuat", Toast.LENGTH_SHORT).show();
-                                loadingBar.dismiss();
-                            }
-                            else {
-                                String message = task.getException().toString();
-                                Toast.makeText(Register.this, "Gagal Register" + message, Toast.LENGTH_SHORT).show();
-                                loadingBar.dismiss();
-                            }
+                                                        }
+                                                    });
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "Token Generate failed", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                            //SendUserToMainActivity();
+                            Toast.makeText(Register.this, "Selamat! akunmu berhasil dibuat", Toast.LENGTH_SHORT).show();
+                            loadingBar.dismiss();
+                        }
+                        else {
+                            String message = task.getException().toString();
+                            Toast.makeText(Register.this, "Gagal Register" + message, Toast.LENGTH_SHORT).show();
+                            loadingBar.dismiss();
                         }
                     });
         }
@@ -230,7 +224,7 @@ public class Register extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private void registertodatabase(final String id_tetap, String token, final String nama, final String ttl, final String email, final String nohp, final String passwords){
+    private void registertodatabase(final String id_tetap, final String token, final String nama, final String ttl, final String email, final String nohp, final String passwords){
         StringRequest request = new StringRequest(Request.Method.POST, REGISTER, response -> {
             try {
                 Log.d("registertodatabase", "registertodatabase: " + response);
