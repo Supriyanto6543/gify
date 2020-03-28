@@ -42,7 +42,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -149,27 +149,47 @@ public class Register extends AppCompatActivity {
             loadingBar.show();
 
             mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                currentUserID = mAuth.getCurrentUser().getUid();
-                                RootRef.child("Users").child(currentUserID).child("nama").setValue(nama);
-                                RootRef.child("Users").child(currentUserID).child("email").setValue(email);
-                                RootRef.child("Users").child(currentUserID).child("password").setValue(password);
-                                RootRef.child("Users").child(currentUserID).child("tanggal").setValue(selectedDate.toString());
-                                RootRef.child("Users").child(currentUserID).child("noHp").setValue(noHp);
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            currentUserID = mAuth.getCurrentUser().getUid();
+                            RootRef.child("Users").child(currentUserID).child("nama").setValue(nama);
+                            RootRef.child("Users").child(currentUserID).child("email").setValue(email);
+                            RootRef.child("Users").child(currentUserID).child("password").setValue(password);
+                            RootRef.child("Users").child(currentUserID).child("tanggal").setValue(selectedDate.toString());
+                            RootRef.child("Users").child(currentUserID).child("noHp").setValue(noHp);
 
-                                //SendUserToMainActivity();
-                                new FcmInstanceIdService();
-                                Toast.makeText(Register.this, "Selamat! akunmu berhasil dibuat", Toast.LENGTH_SHORT).show();
-                                loadingBar.dismiss();
-                            }
-                            else {
-                                String message = task.getException().toString();
-                                Toast.makeText(Register.this, "Gagal Register" + message, Toast.LENGTH_SHORT).show();
-                                loadingBar.dismiss();
-                            }
+                            FirebaseInstanceId.getInstance().getInstanceId()
+                                    .addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+                                            String token = task1.getResult().getToken();
+                                            Log.d("TokenPush", "token: " + token);
+                                            Toast.makeText(getApplicationContext(), "Token Generate", Toast.LENGTH_SHORT).show();
+                                            RootRef.child("Users").child(currentUserID).child("token").setValue(token);
+                                            RootRef.child("Users").child(currentUserID)
+                                                    .addValueEventListener(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                            String LID = dataSnapshot.getKey();
+                                                            registertodatabase(LID, token, nama, selectedDate.toString(), email, noHp, password);
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                        }
+                                                    });
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "Token Generate failed", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                            //SendUserToMainActivity();
+                            Toast.makeText(Register.this, "Selamat! akunmu berhasil dibuat", Toast.LENGTH_SHORT).show();
+                            loadingBar.dismiss();
+                        }
+                        else {
+                            String message = task.getException().toString();
+                            Toast.makeText(Register.this, "Gagal Register" + message, Toast.LENGTH_SHORT).show();
+                            loadingBar.dismiss();
                         }
                     });
         }
@@ -204,33 +224,7 @@ public class Register extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private class FcmInstanceIdService extends FirebaseInstanceIdService {
-
-        @Override
-        public void onTokenRefresh() {
-            String token = FirebaseInstanceId.getInstance().getToken();
-            RootRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String Lnama = String.valueOf(dataSnapshot.child("nama").getValue());
-                    String Lemail = String.valueOf(dataSnapshot.child("email").getValue());
-                    String LnoHp = String.valueOf(dataSnapshot.child("noHp").getValue());
-                    String Lpassword = String.valueOf(dataSnapshot.child("password").getValue());
-                    String Ltanggal = String.valueOf(dataSnapshot.child("tanggal").getValue());
-                    String LID = dataSnapshot.getKey();
-                    registertodatabase(LID, token, Lnama,Ltanggal, Lemail, LnoHp, Lpassword);
-                    Log.d("cobalah ",LID + " " + "Nama: " + Lnama + " " + "Email: " + Lemail + " " + "noHp: " + LnoHp + " " + "Password: " + Lpassword + " " + "Tanggal: " + Ltanggal);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
-    }
-
-    private void registertodatabase(final String id_tetap, String token, final String nama, final String ttl, final String email, final String nohp, final String passwords){
+    private void registertodatabase(final String id_tetap, final String token, final String nama, final String ttl, final String email, final String nohp, final String passwords){
         StringRequest request = new StringRequest(Request.Method.POST, REGISTER, response -> {
             try {
                 Log.d("registertodatabase", "registertodatabase: " + response);
