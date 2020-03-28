@@ -192,8 +192,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                                 profile.setImageBitmap(decodedImageku);
                                             }
 
-                                            dialog.dismiss();
-
 
                                         }
                                     }catch (Exception e){
