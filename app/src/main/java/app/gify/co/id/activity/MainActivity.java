@@ -53,6 +53,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -177,22 +178,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                                             coverku = object.getString("cover_foto");
                                             photoprofile = object.getString("photo");
-                                            byte[] imageBytes = Base64.decode(coverku, Base64.NO_CLOSE);
+                                            byte[] imageBytes = Base64.decode(coverku, Base64.DEFAULT);
                                             Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-                                            byte[] imageBytesku = Base64.decode(photoprofile, Base64.NO_CLOSE);
+                                            byte[] imageBytesku = Base64.decode(photoprofile, Base64.DEFAULT);
                                             Bitmap decodedImageku = BitmapFactory.decodeByteArray(imageBytesku, 0, imageBytesku.length);
                                             if (coverku.equals("cover")){
                                                 cover.setImageResource(R.drawable.login_image);
                                             }else{
+                                                /*Picasso.get().load(coverku).into(cover);*/
+                                                /*Glide.with(getApplicationContext())  //2
+                                                        .load(coverku) //3
+                                                        .centerCrop()
+                                                        .into(cover);*/
                                                 cover.setImageBitmap(decodedImage);
                                             }
                                             if (photoprofile.equals("photo")){
                                                 profile.setImageResource(R.drawable.backgroundprofile);
                                             }else{
+                                                /*Picasso.get().load(photoprofile).fit().into(profile);*/
+                                                /*Glide.with(getApplicationContext())  //2
+                                                        .load(photoprofile) //3
+                                                        .centerCrop()
+                                                        .into(profile);*/
                                                 profile.setImageBitmap(decodedImageku);
                                             }
 
-                                            dialog.dismiss();
+                                            /*dialog.dismiss();*/
 
 
                                         }

@@ -49,7 +49,8 @@
         <activity android:name=".activity.Login" />
         <activity android:name=".activity.Register"/>
         <activity android:name=".activity.MainActivity"/>
-        <activity android:name=".activity.Pengaturan"/>
+        <activity android:name=".activity.Pengaturan"
+            android:hardwareAccelerated="false"/>
         <activity android:name=".activity.LupaSandi"/>
         <activity android:name=".activity.DetailKado"/>
         <activity android:name=".activity.CartActivity"/>

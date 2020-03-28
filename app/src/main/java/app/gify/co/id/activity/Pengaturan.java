@@ -12,7 +12,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
@@ -22,6 +24,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -126,7 +129,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     LNama, LEmail2, Lalamat, LNoHp, Ltanggal, fotoProfil, fotoCover;
     ImageView CheckList, ganti,profileImage, coverImage;
     ImageView Back;
-    String province_id;
+    String coverku, photoku;
     int province_idku;
     TextView gantiAlamat;
     ProgressDialog loadingBar;
@@ -301,6 +304,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
 
             dialog.show();
+            /*coverku = getRealPathFromURI( cover );
+            photoku = getRealPathFromURI( profile );*/
             AkuGantengBanget(email,noHp,namadepan, namabelakang,gAlamat + ", " + kelurahan + ", " + kecamatan + ", " + kota + ", " + provinsi);
             RootRef.child("Users").child(currentUserID).child("nama").setValue(nama)
                     .addOnCompleteListener(task -> {
@@ -375,6 +380,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         ProvinsiS = findViewById(R.id.provinsiPengaturan);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -383,10 +389,13 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             profile = data.getData();
             try {
                 Photo = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), profile);
-                profileImage.setImageBitmap(Photo);
+                decoded1 = getResizedBitmap(Photo, 100);
+                profileImage.setImageBitmap(decoded1);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
 
         }
 
@@ -394,12 +403,50 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             cover = data.getData();
             try {
                 Cover = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), cover);
-                coverImage.setImageBitmap(Cover);
+                decoded = getResizedBitmap(Cover, 100);
+                coverImage.setImageBitmap(decoded);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
+
+            /*cover.getPath();
+            if (cover.getScheme().equals("file")) {
+                coverku =cover.getLastPathSegment();
+            } else {
+                Cursor cursor = null;
+                try {
+                    cursor = getContentResolver().query(cover, new String[]{
+                            MediaStore.Images.ImageColumns.DISPLAY_NAME
+                    }, null, null, null);
+
+                    if (cursor != null && cursor.moveToFirst()) {
+                        coverku = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DISPLAY_NAME));
+                    }
+                } finally {
+
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+            }*/
+
         }
+    }
+
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
     private void lemparMysql(){
@@ -448,10 +495,20 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     public String getStringImage(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.PNG, 10, baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 80, baos);
         byte[] imageBytes = baos.toByteArray();
         return Base64.encodeToString(imageBytes, Base64.DEFAULT);
     }
+
+    /*public String getRealPathFromURI(Uri uri) {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        @SuppressWarnings("deprecation")
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        int column_index = cursor
+                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }*/
 
     private void AkuGantengBanget(String e, String no, String n, String ln, String a){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE +"?id_tetap=" + LID, new Response.Listener<String>() {
@@ -485,8 +542,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                if (getStringImage(Cover) == null){
-                    params.put("foto", getStringImage(Photo));
+                if (getStringImage(decoded) == null){
+                    params.put("foto", getStringImage(decoded1));
                     params.put("cover", "cover");
                     params.put("email", e);
                     params.put("nama", n);
@@ -494,9 +551,9 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     params.put("nohp", no);
                     params.put("alamat", a);
                     params.put("id_tetap", LID);
-                }else if (getStringImage(Photo) == null){
+                }else if (getStringImage(decoded1) == null){
                     params.put("foto", "foto");
-                    params.put("cover", getStringImage(Cover));
+                    params.put("cover", getStringImage(decoded));
                     params.put("email", e);
                     params.put("nama", n);
                     params.put("last_name", ln);
@@ -504,8 +561,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     params.put("alamat", a);
                     params.put("id_tetap", LID);
                 }else {
-                    params.put("foto", getStringImage(Photo));
-                    params.put("cover", getStringImage(Cover));
+                    params.put("foto", getStringImage(decoded1));
+                    params.put("cover",getStringImage(decoded));
                     params.put("email", e);
                     params.put("nama", n);
                     params.put("last_name", ln);
