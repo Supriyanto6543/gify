@@ -455,7 +455,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
                         editor = sharedPreferences.edit();
                         editor.remove("nama");
-                        editor.putString("nama", n + ln);
+                        editor.putString("nama", n);
+                        editor.putString("ln", ln);
                         editor.apply();
                         Intent intentku = new Intent(getApplication(), MainActivity.class);
                         startActivity(intentku);

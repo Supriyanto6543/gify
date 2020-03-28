@@ -60,6 +60,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.PrivateKey;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -139,6 +140,11 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     Spanned templateConvert;
     Dialog dialog;
     String ongkir;
+    TextView kota, provinsi;
+
+    AlertDialog.Builder alert;
+    AlertDialog ad;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -616,7 +622,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
         View alertLayout = inflater.inflate(R.layout.rajaongkir_popup_search, null);
 
-        alert = new AlertDialog.Builder(this);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("List ListProvince");
         alert.setMessage("select your province");
         alert.setView(alertLayout);
