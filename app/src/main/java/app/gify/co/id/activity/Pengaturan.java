@@ -195,11 +195,14 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         dialog.setContentView(layout);
         dialog.show();
 
+
         callMethos();
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        namaUser = sharedPreferences.getString("nama", "");
-        Log.d("nama", namaUser);
+        /*namaUser = sharedPreferences.getString("nama", "");*/
+        /*editor = sharedPreferences.edit();
+
+        editor.apply();*/
 
         mAuth = FirebaseAuth.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
@@ -452,7 +455,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 Log.d("mmakan bang", response + "");
                 try {
                     if (response.equals("bisa")) {
-                        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                        Log.d("Test", "onResponse: " + ln + n);
                         editor = sharedPreferences.edit();
                         editor.remove("nama");
                         editor.putString("nama", n);

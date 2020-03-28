@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ImageView navFragmentHome,cover;
     private long bakPressedTime;
     CircleImageView profile;
-    String Lemail, LID, coverku, photoprofile, Lalamat, LNoHp, currentUserID;
+    String Lemail, LID, coverku, photoprofile, Lalamat, LNoHp, currentUserID, namaku, last_nameku;
     TextView navigationheademail;
     TextView nama;
     Toolbar toolbar;
@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     SharedPreferences.Editor editor;
     LayoutInflater inflater;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,14 +142,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cover = headerLayout.findViewById(R.id.coverDrawable);
 
 
-
+        Lemail = sharedPreferences.getString("nama", "");
+        String nama_belakang = sharedPreferences.getString("ln", "");
 
         String email = sharedPreferences.getString("email", "");
-        /*idgua = sharedPreferences.getString("gokuGanteng", "");
-        Log.d("easd", "onCreate: " + email + " s " + sharedPreferences.getString("nama", ""));*/
         navigationheademail.setText(email);
-        Lemail = sharedPreferences.getString("nama", "");
-        nama.setText(Lemail);
+
+        Log.d("TAG," ,"onCreate: " + Lemail +  " s " + nama_belakang);
+        nama.setText(Lemail + " " + nama_belakang);
         lemparMysql();
         loadFragment (new HomeFragment());
 
