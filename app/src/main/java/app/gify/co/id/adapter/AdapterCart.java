@@ -102,6 +102,7 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         intent.putExtra("name", String.valueOf((getName(carts))));
         intent.putExtra("qty", String.valueOf((getSeperatedquantity(carts))));
         intent.putExtra("berat", String.valueOf(totalBerat));
+        intent.putExtra("totalvalueku", String.valueOf(totalharga));
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
 

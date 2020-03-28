@@ -263,7 +263,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                     provinsiorder = provinsi.getText().toString();
                     ucapanorder = ucapan.getText().toString();
                     hpku = hp.getText().toString();
-                    new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, ucapanorder, Integer.parseInt(idharga)  + lastNumber ).execute();
                 }
 
 
@@ -895,6 +894,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                         provinsi.setText("");
                         kota.setText("");
                         Toast.makeText(CheckoutActivity.this, "Cost: " + "Rp." + cost, Toast.LENGTH_SHORT).show();
+                        new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, ucapanorder, Integer.parseInt(idharga) + Integer.parseInt(ongkir)  + lastNumber ).execute();
+
 
                         ((Button) alertLayout.findViewById(R.id.add_destination)).setOnClickListener(new View.OnClickListener() {
                             @Override
