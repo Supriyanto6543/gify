@@ -421,23 +421,20 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     }
 
     public void cekprofile(){
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA + "?id_tetap=" + LID, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONArray array = response.getJSONArray("GIFY");
-                    for (int i = 0; i < array.length(); i++){
-                        JSONObject object = array.getJSONObject(i);
-                        fotoProfil = object.getString("photo");
-                        fotoCover = object.getString("cover_foto");
-                        emailnama = object.getString("email");
-                        dialog.dismiss();
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA + "?id_tetap=" + LID, null, response -> {
+            try {
+                JSONArray array = response.getJSONArray("GIFY");
+                for (int i = 0; i < array.length(); i++){
+                    JSONObject object = array.getJSONObject(i);
+                    fotoProfil = object.getString("photo");
+                    fotoCover = object.getString("cover_foto");
+                    emailnama = object.getString("email");
+                    dialog.dismiss();
 
 
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
                 }
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }, error -> {
 

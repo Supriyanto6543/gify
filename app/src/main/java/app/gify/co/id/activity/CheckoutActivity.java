@@ -39,6 +39,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,8 +53,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -165,6 +169,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         provinsi = findViewById(R.id.provinsi);
         ucapan = findViewById(R.id.ucapan);
         berat = getIntent().getStringExtra("berat");
+
+        getEmail();
 
 //        textViewCheckOutAlamat = findViewById(R.id.textviewAlamatCheckout);
 //        NamaPenerima = findViewById(R.id.namaPenerimaCheckout);
@@ -932,5 +938,21 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 Toast.makeText(CheckoutActivity.this, "Message : Error " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void getEmail() {
+        RootRef.child("Users").child(currentUserID)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String Lemail = dataSnapshot.child("email").getValue().toString();
+                        Log.d("Lemail", "Email: " + Lemail);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 }
