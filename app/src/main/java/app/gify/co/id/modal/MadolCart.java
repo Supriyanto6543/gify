@@ -5,7 +5,7 @@ public class MadolCart {
     private String namacart, gambar;
     private int berat, quantity;
 
-    public MadolCart(String gambar, int harga, String namacart, int kode, int jumlah, int berat) {
+    public MadolCart(String gambar, int harga, String namacart, int kode, int jumlah, int berat, int quantity) {
         this.gambar = gambar;
         this.harga = harga;
         this.namacart = namacart;

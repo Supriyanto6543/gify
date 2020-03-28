@@ -300,12 +300,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
-                <EditText
+                <TextView
                     android:id="@+id/emailPengaturan"
                     android:background="@drawable/kamdakmdwk"
                     android:hint="nasrudin01@gmail.com"
                     android:textColorHint="#b5a981"
                     android:textStyle="bold"
+                    android:gravity="center_vertical"
                     android:textSize="15dp"
                     android:inputType="textEmailAddress"
                     android:textColor="#b5a981"
@@ -533,8 +534,9 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
 
-                    <Spinner
-                        android:id="@+id/kota"
+                    <EditText
+                        android:focusable="false"
+                        android:id="@+id/kotaPengaturan"
                         android:text="-- pilih --"
                         android:gravity="center"
                         android:layout_gravity="center"
@@ -574,8 +576,9 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
 
-                    <Spinner
-                        android:id="@+id/provinsi"
+                    <EditText
+                        android:focusable="false"
+                        android:id="@+id/provinsiPengaturan"
                         android:text="-- pilih --"
                         android:layout_gravity="center"
                         android:gravity="center"

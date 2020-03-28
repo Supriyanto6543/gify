@@ -16,10 +16,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
+            android:textColorHint="#817676"
             android:id="@+id/searchItem"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:hint="Search for Fast"
             android:background="#ffffff"
+            android:textColor="#000"
             android:layout_marginBottom="10dp"
             android:padding="16dp"
             android:layout_width="match_parent"
@@ -28,6 +30,7 @@
 
     <ListView
         android:id="@+id/listItem"
+        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

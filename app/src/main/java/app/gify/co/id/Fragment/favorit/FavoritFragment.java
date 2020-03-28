@@ -41,6 +41,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import app.gify.co.id.R;
 import app.gify.co.id.activity.CartActivity;
@@ -126,7 +127,7 @@ public class FavoritFragment extends Fragment {
         inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.loading, null);
         ImageView goku = layout.findViewById(R.id.custom_loading_imageView);
-        goku.animate().rotationBy(360).setDuration(1000).setInterpolator(new LinearInterpolator()).start();
+        goku.animate().rotationBy(3600).setDuration(10000).setInterpolator(new LinearInterpolator()).start();
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
         dialog.setContentView(layout);
@@ -194,7 +195,7 @@ public class FavoritFragment extends Fragment {
             dialog.dismiss();
             Log.d("errorlistkadojson", "getBarang: " + error.getMessage());
         });
-        RequestQueue queue = Volley.newRequestQueue(getContext());
+        RequestQueue queue = Volley.newRequestQueue(Objects.requireNonNull(getContext()));
         queue.add(objectRequest);
     }
 
@@ -239,10 +240,13 @@ public class FavoritFragment extends Fragment {
         }
         if (adapterFavorit == null ){
             Toast.makeText(getContext(), "Kado tidak ditemukan", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
         }else if (searchViews.getText().toString().length() == 0){
-
+            dialog.dismiss();
         }else{
             adapterFavorit.filterList(filterKu);
+            dialog.dismiss();
+
         }
     }
 }

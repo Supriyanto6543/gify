@@ -88,7 +88,7 @@
 
                         <EditText
                             android:id="@+id/nama"
-                            android:hint="Nasrudin Nawawi"
+                            android:hint="Nama Lengkap Penerima"
                             android:textColorHint="#b5a981"
                             android:textColor="#aa7a00"
                             android:background="@drawable/kamdakmdwk"
@@ -105,7 +105,8 @@
 
                         <EditText
                             android:id="@+id/hp"
-                            android:hint="Nasrudin Nawawi"
+                            android:hint="Nomor HP Penerima"
+                            android:inputType="number"
                             android:textColorHint="#b5a981"
                             android:textColor="#aa7a00"
                             android:background="@drawable/kamdakmdwk"
@@ -214,12 +215,14 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
-                                <EditText
+                                <TextView
                                     android:id="@+id/kota"
                                     android:hint="Kota"
+                                    android:focusable="false"
                                     android:layout_gravity="center"
                                     android:textStyle="bold"
                                     android:textSize="15dp"
+                                    android:gravity="center_vertical"
                                     android:background="@drawable/kamdakmdwk"
                                     android:textColor="#aa7a00"
                                     android:textColorHint="#b5a981"
@@ -238,10 +241,12 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
-                                <EditText
+                                <TextView
                                     android:id="@+id/provinsi"
                                     android:hint="Provinsi"
+                                    android:focusable="false"
                                     android:layout_gravity="center"
+                                    android:gravity="center_vertical"
                                     android:textStyle="bold"
                                     android:textColorHint="#b5a981"
                                     android:textSize="15dp"
@@ -267,8 +272,8 @@
 
                         <EditText
                             android:id="@+id/ucapan"
-                            android:background="@drawable/goku"
-                            android:hint="Ucapan"
+                            android:background="#fff"
+                            android:hint="isi disini"
                             android:textColor="#aa7a00"
                             android:layout_marginTop="5dp"
                             android:textColorHint="#b5a981"
@@ -302,7 +307,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
-                <Button
+                <!--<Button
                     android:id="@+id/ongkir"
                     android:background="@drawable/tombol"
                     android:text="CEK ONGKIR"
@@ -311,7 +316,7 @@
                     android:textSize="20dp"
                     android:layout_margin="5dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"/>-->
 
                 <View
                     android:layout_width="match_parent"

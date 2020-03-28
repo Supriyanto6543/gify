@@ -78,13 +78,14 @@ public class List_Kado extends AppCompatActivity {
             public void onClick(View v) {
                 searchView.setVisibility(View.VISIBLE);
                 tulisanListKado.setVisibility(View.GONE);
+
             }
         });
         dialog  = new Dialog(List_Kado.this);
         inflater = (LayoutInflater)getApplication().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.loading, null);
         ImageView goku = layout.findViewById(R.id.custom_loading_imageView);
-        goku.animate().rotationBy(360).setDuration(1000).setInterpolator(new LinearInterpolator()).start();
+        goku.animate().rotationBy(3600).setDuration(10000).setInterpolator(new LinearInterpolator()).start();
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
         dialog.setContentView(layout);
@@ -152,7 +153,9 @@ public class List_Kado extends AppCompatActivity {
                     Log.d("array", "onResponse: " + array.toString() + response.toString());
                     if (array.length() == 0){
                         Toast.makeText(List_Kado.this, "Belum ada barang", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
                         Intent intent = new Intent(List_Kado.this, MainActivity.class);
+                        startActivity(intent);
                     }
                     for (int a = 0; a < array.length(); a++){
                         JSONObject object = array.getJSONObject(a);
@@ -195,6 +198,7 @@ public class List_Kado extends AppCompatActivity {
 
         if (adapterListKado == null){
             Toast.makeText(getApplicationContext(), "Kado tidak ditemukan", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
         }else{
             adapterListKado.filterList(filterKu);
         }

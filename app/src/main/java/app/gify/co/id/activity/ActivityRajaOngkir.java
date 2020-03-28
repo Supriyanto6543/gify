@@ -472,10 +472,7 @@ public class ActivityRajaOngkir extends AppCompatActivity {
 
     }
 
-    public void getCoast(String origin,
-                         String destination,
-                         String weight,
-                         String courier) {
+    public void getCoast(String origin, String destination, String weight, String courier) {
         ApiRaja apiRaja = BaseApi.callJson();
         Call<ItemCost> call = apiRaja.getCost(
                 "cfc2d1eac754c1b41f383bbfa6fe45b6",
