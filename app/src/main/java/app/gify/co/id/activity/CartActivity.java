@@ -77,14 +77,14 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
     RecyclerView recyclerView;
     MainActivity mainActivity;
     NavigationView navigationView;
-    public int hargaku, beratku, kuantitas, lastNumber, idbarang, getHargaAwal;
+    public int beratku, kuantitas, lastNumber, idbarang, getHargaAwal;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
     Spanned templateConvert;
     NumberFormat format;
     Locale id;
     Random random;
-    String template, idberat, idharga, berat;
+    String template, idberat, idharga, berat, hargaku;
     private Dialog dialog;
     LayoutInflater inflater;
     ImageView goku;
@@ -141,7 +141,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
 
         Checkout.setOnClickListener(view -> {
             Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
-            intent.putExtra("idharga", idharga);
+            intent.putExtra("idharga", String.valueOf(hargaku));
             intent.putExtra("name", namacart);
             Log.d("kotainante", "onCreate: " + namacart);
             intent.putExtra("qtyku", qtyku);
@@ -223,6 +223,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         public void onReceive(Context context, Intent intent) {
             namacart = intent.getStringExtra("name");
             Log.d("hargalast", namacart + "");
+            hargaku = intent.getStringExtra("totalvalueku");
             qtyku = intent.getStringExtra("qty");
             berat = intent.getStringExtra("berat");
             template = "<h2> Gify Transaction </h2> " +
@@ -276,6 +277,11 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
             Log.d("taptap", "onSwipe: " + madolCarts.get(viewHolder.getAdapterPosition()).getNamacart());
 
             GETBARANG(madolCarts.get(viewHolder.getAdapterPosition()).getNamacart());
+
+
+
+            totalbelanjar.setText("Rp " + adapterCart.kurangtotalcart(madolCarts, name) + ",-");
+            totalberat.setText(adapterCart.kurangberatCart(madolCarts, name) + " gram");
 
             adapterCart.removeItem(viewHolder.getAdapterPosition());
         }
