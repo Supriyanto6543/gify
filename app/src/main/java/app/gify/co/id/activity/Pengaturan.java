@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -129,6 +130,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     int province_idku;
     TextView gantiAlamat;
     ProgressDialog loadingBar;
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
 
     private static final int GALLERY_PHOTO = 1;
     private static final int GALLERY_COVER = 2;
@@ -449,6 +452,11 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 Log.d("mmakan bang", response + "");
                 try {
                     if (response.equals("bisa")) {
+                        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                        editor = sharedPreferences.edit();
+                        editor.remove("nama");
+                        editor.putString("nama", n + ln);
+                        editor.apply();
                         Intent intentku = new Intent(getApplication(), MainActivity.class);
                         startActivity(intentku);
                         finish();
