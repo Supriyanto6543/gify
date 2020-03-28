@@ -8,6 +8,7 @@ import android.app.FragmentTransaction;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -59,6 +60,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.PrivateKey;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -71,14 +73,15 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
-//import javax.mail.Authenticator;
-//import javax.mail.Message;
-//import javax.mail.MessagingException;
-//import javax.mail.PasswordAuthentication;
-//import javax.mail.Session;
-//import javax.mail.Transport;
-//import javax.mail.internet.InternetAddress;
-//import javax.mail.internet.MimeMessage;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import app.gify.co.id.Fragment.pembelian.PembelianFragment;
 import app.gify.co.id.R;
 import app.gify.co.id.baseurl.UrlJson;
@@ -93,7 +96,7 @@ import app.gify.co.id.rajaongkir.modelongkir.provinsi.Province;
 import app.gify.co.id.rajaongkir.modelongkir.provinsi.ResultOngkir;
 import retrofit2.Call;
 import retrofit2.Callback;
-//import app.gify.co.id.thirdparty.SenderAgent;
+import app.gify.co.id.thirdparty.SenderAgent;
 
 import static app.gify.co.id.baseurl.UrlJson.DELETEALLCART;
 import static app.gify.co.id.baseurl.UrlJson.ORDER;
@@ -118,10 +121,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     EditText nama, hp, jalan, kelurahan, kecamatan,  ucapan;
     String currentUserID, Lnama, LNohp, Lalamat;
     ImageView gantiAlamat;
-    TextView kota, provinsi;
-
-    private AlertDialog.Builder alert;
-    private AlertDialog ad;
 
     HintArrayAdapter hintArrayAdapter, hintArrayAdapterKu;
 
@@ -141,6 +140,11 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     Spanned templateConvert;
     Dialog dialog;
     String ongkir;
+    TextView kota, provinsi;
+
+    AlertDialog.Builder alert;
+    AlertDialog ad;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -491,16 +495,20 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     }
 
     public void pushNotify(Context context){
+        Intent intent = new Intent(this, PembelianFragment.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "notify_001");
 
         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
         bigText.setBigContentTitle("Pembelian Berhasil");
-        bigText.setSummaryText("silahkan lakukan pembayaran");
+        bigText.setSummaryText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran dengan invoice yang kami kirim ke emailmu");
 
         mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
         mBuilder.setContentTitle("Pembelian Berhasil");
-        mBuilder.setContentText("silahkan lakukan pembayaran");
+        mBuilder.setContentText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran dengan invoice yang kami kirim ke emailmu");
         mBuilder.setPriority(Notification.PRIORITY_MAX);
+        mBuilder.setContentIntent(pendingIntent);
         mBuilder.setStyle(bigText);
 
         mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -527,7 +535,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         Dialog dialog;
 
         private Context context;
-//        private Session session;
+        private Session session;
 
         private ProgressDialog progressDialog;
 
@@ -576,24 +584,24 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             properties.put("mail.smtp.auth", "true");
             properties.put("mail.smtp.port", "465");
 
-//            session = Session.getDefaultInstance(properties, new Authenticator() {
-//                @Override
-//                protected PasswordAuthentication getPasswordAuthentication() {
-//                    return new PasswordAuthentication("gify.firebase@gmail.com", "Gifyapp01");
-//                }
-//            });
-//
-//            try{
-//                MimeMessage mimeMessage = new MimeMessage(session);
-//
-//                mimeMessage.setFrom(new InternetAddress("gify.firebase@gmail.com"));
-//                mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress("supriyanto150@gmail.com"));
-//                mimeMessage.setSubject(subject);
-//                mimeMessage.setText(String.valueOf(message));
-//                Transport.send(mimeMessage);
-//            }catch (MessagingException m){
-//                m.printStackTrace();
-//            }
+            session = Session.getDefaultInstance(properties, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication("gify.firebase@gmail.com", "Gifyapp01");
+                }
+            });
+
+            try{
+                MimeMessage mimeMessage = new MimeMessage(session);
+
+                mimeMessage.setFrom(new InternetAddress("gify.firebase@gmail.com"));
+                mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress("supriyanto150@gmail.com"));
+                mimeMessage.setSubject(subject);
+                mimeMessage.setText(String.valueOf(message));
+                Transport.send(mimeMessage);
+            }catch (MessagingException m){
+                m.printStackTrace();
+            }
 
             return null;
         }
@@ -614,7 +622,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
         View alertLayout = inflater.inflate(R.layout.rajaongkir_popup_search, null);
 
-        alert = new AlertDialog.Builder(this);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("List ListProvince");
         alert.setMessage("select your province");
         alert.setView(alertLayout);

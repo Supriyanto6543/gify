@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -129,6 +130,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     int province_idku;
     TextView gantiAlamat;
     ProgressDialog loadingBar;
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
 
     private static final int GALLERY_PHOTO = 1;
     private static final int GALLERY_COVER = 2;
@@ -288,47 +291,39 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
 
             dialog.show();
-            if (gAlamat.isEmpty() || kelurahan.isEmpty() || kecamatan.isEmpty()||  kota.isEmpty() || provinsi.isEmpty() ){
-                Toast.makeText(getApplicationContext(), "isi alamat lengkap terlebih dahulu",Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }else if (getStringImage(Photo).isEmpty() || getStringImage(Cover).isEmpty()){
-                Toast.makeText(getApplicationContext(), "ambil gambar terkebih dahulu",Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }else {
-                AkuGantengBanget(email,noHp,namadepan, namabelakang,gAlamat + ", " + kelurahan + ", " + kecamatan + ", " + kota + ", " + provinsi);
-                RootRef.child("Users").child(currentUserID).child("nama").setValue(nama)
-                        .addOnCompleteListener(task -> {
-                            NamaDepan.setText("");
-                            NamaBelakang.setText("");
-                            dialog.dismiss();
-                        });
-                RootRef.child("Users").child(currentUserID).child("noHp").setValue(noHp)
-                        .addOnCompleteListener(task -> {
-                            NoHp.setText("");
-                            dialog.dismiss();
-                        });
-                RootRef.child("Users").child(currentUserID).child("email").setValue(email)
-                        .addOnCompleteListener(task -> {
-                            Email.setText("");
-                            dialog.dismiss();
-                        });
-                RootRef.child("Users").child(currentUserID).child("alamat").setValue(alamat)
-                        .addOnCompleteListener(task -> {
-                            editTextKelurahan.setText("");
-                            editTextKecamatan.setText("");
+            AkuGantengBanget(email,noHp,namadepan, namabelakang,gAlamat + ", " + kelurahan + ", " + kecamatan + ", " + kota + ", " + provinsi);
+            RootRef.child("Users").child(currentUserID).child("nama").setValue(nama)
+                    .addOnCompleteListener(task -> {
+                        NamaDepan.setText("");
+                        NamaBelakang.setText("");
+                        dialog.dismiss();
+                    });
+            RootRef.child("Users").child(currentUserID).child("noHp").setValue(noHp)
+                    .addOnCompleteListener(task -> {
+                        NoHp.setText("");
+                        dialog.dismiss();
+                    });
+            RootRef.child("Users").child(currentUserID).child("email").setValue(email)
+                    .addOnCompleteListener(task -> {
+                        Email.setText("");
+                        dialog.dismiss();
+                    });
+            RootRef.child("Users").child(currentUserID).child("alamat").setValue(alamat)
+                    .addOnCompleteListener(task -> {
+                        editTextKelurahan.setText("");
+                        editTextKecamatan.setText("");
 
-                            editTextKelurahan.setVisibility(View.GONE);
-                            editTextKecamatan.setVisibility(View.GONE);
+                        editTextKelurahan.setVisibility(View.GONE);
+                        editTextKecamatan.setVisibility(View.GONE);
 
-                            viewKecamatan.setVisibility(View.VISIBLE);
-                            viewKelurahan.setVisibility(View.VISIBLE);
+                        viewKecamatan.setVisibility(View.VISIBLE);
+                        viewKelurahan.setVisibility(View.VISIBLE);
 
-                            dialog.dismiss();
-                        });
+                        dialog.dismiss();
+                    });
 
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-            }
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
 
 
 
@@ -457,6 +452,12 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 Log.d("mmakan bang", response + "");
                 try {
                     if (response.equals("bisa")) {
+                        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                        editor = sharedPreferences.edit();
+                        editor.remove("nama");
+                        editor.putString("nama", n);
+                        editor.putString("ln", ln);
+                        editor.apply();
                         Intent intentku = new Intent(getApplication(), MainActivity.class);
                         startActivity(intentku);
                         finish();
