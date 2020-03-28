@@ -390,7 +390,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             profile = data.getData();
             try {
                 Photo = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), profile);
-                decoded1 = getResizedBitmap(Photo, 100);
+                decoded1 = getResizedBitmap(Photo, 300);
                 profileImage.setImageBitmap(decoded1);
 
             } catch (IOException e) {
@@ -404,7 +404,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             cover = data.getData();
             try {
                 Cover = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), cover);
-                decoded = getResizedBitmap(Cover, 100);
+                decoded = getResizedBitmap(Cover, 300);
                 coverImage.setImageBitmap(decoded);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -564,6 +564,10 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     params.put("last_name", ln);
                     params.put("nohp", no);
                     params.put("alamat", a);
+                    params.put("kelurahan", kl);
+                    params.put("kecamatan", kc);
+                    params.put("kota", kt);
+                    params.put("provinsi", pr);
                     params.put("id_tetap", LID);
                 }else {
                     params.put("foto", getStringImage(decoded1));
@@ -573,6 +577,10 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     params.put("last_name", ln);
                     params.put("nohp", no);
                     params.put("alamat", a);
+                    params.put("kelurahan", kl);
+                    params.put("kecamatan", kc);
+                    params.put("kota", kt);
+                    params.put("provinsi", pr);
                     params.put("id_tetap", LID);
                 }
 
