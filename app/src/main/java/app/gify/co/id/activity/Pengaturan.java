@@ -195,11 +195,14 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         dialog.setContentView(layout);
         dialog.show();
 
+
         callMethos();
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        namaUser = sharedPreferences.getString("nama", "");
-        Log.d("nama", namaUser);
+        /*namaUser = sharedPreferences.getString("nama", "");*/
+        /*editor = sharedPreferences.edit();
+
+        editor.apply();*/
 
         mAuth = FirebaseAuth.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
@@ -288,6 +291,13 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             gAlamat = GantiAlamat.getText().toString().trim();
             kota = KotaS.getText().toString();
             provinsi = ProvinsiS.getText().toString();
+            editor = sharedPreferences.edit();
+            editor.remove("nama");
+            editor.remove("email");
+            editor.putString("nama", nama);
+            editor.putString("email", email);
+            /*editor.putString("ln", ln);*/
+            editor.apply();
 
 
             dialog.show();
@@ -452,12 +462,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 Log.d("mmakan bang", response + "");
                 try {
                     if (response.equals("bisa")) {
-                        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-                        editor = sharedPreferences.edit();
-                        editor.remove("nama");
-                        editor.putString("nama", n);
-                        editor.putString("ln", ln);
-                        editor.apply();
+                        Log.d("Test", "onResponse: " + ln + n);
+
                         Intent intentku = new Intent(getApplication(), MainActivity.class);
                         startActivity(intentku);
                         finish();
@@ -480,14 +486,35 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("foto", getStringImage(Photo));
-                params.put("cover", getStringImage(Cover));
-                params.put("email", e);
-                params.put("nama", n);
-                params.put("last_name", ln);
-                params.put("nohp", no);
-                params.put("alamat", a);
-                params.put("id_tetap", LID);
+                if (getStringImage(Cover) == null){
+                    params.put("foto", getStringImage(Photo));
+                    params.put("cover", "cover");
+                    params.put("email", e);
+                    params.put("nama", n);
+                    params.put("last_name", ln);
+                    params.put("nohp", no);
+                    params.put("alamat", a);
+                    params.put("id_tetap", LID);
+                }else if (getStringImage(Photo) == null){
+                    params.put("foto", "foto");
+                    params.put("cover", getStringImage(Cover));
+                    params.put("email", e);
+                    params.put("nama", n);
+                    params.put("last_name", ln);
+                    params.put("nohp", no);
+                    params.put("alamat", a);
+                    params.put("id_tetap", LID);
+                }else {
+                    params.put("foto", getStringImage(Photo));
+                    params.put("cover", getStringImage(Cover));
+                    params.put("email", e);
+                    params.put("nama", n);
+                    params.put("last_name", ln);
+                    params.put("nohp", no);
+                    params.put("alamat", a);
+                    params.put("id_tetap", LID);
+                }
+
                 return params;
             }
         };
