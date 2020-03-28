@@ -118,9 +118,9 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     private AlertDialog.Builder alert;
     private AlertDialog ad;
 
-    EditText NamaDepan, NamaBelakang, NoHp, Email, GantiAlamat, editTextKecamatan, editTextKelurahan;
+    EditText NamaDepan, NamaBelakang, NoHp,  GantiAlamat, editTextKecamatan, editTextKelurahan;
     LinearLayout changePicture, changeCover;
-    TextView Kelurahan, Kecamatan, nama_depan, nama_belakang, No_hp, E_mail, textAlamat;
+    TextView Kelurahan, Kecamatan, Email,nama_depan, nama_belakang, No_hp, E_mail, textAlamat;
     String  cobaAgar, province, namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat2, gAlamat, kota, provinsi, Lemail, LID, namaUser, emailnama, idku, namanama,
     LNama, LEmail2, Lalamat, LNoHp, Ltanggal, fotoProfil, fotoCover;
     ImageView CheckList, ganti,profileImage, coverImage;
@@ -170,7 +170,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         changePicture = findViewById(R.id.changePicturePengaturan);
         Kelurahan = findViewById(R.id.kelurahan);
         Kecamatan = findViewById(R.id.kecamatan);
-        gantiAlamat = findViewById(R.id.textviewAlamatPengaturan);
         GantiAlamat = findViewById(R.id.edittextAlamatPengaturan);
         ganti = findViewById(R.id.gantiAlamatPengaturan);
         viewTerserah = findViewById(R.id.viewTerserah);
@@ -286,27 +285,17 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             gAlamat = GantiAlamat.getText().toString().trim();
             kota = KotaS.getText().toString();
             provinsi = ProvinsiS.getText().toString();
-            if (Lalamat == null) {
-                alamat = gAlamat + "," + " " + kelurahan + "," + " " + kecamatan + "," + " " + kota + "," + " " + provinsi;
-            }
-            else if (!gAlamat.isEmpty()) {
-                alamat = gAlamat;
-            }
-            else if (!provinsi.isEmpty() && !kota.isEmpty() && !kecamatan.isEmpty() && !kelurahan.isEmpty()){
-                alamat = gAlamat + "," + " " + kelurahan + "," + " " + kecamatan + "," + " " + kota + "," + " " + provinsi;
-            }
-            else {
-                Toast.makeText(Pengaturan.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
-            }
+
+
             dialog.show();
-
-
-            if (namadepan.isEmpty() || noHp.isEmpty() || email.isEmpty() || gAlamat.isEmpty()) {
-                Toast.makeText(Pengaturan.this, "Isi yang kosong terlebih dahulu", Toast.LENGTH_SHORT).show();
+            if (gAlamat.isEmpty() || kelurahan.isEmpty() || kecamatan.isEmpty()||  kota.isEmpty() || provinsi.isEmpty() ){
+                Toast.makeText(getApplicationContext(), "isi alamat lengkap terlebih dahulu",Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
-            }
-            else {
-                AkuGantengBanget();
+            }else if (getStringImage(Photo).isEmpty() || getStringImage(Cover).isEmpty()){
+                Toast.makeText(getApplicationContext(), "ambil gambar terkebih dahulu",Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }else {
+                AkuGantengBanget(email,noHp,namadepan, namabelakang,gAlamat + ", " + kelurahan + ", " + kecamatan + ", " + kota + ", " + provinsi);
                 RootRef.child("Users").child(currentUserID).child("nama").setValue(nama)
                         .addOnCompleteListener(task -> {
                             NamaDepan.setText("");
@@ -339,8 +328,10 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
-
             }
+
+
+
         });
 
 
@@ -458,7 +449,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         return encodedImage;
     }
 
-    private void AkuGantengBanget(){
+    private void AkuGantengBanget(String e, String no, String n, String ln, String a){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE +"?id_tetap=" + LID, new Response.Listener<String>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -488,19 +479,14 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                if(getStringImage(Photo) == null){
-                    params.put("foto", "photo");
-                    params.put("cover", getStringImage(Cover));
-                    params.put("id_tetap", LID);
-                }else if (getStringImage(Cover) == null){
-                    params.put("foto", getStringImage(Photo));
-                    params.put("cover", "cover");
-                    params.put("id_tetap", LID);
-                }else {
-                    params.put("foto", getStringImage(Photo));
-                    params.put("cover", getStringImage(Cover));
-                    params.put("id_tetap", LID);
-                }
+                params.put("foto", getStringImage(Photo));
+                params.put("cover", getStringImage(Cover));
+                params.put("email", e);
+                params.put("nama", n);
+                params.put("last_name", ln);
+                params.put("nohp", no);
+                params.put("alamat", a);
+                params.put("id_tetap", LID);
                 return params;
             }
         };

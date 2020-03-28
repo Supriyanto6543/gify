@@ -41,6 +41,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import app.gify.co.id.R;
 import app.gify.co.id.activity.CartActivity;
@@ -194,7 +195,7 @@ public class FavoritFragment extends Fragment {
             dialog.dismiss();
             Log.d("errorlistkadojson", "getBarang: " + error.getMessage());
         });
-        RequestQueue queue = Volley.newRequestQueue(getContext());
+        RequestQueue queue = Volley.newRequestQueue(Objects.requireNonNull(getContext()));
         queue.add(objectRequest);
     }
 
