@@ -120,10 +120,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     EditText nama, hp, jalan, kelurahan, kecamatan,  ucapan;
     String currentUserID, Lnama, LNohp, Lalamat;
     ImageView gantiAlamat;
-    TextView kota, provinsi;
-
-    private AlertDialog.Builder alert;
-    private AlertDialog ad;
 
     HintArrayAdapter hintArrayAdapter, hintArrayAdapterKu;
 
