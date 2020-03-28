@@ -293,7 +293,9 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             provinsi = ProvinsiS.getText().toString();
             editor = sharedPreferences.edit();
             editor.remove("nama");
+            editor.remove("email");
             editor.putString("nama", nama);
+            editor.putString("email", email);
             /*editor.putString("ln", ln);*/
             editor.apply();
 
