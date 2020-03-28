@@ -46,6 +46,7 @@ import androidx.core.app.NotificationCompat;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -140,6 +141,10 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     Spanned templateConvert;
     Dialog dialog;
     String ongkir;
+    RequestQueue queue;
+
+    private static void onErrorResponse(VolleyError error) {
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -423,6 +428,19 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         queue.add(objectRequest);
     }
 
+    private void deleteallcart(){
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, DELETEALLCART+"?idtetap="+currentUserID, response -> {
+            if (response.equals("bisa")){
+                Toast.makeText(context, "cart kosong", Toast.LENGTH_SHORT).show();
+            }
+        }, CheckoutActivity::onErrorResponse);
+
+
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(stringRequest);
+    }
+
     public void sendCart(Context context, String idtetap, String date, String penerima,String noHp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang,String jumlah, String berat, String ucapan){
         StringRequest request = new StringRequest(Request.Method.POST, ORDER, response -> {
             Log.d("bahrus", response + "");
@@ -472,17 +490,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         return dateFormat.format(date);
     }
 
-    private void deleteallcart(){
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, DELETEALLCART+"?idtetap="+currentUserID, response -> {
-            if (response.equals("bisa")){
-                Toast.makeText(context, "cart kosong", Toast.LENGTH_SHORT).show();
-            }
-        }, error ->  {
 
-        });
-        RequestQueue queue = Volley.newRequestQueue(context);
-        queue.add(stringRequest);
-    }
 
     private String replaceNumberOfAmount(String original, int replace){
         return original.substring(0, original.length() - 3) + replace;

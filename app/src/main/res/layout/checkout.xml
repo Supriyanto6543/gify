@@ -88,7 +88,7 @@
 
                         <EditText
                             android:id="@+id/nama"
-                            android:hint="Nasrudin Nawawi"
+                            android:hint="Isi Nama Lengkap"
                             android:textColorHint="#b5a981"
                             android:textColor="#aa7a00"
                             android:background="@drawable/kamdakmdwk"
@@ -105,7 +105,7 @@
 
                         <EditText
                             android:id="@+id/hp"
-                            android:hint="Nasrudin Nawawi"
+                            android:hint="Isi Nomor HP"
                             android:inputType="number"
                             android:textColorHint="#b5a981"
                             android:textColor="#aa7a00"
