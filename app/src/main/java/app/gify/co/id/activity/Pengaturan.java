@@ -174,8 +174,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         CheckList = findViewById(R.id.checklistPengaturan);
         Back = findViewById(R.id.backPengaturan);
         changePicture = findViewById(R.id.changePicturePengaturan);
-        Kelurahan = findViewById(R.id.kelurahan);
-        Kecamatan = findViewById(R.id.kecamatan);
+        /*Kelurahan = findViewById(R.id.kelurahan);
+        Kecamatan = findViewById(R.id.kecamatan);*/
         GantiAlamat = findViewById(R.id.edittextAlamatPengaturan);
         ganti = findViewById(R.id.gantiAlamatPengaturan);
         viewTerserah = findViewById(R.id.viewTerserah);
@@ -276,12 +276,13 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         });
 
         ganti.setOnClickListener(v -> {
-            Kelurahan.setVisibility(View.GONE);
-            Kecamatan.setVisibility(View.GONE);
+            /*Kelurahan.setVisibility(View.GONE);
+            Kecamatan.setVisibility(View.GONE);*/
 
             editTextKecamatan.setVisibility(View.VISIBLE);
             editTextKelurahan.setVisibility(View.VISIBLE);
         });
+
 
         CheckList.setOnClickListener(v -> {
             namadepan = NamaDepan.getText().toString().trim();
@@ -306,7 +307,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             dialog.show();
             /*coverku = getRealPathFromURI( cover );
             photoku = getRealPathFromURI( profile );*/
-            AkuGantengBanget(email,noHp,namadepan, namabelakang,gAlamat + ", " + kelurahan + ", " + kecamatan + ", " + kota + ", " + provinsi);
+            AkuGantengBanget(email,noHp,namadepan, namabelakang,gAlamat , kelurahan , kecamatan , kota , provinsi);
             RootRef.child("Users").child(currentUserID).child("nama").setValue(nama)
                     .addOnCompleteListener(task -> {
                         NamaDepan.setText("");
@@ -510,7 +511,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         return cursor.getString(column_index);
     }*/
 
-    private void AkuGantengBanget(String e, String no, String n, String ln, String a){
+    private void AkuGantengBanget(String e, String no, String n, String ln, String a, String kl, String kc, String kt, String pr){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE +"?id_tetap=" + LID, new Response.Listener<String>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -542,7 +543,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                if (getStringImage(decoded) == null){
+                if (decoded == null){
                     params.put("foto", getStringImage(decoded1));
                     params.put("cover", "cover");
                     params.put("email", e);
@@ -550,8 +551,12 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     params.put("last_name", ln);
                     params.put("nohp", no);
                     params.put("alamat", a);
+                    params.put("kelurahan", kl);
+                    params.put("kecamatan", kc);
+                    params.put("kota", kt);
+                    params.put("provinsi", pr);
                     params.put("id_tetap", LID);
-                }else if (getStringImage(decoded1) == null){
+                }else if (decoded1 == null){
                     params.put("foto", "foto");
                     params.put("cover", getStringImage(decoded));
                     params.put("email", e);
