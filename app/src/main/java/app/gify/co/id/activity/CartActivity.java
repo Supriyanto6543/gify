@@ -227,15 +227,15 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
             hargaku = intent.getStringExtra("totalvalueku");
             qtyku = intent.getStringExtra("qty");
             berat = intent.getStringExtra("berat");
-            template = "<h2> Gify Transaction </h2> " +
-                    "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
-                    + "<p><b> Nama barang: </p></b>"
-                    + "<p><b> Harga barang" + format.format(Double.valueOf(replaceNumberOfAmount(hargaku, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
-                    + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
-                    + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
-                    + "<h2>Salam, Gify Team</h2>";
-            Log.d("hargalast", idharga + lastNumber + " s " + qtyku  + " s " + beratku);
-            templateConvert = Html.fromHtml(template);
+//            template = "<h2> Gify Transaction </h2> " +
+//                    "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
+//                    + "<p><b> Nama barang: </p></b>"
+//                    + "<p><b> Harga barang" + format.format(Double.valueOf(replaceNumberOfAmount(hargaku, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
+//                    + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
+//                    + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
+//                    + "<h2>Salam, Gify Team</h2>";
+//            Log.d("hargalast", idharga + lastNumber + " s " + qtyku  + " s " + beratku);
+//            templateConvert = Html.fromHtml(template);
         }
     };
 
