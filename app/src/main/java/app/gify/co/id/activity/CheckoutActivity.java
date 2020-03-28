@@ -240,7 +240,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         prosescekout.setOnClickListener(view -> {
 
             if (nama.getText().toString().isEmpty() || hp.getText().toString().isEmpty() || jalan.getText().toString().isEmpty() || kelurahan.getText().toString().isEmpty() || kota.getText().toString().isEmpty() || provinsi.getText().toString().isEmpty() || ucapan.getText().toString().isEmpty()){
-                Toast.makeText(getApplicationContext(), "isi semua kolom yang kosong", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CheckoutActivity.this, "isi semua kolom yang kosong", Toast.LENGTH_SHORT).show();
             }else {
                 String Kota = kota.getText().toString();
                 String Provinsi = provinsi.getText().toString();
@@ -387,7 +387,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 e.printStackTrace();
             }
         }, error -> Log.d("err2", "Error: " + error.getMessage()));
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        RequestQueue queue = Volley.newRequestQueue(CheckoutActivity.this);
         queue.add(objectRequest);
     }
 
@@ -422,7 +422,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 e.printStackTrace();
             }
         }, error -> Log.d("error7", "Error: " + error.getMessage()));
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        RequestQueue queue = Volley.newRequestQueue(CheckoutActivity.this);
         queue.add(objectRequest);
     }
 
@@ -439,7 +439,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 }
             }catch (Exception e){
                 e.printStackTrace();
-                Log.d("erorca", "sendCart: " + e.getMessage());
+                Log.d("erorcas", "sendCart: " + e.getMessage());
             }
         }, error -> {
             Log.d("erorca", "sendCart: " + error.getMessage());
@@ -479,12 +479,12 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     private void deleteallcart(){
         StringRequest stringRequest = new StringRequest(Request.Method.GET, DELETEALLCART+"?idtetap="+currentUserID, response -> {
             if (response.equals("bisa")){
-                Toast.makeText(context, "cart kosong", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CheckoutActivity.this, "cart kosong", Toast.LENGTH_SHORT).show();
             }
         }, error ->  {
 
         });
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        RequestQueue queue = Volley.newRequestQueue(CheckoutActivity.this);
         queue.add(stringRequest);
     }
 
@@ -525,7 +525,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         mNotificationManager.notify(0, mBuilder.build());
     }
 
-    private static class SenderOrder extends AsyncTask<Void, Void, Void>{
+    private class SenderOrder extends AsyncTask<Void, Void, Void>{
         private String mail, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang,jumlah,berat, ucapan, jumlahbrng;
         private String subject;
         private Spanned message;
@@ -609,7 +609,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             dialog.dismiss();
             Log.d("dismisskupost", "onPostExecute: " + berat + " s " + jumlah);
             context.startActivity(new Intent(context, MainActivity.class));
-            new CheckoutActivity().sendCart(context, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, jumlah, berat, ucapan, harga);
+            new CheckoutActivity().sendCart(CheckoutActivity.this, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, jumlah, berat, ucapan, harga);
             new CheckoutActivity().pushNotify(context);
         }
     }
@@ -780,7 +780,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
                 } else {
                     String error = "Error Retrive Data from Server !!!";
-                    Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CheckoutActivity.this, error, Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -788,7 +788,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void onFailure(Call<Province> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "Message : Error " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(CheckoutActivity.this, "Message : Error " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -827,7 +827,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
                 } else {
                     String error = "Error Retrive Data from Server !!!";
-                    Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CheckoutActivity.this, error, Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -835,7 +835,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void onFailure(Call<ItemCity> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "Message : Error " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(CheckoutActivity.this, "Message : Error " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -866,7 +866,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                     int statusCode = response.body().getRajaongkir().getStatus().getCode();
 
                     if (statusCode == 200){
-                        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        LayoutInflater inflater = (LayoutInflater) CheckoutActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         View alertLayout = inflater.inflate(R.layout.rajaongkir_popup_cost, null);
                         alert = new AlertDialog.Builder(CheckoutActivity.this);
                         alert.setTitle("Result Cost");
@@ -899,24 +899,24 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                         ongkir = cost;
                         provinsi.setText("");
                         kota.setText("");
-                        Toast.makeText(getApplicationContext(), "Cost: " + "Rp." + cost, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CheckoutActivity.this, "Cost: " + "Rp." + cost, Toast.LENGTH_SHORT).show();
 
                         ((Button) alertLayout.findViewById(R.id.add_destination)).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                Intent intent = new Intent(getApplication(), PembelianFragment.class);
+                                Intent intent = new Intent(CheckoutActivity.this, PembelianFragment.class);
                                 startActivity(intent);
                             }
                         });
                     } else {
 
                         String message = response.body().getRajaongkir().getStatus().getDescription();
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CheckoutActivity.this, message, Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
                     String error = "Error Retrive Data from Server !!!";
-                    Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CheckoutActivity.this, error, Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -925,7 +925,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             public void onFailure(Call<ItemCost> call, Throwable t) {
 
                 progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "Message : Error " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(CheckoutActivity.this, "Message : Error " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
