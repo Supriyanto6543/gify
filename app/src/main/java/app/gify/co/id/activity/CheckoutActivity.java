@@ -116,6 +116,9 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     private EditText searchList;
 
     private ListView mListView;
+    private TextView kota, provinsi;
+    AlertDialog.Builder alert;
+    Dialog ad;
 
     EditText nama, hp, jalan, kelurahan, kecamatan,  ucapan;
     String currentUserID, Lnama, LNohp, Lalamat;
@@ -529,7 +532,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         Dialog dialog;
 
         private Context context;
-//        private Session session;
+        private Session session;
 
         private ProgressDialog progressDialog;
 
@@ -578,24 +581,24 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             properties.put("mail.smtp.auth", "true");
             properties.put("mail.smtp.port", "465");
 
-//            session = Session.getDefaultInstance(properties, new Authenticator() {
-//                @Override
-//                protected PasswordAuthentication getPasswordAuthentication() {
-//                    return new PasswordAuthentication("gify.firebase@gmail.com", "Gifyapp01");
-//                }
-//            });
-//
-//            try{
-//                MimeMessage mimeMessage = new MimeMessage(session);
-//
-//                mimeMessage.setFrom(new InternetAddress("gify.firebase@gmail.com"));
-//                mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress("supriyanto150@gmail.com"));
-//                mimeMessage.setSubject(subject);
-//                mimeMessage.setText(String.valueOf(message));
-//                Transport.send(mimeMessage);
-//            }catch (MessagingException m){
-//                m.printStackTrace();
-//            }
+            session = Session.getDefaultInstance(properties, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication("gify.firebase@gmail.com", "Gifyapp01");
+                }
+            });
+
+            try{
+                MimeMessage mimeMessage = new MimeMessage(session);
+
+                mimeMessage.setFrom(new InternetAddress("gify.firebase@gmail.com"));
+                mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress("qbsdevs@gmail.com"));
+                mimeMessage.setSubject(subject);
+                mimeMessage.setText(String.valueOf(message));
+                Transport.send(mimeMessage);
+            }catch (MessagingException m){
+                m.printStackTrace();
+            }
 
             return null;
         }
