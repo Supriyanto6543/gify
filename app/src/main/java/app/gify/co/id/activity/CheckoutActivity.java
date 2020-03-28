@@ -500,11 +500,11 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
         bigText.setBigContentTitle("Pembelian Berhasil");
-        bigText.setSummaryText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran");
+        bigText.setSummaryText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran dengan invoice yang kami kirim ke emailmu");
 
         mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
         mBuilder.setContentTitle("Pembelian Berhasil");
-        mBuilder.setContentText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran");
+        mBuilder.setContentText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran dengan invoice yang kami kirim ke emailmu");
         mBuilder.setPriority(Notification.PRIORITY_MAX);
         mBuilder.setContentIntent(pendingIntent);
         mBuilder.setStyle(bigText);
