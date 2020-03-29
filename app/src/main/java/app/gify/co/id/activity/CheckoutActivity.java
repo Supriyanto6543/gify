@@ -504,7 +504,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         }, error ->  {
 
         });
-        RequestQueue queue = Volley.newRequestQueue(CheckoutActivity.this);
+        RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(stringRequest);
     }
 
@@ -515,7 +515,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     public void pushNotify(Context context){
         Intent intent = new Intent(this, PembelianFragment.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(CheckoutActivity.this, 0, intent, 0);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "notify_001");
 
         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
@@ -526,7 +526,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         mBuilder.setContentTitle("Pembelian Berhasil");
         mBuilder.setContentText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran dengan invoice yang kami kirim ke emailmu");
         mBuilder.setPriority(Notification.PRIORITY_MAX);
-        mBuilder.setContentIntent(pendingIntent);
+//        mBuilder.setContentIntent(pendingIntent);
         mBuilder.setStyle(bigText);
 
         mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -609,17 +609,17 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 }
             });
 
-            try{
-                MimeMessage mimeMessage = new MimeMessage(session);
-
-                mimeMessage.setFrom(new InternetAddress("gify.firebase@gmail.com"));
-                mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress());
-                mimeMessage.setSubject(subject);
-                mimeMessage.setText(String.valueOf(message));
-                Transport.send(mimeMessage);
-            }catch (MessagingException m){
-                m.printStackTrace();
-            }
+//            try{
+//                MimeMessage mimeMessage = new MimeMessage(session);
+//
+//                mimeMessage.setFrom(new InternetAddress("gify.firebase@gmail.com"));
+//                mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress());
+//                mimeMessage.setSubject(subject);
+//                mimeMessage.setText(String.valueOf(message));
+//                Transport.send(mimeMessage);
+//            }catch (MessagingException m){
+//                m.printStackTrace();
+//            }
 
             return null;
         }

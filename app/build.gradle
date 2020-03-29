@@ -77,5 +77,6 @@ dependencies {
     implementation 'com.makeramen:roundedimageview:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     implementation 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
+    implementation 'javax.mail:mail:1.4.7'
 }
 apply plugin: 'com.google.gms.google-services'
