@@ -98,8 +98,6 @@ public class Register extends AppCompatActivity {
 
 
         Masuk.setOnClickListener(v -> CreateNewAccount());
-
-
     }
 
     private void InitializeFields() {

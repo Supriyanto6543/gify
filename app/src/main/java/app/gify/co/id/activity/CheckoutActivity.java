@@ -140,7 +140,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     Locale id;
     Random random;
     int lastNumber, quantity;
-    String berat;
+    String berat, Lemail;
     Spanned templateConvert;
     Dialog dialog;
     String ongkir;
@@ -159,6 +159,19 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
 
+        RootRef.child("Users").child(currentUserID)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Lemail = dataSnapshot.child("email").getValue().toString();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
         // initialization
         nama = findViewById(R.id.nama);
         hp = findViewById(R.id.hp);
@@ -170,7 +183,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         ucapan = findViewById(R.id.ucapan);
         berat = getIntent().getStringExtra("berat");
 
-        getEmail();
 
 //        textViewCheckOutAlamat = findViewById(R.id.textviewAlamatCheckout);
 //        NamaPenerima = findViewById(R.id.namaPenerimaCheckout);
@@ -601,7 +613,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 MimeMessage mimeMessage = new MimeMessage(session);
 
                 mimeMessage.setFrom(new InternetAddress("gify.firebase@gmail.com"));
-                mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress("supriyanto150@gmail.com"));
+                mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress());
                 mimeMessage.setSubject(subject);
                 mimeMessage.setText(String.valueOf(message));
                 Transport.send(mimeMessage);
@@ -938,21 +950,5 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 Toast.makeText(CheckoutActivity.this, "Message : Error " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void getEmail() {
-        RootRef.child("Users").child(currentUserID)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String Lemail = dataSnapshot.child("email").getValue().toString();
-                        Log.d("Lemail", "Email: " + Lemail);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
     }
 }
