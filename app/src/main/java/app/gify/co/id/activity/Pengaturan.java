@@ -474,7 +474,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     }
 
     public void cekprofile(){
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA + "?id_tetap=" + LID, null, response -> {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_IMAGE + LID, null, response -> {
             try {
                 JSONArray array = response.getJSONArray("GIFY");
                 for (int i = 0; i < array.length(); i++){
@@ -545,7 +545,46 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                if (decoded == null){
+                if (decoded == null && fotoProfil != null && fotoCover == null){
+                    params.put("photo", fotoProfil);
+                    params.put("cover_foto", "cover");
+                    params.put("email", e);
+                    params.put("nama", n);
+                    params.put("last_name", ln);
+                    params.put("nohp", no);
+                    params.put("alamat", a);
+                    params.put("kelurahan", kl);
+                    params.put("kecamatan", kc);
+                    params.put("kota", kt);
+                    params.put("provinsi", pr);
+                    params.put("id_tetap", LID);
+                }else if (decoded1 == null && fotoCover != null && fotoProfil == null){
+                    params.put("photo", "foto");
+                    params.put("cover_foto", fotoCover);
+                    params.put("email", e);
+                    params.put("nama", n);
+                    params.put("last_name", ln);
+                    params.put("nohp", no);
+                    params.put("alamat", a);
+                    params.put("kelurahan", kl);
+                    params.put("kecamatan", kc);
+                    params.put("kota", kt);
+                    params.put("provinsi", pr);
+                    params.put("id_tetap", LID);
+                }else if (decoded1 == null && fotoCover == null && fotoProfil == null){
+                    params.put("photo", "foto");
+                    params.put("cover_foto", "cover");
+                    params.put("email", e);
+                    params.put("nama", n);
+                    params.put("last_name", ln);
+                    params.put("nohp", no);
+                    params.put("alamat", a);
+                    params.put("kelurahan", kl);
+                    params.put("kecamatan", kc);
+                    params.put("kota", kt);
+                    params.put("provinsi", pr);
+                    params.put("id_tetap", LID);
+                }else if (decoded1 != null && decoded == null){
                     params.put("photo", getStringImage(decoded1));
                     params.put("cover_foto", "cover");
                     params.put("email", e);
@@ -558,7 +597,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     params.put("kota", kt);
                     params.put("provinsi", pr);
                     params.put("id_tetap", LID);
-                }else if (decoded1 == null){
+                }else if (decoded != null && decoded1 == null){
                     params.put("photo", "foto");
                     params.put("cover_foto", getStringImage(decoded));
                     params.put("email", e);
@@ -571,7 +610,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     params.put("kota", kt);
                     params.put("provinsi", pr);
                     params.put("id_tetap", LID);
-                }else {
+                }else{
                     params.put("photo", getStringImage(decoded1));
                     params.put("cover_foto",getStringImage(decoded));
                     params.put("email", e);
