@@ -524,7 +524,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     private void AkuGantengBanget(String e, String no, String n, String ln, String a, String kl, String kc, String kt, String pr){
 
-        if (decoded1 == null && decoded != null){
+        if (decoded1 != null && decoded == null){
             StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE1 +"?id_tetap=" + LID, new Response.Listener<String>() {
                 @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
@@ -572,7 +572,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 }
             };
             queue.add(stringRequest);
-        }else if (decoded == null && decoded1 != null){
+        }else if (decoded1 == null && decoded != null ){
             StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE2 +"?id_tetap=" + LID, new Response.Listener<String>() {
                 @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
