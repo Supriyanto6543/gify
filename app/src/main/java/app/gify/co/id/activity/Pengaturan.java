@@ -620,7 +620,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 @Override
                 protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<>();
-                    params.put("cover_foto",getStringImage(decoded));
+                    params.put("cover_foto", getStringImage(decoded));
                     params.put("email", e);
                     params.put("nama", n);
                     params.put("last_name", ln);
