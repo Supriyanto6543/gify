@@ -501,7 +501,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     public void pushNotify(Context context){
         Intent intent = new Intent(this, PembelianFragment.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(CheckoutActivity.this, 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "notify_001");
 
         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
@@ -595,17 +595,17 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 }
             });
 
-            try{
-                MimeMessage mimeMessage = new MimeMessage(session);
-
-                mimeMessage.setFrom(new InternetAddress("gify.firebase@gmail.com"));
-                mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
-                mimeMessage.setSubject(subject);
-                mimeMessage.setText(String.valueOf(message));
-                Transport.send(mimeMessage);
-            }catch (MessagingException m){
-                m.printStackTrace();
-            }
+//            try{
+//                MimeMessage mimeMessage = new MimeMessage(session);
+//
+//                mimeMessage.setFrom(new InternetAddress("gify.firebase@gmail.com"));
+//                mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
+//                mimeMessage.setSubject(subject);
+//                mimeMessage.setText(String.valueOf(message));
+//                Transport.send(mimeMessage);
+//            }catch (MessagingException m){
+//                m.printStackTrace();
+//            }
 
             return null;
         }
@@ -905,17 +905,18 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                         provinsi.setText("");
                         kota.setText("");
                         Toast.makeText(CheckoutActivity.this, "Cost: " + "Rp." + cost, Toast.LENGTH_SHORT).show();
+                        String hargacost = String.valueOf(Integer.parseInt(idharga) + Integer.parseInt(cost));
                         template = "<h2> Gify Transaction </h2> " +
                                 "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
                                 + "<p><b> Nama barang: " + namabarangorder + ", " + "Jumlah: " + qtyku + "</p></b>"
-                                + "<p><b> Harga barang: " + format.format(Double.valueOf(replaceNumberOfAmount(idharga, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
+                                + "<p><b> Harga barang: " + format.format(Double.valueOf(replaceNumberOfAmount(hargacost, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
                                 + "<p><b> Biaya Pengiriman: " + ongkir + "</p></b>"
                                 + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
                                 + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
                                 + "<h2>Salam, Gify Team</h2>";
 
                         templateConvert = Html.fromHtml(template);
-                        new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, Integer.parseInt(idharga) + Integer.parseInt(ongkir)  + lastNumber, ucapanorder ).execute();
+                        new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, Integer.parseInt(hargacost)  + lastNumber, ucapanorder ).execute();
 
 
                         ((Button) alertLayout.findViewById(R.id.add_destination)).setOnClickListener(new View.OnClickListener() {
