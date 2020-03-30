@@ -297,16 +297,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             lastNumber+=(random.nextInt(10)*Math.pow(10, k));
         }
 
-        template = "<h2> Gify Transaction </h2> " +
-                "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
-                + "<p><b> Nama barang: " + namabarangorder + ", " + "Jumlah: " + qtyku + "</p></b>"
-                + "<p><b> Harga barang: " + format.format(Double.valueOf(replaceNumberOfAmount(idharga, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
-                + "<p><b> Biaya Pengiriman: " + ongkir + "</p></b>"
-                + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
-                + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
-                + "<h2>Salam, Gify Team</h2>";
 
-        templateConvert = Html.fromHtml(template);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         email = sharedPreferences.getString("email", "");
@@ -510,7 +501,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     public void pushNotify(Context context){
         Intent intent = new Intent(this, PembelianFragment.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(CheckoutActivity.this, 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(CheckoutActivity.this, 0, intent, 0);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "notify_001");
 
         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
@@ -521,7 +512,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         mBuilder.setContentTitle("Pembelian Berhasil");
         mBuilder.setContentText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran dengan invoice yang kami kirim ke emailmu");
         mBuilder.setPriority(Notification.PRIORITY_MAX);
-//        mBuilder.setContentIntent(pendingIntent);
+        mBuilder.setContentIntent(pendingIntent);
         mBuilder.setStyle(bigText);
 
         mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -914,6 +905,16 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                         provinsi.setText("");
                         kota.setText("");
                         Toast.makeText(CheckoutActivity.this, "Cost: " + "Rp." + cost, Toast.LENGTH_SHORT).show();
+                        template = "<h2> Gify Transaction </h2> " +
+                                "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
+                                + "<p><b> Nama barang: " + namabarangorder + ", " + "Jumlah: " + qtyku + "</p></b>"
+                                + "<p><b> Harga barang: " + format.format(Double.valueOf(replaceNumberOfAmount(idharga, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
+                                + "<p><b> Biaya Pengiriman: " + ongkir + "</p></b>"
+                                + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
+                                + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
+                                + "<h2>Salam, Gify Team</h2>";
+
+                        templateConvert = Html.fromHtml(template);
                         new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, Integer.parseInt(idharga) + Integer.parseInt(ongkir)  + lastNumber, ucapanorder ).execute();
 
 
