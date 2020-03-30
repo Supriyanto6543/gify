@@ -300,7 +300,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         CheckList.setOnClickListener(v -> {
             namadepan = NamaDepan.getText().toString().trim();
             namabelakang = NamaBelakang.getText().toString().trim();
-            nama = namadepan + " " + namabelakang;
             noHp = NoHp.getText().toString().trim();
             email = Email.getText().toString().trim();
             kelurahan = editTextKelurahan.getText().toString().trim();
@@ -621,7 +620,54 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 @Override
                 protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<>();
-                    params.put("cover_foto",getStringImage(decoded));
+                    params.put("email", e);
+                    params.put("nama", n);
+                    params.put("last_name", ln);
+                    params.put("nohp", no);
+                    params.put("alamat", a);
+                    params.put("kelurahan", kl);
+                    params.put("kecamatan", kc);
+                    params.put("kota", kt);
+                    params.put("provinsi", pr);
+                    params.put("id_tetap", LID);
+
+                    return params;
+                }
+            };
+            queue.add(stringRequest);
+        }else if (decoded1 == null && decoded == null){
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE3 +"?id_tetap=" + LID, new Response.Listener<String>() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
+                @Override
+                public void onResponse(String response) {
+                    Log.d("mmakan bang", response + "");
+                    try {
+                        if (response.equals("bisa")) {
+                            Log.d("Test", "onResponse: " + ln + n);
+
+                            Intent intentku = new Intent(getApplication(), MainActivity.class);
+                            startActivity(intentku);
+                            finish();
+
+                        } else if (response.equals("gagal")) {
+                            Toast.makeText(getApplicationContext(), "Gagal Coba Lagi", Toast.LENGTH_LONG).show();
+                            dialog.dismiss();
+                        }
+                    } catch (Exception e) {
+                        e.getMessage();
+                        Toast.makeText(Pengaturan.this, "isi semua kolom", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+
+            }, error -> {
+
+
+            }){
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("photo", getStringImage(decoded1));
                     params.put("email", e);
                     params.put("nama", n);
                     params.put("last_name", ln);
