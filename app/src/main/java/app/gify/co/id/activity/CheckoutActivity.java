@@ -615,7 +615,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         @Override
         protected void onPostExecute(Void aVoid) {
             dialog.dismiss();
-            context.startActivity(new Intent(context, MainActivity.class));
             new CheckoutActivity().sendCart(CheckoutActivity.this, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, jumlah, berat, ucapan, harga);
             new CheckoutActivity().pushNotify(context);
             new CheckoutActivity().deleteallcart(context);
