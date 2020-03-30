@@ -125,7 +125,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     EditText NamaDepan, NamaBelakang, NoHp,  GantiAlamat, editTextKecamatan, editTextKelurahan;
     LinearLayout changePicture, changeCover;
     TextView Kelurahan, Kecamatan, Email,nama_depan, nama_belakang, No_hp, E_mail, textAlamat;
-    String  cobaAgar, province, namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat2, gAlamat, kota, provinsi, Lemail, LID, namaUser, emailnama, idku, namanama,
+    String  cobaAgar, province, namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat2, gAlamat, kota, provinsi, Lemail, LID, namaUser, emailnama, kotaku, kelurahanku, kecamatanku, provinsiku, alamatku,
     LNama, LEmail2, Lalamat, LNoHp, Ltanggal, fotoProfil, fotoCover;
     ImageView CheckList, ganti,profileImage, coverImage;
     ImageView Back;
@@ -147,7 +147,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     View viewTerserah, viewKecamatan, viewKelurahan;
 
-    EditText KotaS, ProvinsiS;
+    TextView KotaS, ProvinsiS;
 
     FirebaseAuth mAuth;
     DatabaseReference RootRef;
@@ -167,26 +167,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_pengaturan);
 
-        NamaDepan = findViewById(R.id.namaDepanPengaturan);
-        NamaBelakang = findViewById(R.id.namaBelakangPengaturan);
-        NoHp = findViewById(R.id.noHpPengaturan);
-        Email = findViewById(R.id.emailPengaturan);
-        CheckList = findViewById(R.id.checklistPengaturan);
-        Back = findViewById(R.id.backPengaturan);
-        changePicture = findViewById(R.id.changePicturePengaturan);
-        /*Kelurahan = findViewById(R.id.kelurahan);
-        Kecamatan = findViewById(R.id.kecamatan);*/
-        GantiAlamat = findViewById(R.id.edittextAlamatPengaturan);
-        ganti = findViewById(R.id.gantiAlamatPengaturan);
-        viewTerserah = findViewById(R.id.viewTerserah);
-        textAlamat = findViewById(R.id.textviewAlamatPengaturan);
-        viewKecamatan = findViewById(R.id.Viewkecamatan);
-        viewKelurahan = findViewById(R.id.Viewkelurahan);
-        editTextKelurahan = findViewById(R.id.edittextkelurahan);
-        editTextKecamatan = findViewById(R.id.edittextkecamatan);
-        profileImage = findViewById(R.id.profileimage);
-        coverImage = findViewById(R.id.photo);
-        changeCover = findViewById(R.id.changeCoverPengaturan);
+        callMethos();
 
         dialog  = new Dialog(Pengaturan.this);
         inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -199,7 +180,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         dialog.show();
 
 
-        callMethos();
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         /*namaUser = sharedPreferences.getString("nama", "");*/
@@ -210,6 +190,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         mAuth = FirebaseAuth.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
         currentUserID = Objects.requireNonNull(mAuth.getCurrentUser().getUid());
+
+        lemparMysql();
 
         ProvinsiS.setOnClickListener(v -> {
             popUpProvince(ProvinsiS, KotaS);
@@ -227,7 +209,9 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             }
         });
 
-        cekprofile();
+
+
+
 
         RootRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
@@ -238,15 +222,27 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 String nama = dataSnapshot.child("nama").getValue().toString();
                 if (dataSnapshot.child("alamat").exists()){
                     Lalamat = dataSnapshot.child("alamat").getValue().toString();
+                    kotaku = dataSnapshot.child("kota").getValue().toString();
+                    kecamatanku = dataSnapshot.child("kecamatan").getValue().toString();
+                    kelurahanku = dataSnapshot.child("kelurahan").getValue().toString();
+                    provinsiku = dataSnapshot.child("provinsi").getValue().toString();
                 }
                 else {
                     Lalamat = null;
+                    kecamatanku = null;
+                    kelurahanku = null;
+                    kotaku = null;
+                    provinsiku = null;
                 }
                 Log.d("cobaL", "email: " + Lemail + " " + "LID: " + LID);
                 Email.setText(Lemail);
                 NoHp.setText(LNoHP);
                 NamaDepan.setText(nama);
                 GantiAlamat.setText(Lalamat);
+                editTextKecamatan.setText(kecamatanku);
+                editTextKelurahan.setText(kelurahanku);
+                KotaS.setText(kotaku);
+                ProvinsiS.setText(provinsiku);
             }
 
             @Override
@@ -308,7 +304,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             /*coverku = getRealPathFromURI( cover );
             photoku = getRealPathFromURI( profile );*/
             AkuGantengBanget(email,noHp,namadepan, namabelakang,gAlamat,kelurahan,kecamatan,kota,provinsi);
-            RootRef.child("Users").child(currentUserID).child("nama depan").setValue(namadepan)
+            RootRef.child("Users").child(currentUserID).child("nama").setValue(namadepan)
                     .addOnCompleteListener(task -> {
                         NamaDepan.setText("");
                         dialog.dismiss();
@@ -328,17 +324,29 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                         Email.setText("");
                         dialog.dismiss();
                     });
-            RootRef.child("Users").child(currentUserID).child("alamat").setValue(alamat)
+            RootRef.child("Users").child(currentUserID).child("alamat").setValue(gAlamat)
+                    .addOnCompleteListener(task -> {
+                        GantiAlamat.setText("");
+                        dialog.dismiss();
+                    });
+            RootRef.child("Users").child(currentUserID).child("kelurahan").setValue(kelurahan)
                     .addOnCompleteListener(task -> {
                         editTextKelurahan.setText("");
+                        dialog.dismiss();
+                    });
+            RootRef.child("Users").child(currentUserID).child("kecamatan").setValue(kecamatan)
+                    .addOnCompleteListener(task -> {
                         editTextKecamatan.setText("");
-
-                        editTextKelurahan.setVisibility(View.GONE);
-                        editTextKecamatan.setVisibility(View.GONE);
-
-                        viewKecamatan.setVisibility(View.VISIBLE);
-                        viewKelurahan.setVisibility(View.VISIBLE);
-
+                        dialog.dismiss();
+                    });
+            RootRef.child("Users").child(currentUserID).child("kota").setValue(kota)
+                    .addOnCompleteListener(task -> {
+                        KotaS.setText("");
+                        dialog.dismiss();
+                    });
+            RootRef.child("Users").child(currentUserID).child("provinsi").setValue(provinsi)
+                    .addOnCompleteListener(task -> {
+                        ProvinsiS.setText("");
                         dialog.dismiss();
                     });
 
@@ -355,7 +363,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             startActivity(intent);
         });
 
-        lemparMysql();
+
 
     }
 
@@ -461,9 +469,32 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         LID = dataSnapshot.getKey();
-                        LNama = dataSnapshot.child("nama depan").getValue().toString();
+                        LNama = dataSnapshot.child("nama").getValue().toString();
                         LNoHp = dataSnapshot.child("noHp").getValue().toString();
                         dialog.dismiss();
+
+                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_IMAGE + LID, null, response -> {
+                            try {
+                                JSONArray array = response.getJSONArray("GIFY");
+                                for (int i = 0; i < array.length(); i++){
+                                    JSONObject object = array.getJSONObject(i);
+                                    fotoProfil = object.getString("photo");
+                                    fotoCover = object.getString("cover_foto");
+                                    emailnama = object.getString("email");
+
+                                    dialog.dismiss();
+
+
+
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }, error -> {
+
+                        });
+                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                        requestQueue.add(request);
                     }
 
                     @Override
@@ -473,28 +504,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 });
     }
 
-    public void cekprofile(){
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_IMAGE + LID, null, response -> {
-            try {
-                JSONArray array = response.getJSONArray("GIFY");
-                for (int i = 0; i < array.length(); i++){
-                    JSONObject object = array.getJSONObject(i);
-                    fotoProfil = object.getString("photo");
-                    fotoCover = object.getString("cover_foto");
-                    emailnama = object.getString("email");
-                    dialog.dismiss();
-
-
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }, error -> {
-
-        });
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        requestQueue.add(request);
-    }
 
     public String getStringImage(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -514,79 +523,40 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     }*/
 
     private void AkuGantengBanget(String e, String no, String n, String ln, String a, String kl, String kc, String kt, String pr){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE +"?id_tetap=" + LID, new Response.Listener<String>() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onResponse(String response) {
-                Log.d("mmakan bang", response + "");
-                try {
-                    if (response.equals("bisa")) {
-                        Log.d("Test", "onResponse: " + ln + n);
 
-                        Intent intentku = new Intent(getApplication(), MainActivity.class);
-                        startActivity(intentku);
-                        finish();
+        if (decoded1 == null && decoded != null){
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE1 +"?id_tetap=" + LID, new Response.Listener<String>() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
+                @Override
+                public void onResponse(String response) {
+                    Log.d("mmakan bang", response + "");
+                    try {
+                        if (response.equals("bisa")) {
+                            Log.d("Test", "onResponse: " + ln + n);
 
-                    } else if (response.equals("gagal")) {
-                        Toast.makeText(getApplicationContext(), "Gagal Coba Lagi", Toast.LENGTH_LONG).show();
-                        dialog.dismiss();
+                            Intent intentku = new Intent(getApplication(), MainActivity.class);
+                            startActivity(intentku);
+                            finish();
+
+                        } else if (response.equals("gagal")) {
+                            Toast.makeText(getApplicationContext(), "Gagal Coba Lagi", Toast.LENGTH_LONG).show();
+                            dialog.dismiss();
+                        }
+                    } catch (Exception e) {
+                        e.getMessage();
+                        Toast.makeText(Pengaturan.this, "isi semua kolom", Toast.LENGTH_SHORT).show();
                     }
-                } catch (Exception e) {
-                    e.getMessage();
-                    Toast.makeText(Pengaturan.this, "isi semua kolom", Toast.LENGTH_SHORT).show();
+
                 }
 
-            }
-
-        }, error -> {
+            }, error -> {
 
 
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                if (decoded == null && fotoProfil != null && fotoCover == null){
-                    params.put("photo", fotoProfil);
-                    params.put("cover_foto", "cover");
-                    params.put("email", e);
-                    params.put("nama", n);
-                    params.put("last_name", ln);
-                    params.put("nohp", no);
-                    params.put("alamat", a);
-                    params.put("kelurahan", kl);
-                    params.put("kecamatan", kc);
-                    params.put("kota", kt);
-                    params.put("provinsi", pr);
-                    params.put("id_tetap", LID);
-                }else if (decoded1 == null && fotoCover != null && fotoProfil == null){
-                    params.put("photo", "foto");
-                    params.put("cover_foto", fotoCover);
-                    params.put("email", e);
-                    params.put("nama", n);
-                    params.put("last_name", ln);
-                    params.put("nohp", no);
-                    params.put("alamat", a);
-                    params.put("kelurahan", kl);
-                    params.put("kecamatan", kc);
-                    params.put("kota", kt);
-                    params.put("provinsi", pr);
-                    params.put("id_tetap", LID);
-                }else if (decoded1 == null && fotoCover == null && fotoProfil == null){
-                    params.put("photo", "foto");
-                    params.put("cover_foto", "cover");
-                    params.put("email", e);
-                    params.put("nama", n);
-                    params.put("last_name", ln);
-                    params.put("nohp", no);
-                    params.put("alamat", a);
-                    params.put("kelurahan", kl);
-                    params.put("kecamatan", kc);
-                    params.put("kota", kt);
-                    params.put("provinsi", pr);
-                    params.put("id_tetap", LID);
-                }else if (decoded1 != null && decoded == null){
+            }){
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
                     params.put("photo", getStringImage(decoded1));
-                    params.put("cover_foto", "cover");
                     params.put("email", e);
                     params.put("nama", n);
                     params.put("last_name", ln);
@@ -597,9 +567,44 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     params.put("kota", kt);
                     params.put("provinsi", pr);
                     params.put("id_tetap", LID);
-                }else if (decoded != null && decoded1 == null){
-                    params.put("photo", "foto");
-                    params.put("cover_foto", getStringImage(decoded));
+
+                    return params;
+                }
+            };
+            queue.add(stringRequest);
+        }else if (decoded == null && decoded1 != null){
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE2 +"?id_tetap=" + LID, new Response.Listener<String>() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
+                @Override
+                public void onResponse(String response) {
+                    Log.d("mmakan bang", response + "");
+                    try {
+                        if (response.equals("bisa")) {
+                            Log.d("Test", "onResponse: " + ln + n);
+
+                            Intent intentku = new Intent(getApplication(), MainActivity.class);
+                            startActivity(intentku);
+                            finish();
+
+                        } else if (response.equals("gagal")) {
+                            Toast.makeText(getApplicationContext(), "Gagal Coba Lagi", Toast.LENGTH_LONG).show();
+                            dialog.dismiss();
+                        }
+                    } catch (Exception e) {
+                        e.getMessage();
+                        Toast.makeText(Pengaturan.this, "isi semua kolom", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+
+            }, error -> {
+
+
+            }){
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("cover_foto",getStringImage(decoded));
                     params.put("email", e);
                     params.put("nama", n);
                     params.put("last_name", ln);
@@ -610,7 +615,43 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     params.put("kota", kt);
                     params.put("provinsi", pr);
                     params.put("id_tetap", LID);
-                }else{
+
+                    return params;
+                }
+            };
+            queue.add(stringRequest);
+        }else{
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE +"?id_tetap=" + LID, new Response.Listener<String>() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
+                @Override
+                public void onResponse(String response) {
+                    Log.d("mmakan bang", response + "");
+                    try {
+                        if (response.equals("bisa")) {
+                            Log.d("Test", "onResponse: " + ln + n);
+
+                            Intent intentku = new Intent(getApplication(), MainActivity.class);
+                            startActivity(intentku);
+                            finish();
+
+                        } else if (response.equals("gagal")) {
+                            Toast.makeText(getApplicationContext(), "Gagal Coba Lagi", Toast.LENGTH_LONG).show();
+                            dialog.dismiss();
+                        }
+                    } catch (Exception e) {
+                        e.getMessage();
+                        Toast.makeText(Pengaturan.this, "isi semua kolom", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+
+            }, error -> {
+
+
+            }){
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
                     params.put("photo", getStringImage(decoded1));
                     params.put("cover_foto",getStringImage(decoded));
                     params.put("email", e);
@@ -623,12 +664,13 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     params.put("kota", kt);
                     params.put("provinsi", pr);
                     params.put("id_tetap", LID);
-                }
 
-                return params;
-            }
-        };
-        queue.add(stringRequest);
+                    return params;
+                }
+            };
+            queue.add(stringRequest);
+        }
+
     }
 
     @Override

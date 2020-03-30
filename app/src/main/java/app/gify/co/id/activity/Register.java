@@ -136,7 +136,7 @@ public class Register extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 currentUserID = mAuth.getCurrentUser().getUid();
-                                RootRef.child("Users").child(currentUserID).child("nama depan").setValue(nama);
+                                RootRef.child("Users").child(currentUserID).child("nama").setValue(nama);
                                 RootRef.child("Users").child(currentUserID).child("email").setValue(email);
                                 RootRef.child("Users").child(currentUserID).child("password").setValue(password);
                                 RootRef.child("Users").child(currentUserID).child("tanggal").setValue(selectedDate.toString());

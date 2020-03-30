@@ -12,6 +12,8 @@ public class UrlJson {
     public static final String GETFAV = ROOT + "favorit.php";
     public static final String REGISTER = ROOT + "register.php";
     public static final String IMAGE = ROOT + "image.php";
+    public static final String IMAGE1 = ROOT + "image1.php";
+    public static final String IMAGE2 = ROOT + "image2.php";
     public static final String POST_IMAGE = ROOT + "postimage.php";
     public static final String AMBIL_NAMA = ROOT + "profilenama.php?nama=";
     public static final String AMBIL_IMAGE = ROOT + "getimage.php"+"?id_tetap=";

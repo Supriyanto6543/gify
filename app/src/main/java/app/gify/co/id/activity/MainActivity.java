@@ -153,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         profile = headerLayout.findViewById(R.id.imageViewNavigationDrawer);
         cover = headerLayout.findViewById(R.id.coverDrawable);
+        lemparMysql();
 
 
         Lemail = sharedPreferences.getString("nama", "");
@@ -168,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         uid = sharedPreferences.getString("uid", "");
 
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, UrlJson.PROFILEPHOTO+uid, null, new Response.Listener<JSONArray>() {
+        /*JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, UrlJson.PROFILEPHOTO+uid, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Log.d("munculah", response + "");
@@ -202,10 +203,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
         RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-        queue.add(request);
+        queue.add(request);*/
     }
 
-    private void getImageDrawer(String coverfoto){
+    /*private void getImageDrawer(String coverfoto){
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -227,88 +228,88 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 });
             }
         }, 10);
-    }
+    }*/
 
-//    private void lemparMysql(){
-//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA  + nama.getText().toString(), null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                try {
-//                    JSONArray array = response.getJSONArray("GIFY");
-//                    for (int i = 0; i < array.length(); i++){
-//                        JSONObject object = array.getJSONObject(i);
-//
-//                        String goku = object.getString("id_tetap");
-//                        if (goku != null){
-//                            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_IMAGE  + goku, null, new Response.Listener<JSONObject>() {
-//                                @Override
-//                                public void onResponse(JSONObject response) {
-//                                    try {
-//                                        JSONArray array = response.getJSONArray("GIFY");
-//                                        for (int i = 0; i < array.length(); i++){
-//                                            JSONObject object = array.getJSONObject(i);
-//
-//                                            coverku = object.getString("cover_foto");
-//                                            photoprofile = object.getString("photo");
-//                                            byte[] imageBytes = Base64.decode(coverku, Base64.DEFAULT);
-//                                            Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-//                                            byte[] imageBytesku = Base64.decode(photoprofile, Base64.DEFAULT);
-//                                            Bitmap decodedImageku = BitmapFactory.decodeByteArray(imageBytesku, 0, imageBytesku.length);
-//                                            if (coverku.equals("cover")){
-//                                                cover.setImageResource(R.drawable.login_image);
-//                                            }else{
-//                                                /*Picasso.get().load(coverku).into(cover);*/
-//                                                /*Glide.with(getApplicationContext())  //2
-//                                                        .load(coverku) //3
-//                                                        .centerCrop()
-//                                                        .into(cover);*/
-//                                                cover.setImageBitmap(decodedImage);
-//                                            }
-//                                            if (photoprofile.equals("photo")){
-//                                                profile.setImageResource(R.drawable.backgroundprofile);
-//                                            }else{
-//                                                /*Picasso.get().load(photoprofile).fit().into(profile);*/
-//                                                /*Glide.with(getApplicationContext())  //2
-//                                                        .load(photoprofile) //3
-//                                                        .centerCrop()
-//                                                        .into(profile);*/
-//                                                profile.setImageBitmap(decodedImageku);
-//                                            }
-//
-//                                            /*dialog.dismiss();*/
-//
-//
-//                                        }
-//                                    }catch (Exception e){
-//                                        e.printStackTrace();
-//                                    }
-//                                }
-//                            }, new Response.ErrorListener() {
-//                                @Override
-//                                public void onErrorResponse(VolleyError error) {
-//
-//                                }
-//                            });
-//                            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-//                            requestQueue.add(request);
-//                        }
-//                        Log.d("goky", goku + " ");
-//
-//
-//                    }
-//                }catch (Exception e){
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//
-//            }
-//        });
-//        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-//        requestQueue.add(request);
-//    }
+    private void lemparMysql(){
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA  + nama.getText().toString(), null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray array = response.getJSONArray("GIFY");
+                    for (int i = 0; i < array.length(); i++){
+                        JSONObject object = array.getJSONObject(i);
+
+                        String goku = object.getString("id_tetap");
+                        if (goku != null){
+                            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_IMAGE  + goku, null, new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    try {
+                                        JSONArray array = response.getJSONArray("GIFY");
+                                        for (int i = 0; i < array.length(); i++){
+                                            JSONObject object = array.getJSONObject(i);
+
+                                            coverku = object.getString("cover_foto");
+                                            photoprofile = object.getString("photo");
+                                            byte[] imageBytes = Base64.decode(coverku, Base64.DEFAULT);
+                                            Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                                            byte[] imageBytesku = Base64.decode(photoprofile, Base64.DEFAULT);
+                                            Bitmap decodedImageku = BitmapFactory.decodeByteArray(imageBytesku, 0, imageBytesku.length);
+                                            if (coverku.equals("cover")){
+                                                cover.setImageResource(R.drawable.login_image);
+                                            }else{
+                                                /*Picasso.get().load(coverku).into(cover);*/
+                                                /*Glide.with(getApplicationContext())  //2
+                                                        .load(coverku) //3
+                                                        .centerCrop()
+                                                        .into(cover);*/
+                                                cover.setImageBitmap(decodedImage);
+                                            }
+                                            if (photoprofile.equals("photo")){
+                                                profile.setImageResource(R.drawable.backgroundprofile);
+                                            }else{
+                                                /*Picasso.get().load(photoprofile).fit().into(profile);*/
+                                                /*Glide.with(getApplicationContext())  //2
+                                                        .load(photoprofile) //3
+                                                        .centerCrop()
+                                                        .into(profile);*/
+                                                profile.setImageBitmap(decodedImageku);
+                                            }
+
+                                            /*dialog.dismiss();*/
+
+
+                                        }
+                                    }catch (Exception e){
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                            });
+                            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                            requestQueue.add(request);
+                        }
+                        Log.d("goky", goku + " ");
+
+
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(request);
+    }
 
 
     /*public void cekprofile(){
