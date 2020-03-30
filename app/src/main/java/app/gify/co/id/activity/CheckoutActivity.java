@@ -103,7 +103,7 @@ import app.gify.co.id.rajaongkir.modelongkir.provinsi.Province;
 import app.gify.co.id.rajaongkir.modelongkir.provinsi.ResultOngkir;
 import retrofit2.Call;
 import retrofit2.Callback;
-//import app.gify.co.id.thirdparty.SenderAgent;
+import app.gify.co.id.thirdparty.SenderAgent;
 
 import static app.gify.co.id.baseurl.UrlJson.DELETEALLCART;
 import static app.gify.co.id.baseurl.UrlJson.ORDER;
@@ -221,7 +221,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         idtetaporder = preferences.getString("uid", "");
         idharga = getIntent().getStringExtra("idharga");
         namabarangorder = getIntent().getStringExtra("name");
-        Log.d("kotainantes", "onCreate: " + namabarangorder + idharga);
+        Log.d("kotainantes", "onCreate: " + namabarangorder);
         qtyku = getIntent().getStringExtra("qtyku");
         berat = getIntent().getStringExtra("berat");
         Log.d("cekstatus", idharga + namabarangorder + " s " + qtyku);
@@ -312,11 +312,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         email = sharedPreferences.getString("email", "");
 
     }
-
-//    private String lempar(String lemparaja){
-//
-//        return lemparaja;
-//    }
 
     private void loadFragment(Fragment fragment) {
         FragmentManager fm = getFragmentManager();
@@ -504,12 +499,45 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         }, error ->  {
 
         });
-        RequestQueue queue = Volley.newRequestQueue(CheckoutActivity.this);
+        RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(stringRequest);
     }
 
     private String replaceNumberOfAmount(String original, int replace){
         return original.substring(0, original.length() - 3) + replace;
+    }
+
+    public void pushNotify(Context context){
+        Intent intent = new Intent(this, PembelianFragment.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(CheckoutActivity.this, 0, intent, 0);
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "notify_001");
+
+        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+        bigText.setBigContentTitle("Pembelian Berhasil");
+        bigText.setSummaryText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran dengan invoice yang kami kirim ke emailmu");
+
+        mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+        mBuilder.setContentTitle("Pembelian Berhasil");
+        mBuilder.setContentText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran dengan invoice yang kami kirim ke emailmu");
+        mBuilder.setPriority(Notification.PRIORITY_MAX);
+//        mBuilder.setContentIntent(pendingIntent);
+        mBuilder.setStyle(bigText);
+
+        mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            String channelId = "Your_channel_id";
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_HIGH);
+            mNotificationManager.createNotificationChannel(channel);
+            mBuilder.setChannelId(channelId);
+        }
+
+        mNotificationManager.notify(0, mBuilder.build());
     }
 
     private class SenderOrder extends AsyncTask<Void, Void, Void>{
@@ -598,39 +626,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             new CheckoutActivity().sendCart(CheckoutActivity.this, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, jumlah, berat, ucapan, harga);
             new CheckoutActivity().pushNotify(context);
         }
-    }
-
-    public void pushNotify(Context context){
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "notify_001");
-
-        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
-        bigText.setBigContentTitle("Pembelian Berhasil");
-        bigText.setSummaryText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran dengan invoice yang kami kirim ke emailmu");
-
-        mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
-        mBuilder.setContentTitle("Pembelian Berhasil");
-        mBuilder.setContentText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran dengan invoice yang kami kirim ke emailmu");
-        mBuilder.setPriority(Notification.PRIORITY_MAX);
-        mBuilder.setContentIntent(pendingIntent);
-        mBuilder.setStyle(bigText);
-
-        mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
-            String channelId = "Your_channel_id";
-            NotificationChannel channel = new NotificationChannel(
-                    channelId,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_HIGH);
-            mNotificationManager.createNotificationChannel(channel);
-            mBuilder.setChannelId(channelId);
-        }
-
-        mNotificationManager.notify(0, mBuilder.build());
     }
 
     public void popUpProvince(final TextView provinsi, final TextView kota ) {
