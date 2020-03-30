@@ -307,10 +307,14 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             dialog.show();
             /*coverku = getRealPathFromURI( cover );
             photoku = getRealPathFromURI( profile );*/
-            AkuGantengBanget(email,noHp,namadepan, namabelakang,gAlamat , kelurahan , kecamatan , kota , provinsi);
-            RootRef.child("Users").child(currentUserID).child("nama").setValue(nama)
+            AkuGantengBanget(email,noHp,namadepan, namabelakang,gAlamat,kelurahan,kecamatan,kota,provinsi);
+            RootRef.child("Users").child(currentUserID).child("nama depan").setValue(namadepan)
                     .addOnCompleteListener(task -> {
                         NamaDepan.setText("");
+                        dialog.dismiss();
+                    });
+            RootRef.child("Users").child(currentUserID).child("nama belakang").setValue(namabelakang)
+                    .addOnCompleteListener(task -> {
                         NamaBelakang.setText("");
                         dialog.dismiss();
                     });
@@ -390,7 +394,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             profile = data.getData();
             try {
                 Photo = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), profile);
-                decoded1 = getResizedBitmap(Photo, 300);
+                decoded1 = getResizedBitmap(Photo, 500);
                 profileImage.setImageBitmap(decoded1);
 
             } catch (IOException e) {
@@ -404,7 +408,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             cover = data.getData();
             try {
                 Cover = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), cover);
-                decoded = getResizedBitmap(Cover, 300);
+                decoded = getResizedBitmap(Cover, 500);
                 coverImage.setImageBitmap(decoded);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -456,7 +460,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         LID = dataSnapshot.getKey();
-                        LNama = dataSnapshot.child("nama").getValue().toString();
+                        LNama = dataSnapshot.child("nama depan").getValue().toString();
                         LNoHp = dataSnapshot.child("noHp").getValue().toString();
                         dialog.dismiss();
                     }
@@ -541,8 +545,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 if (decoded == null){
-                    params.put("foto", getStringImage(decoded1));
-                    params.put("cover", "cover");
+                    params.put("photo", getStringImage(decoded1));
+                    params.put("cover_foto", "cover");
                     params.put("email", e);
                     params.put("nama", n);
                     params.put("last_name", ln);
@@ -554,8 +558,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     params.put("provinsi", pr);
                     params.put("id_tetap", LID);
                 }else if (decoded1 == null){
-                    params.put("foto", "foto");
-                    params.put("cover", getStringImage(decoded));
+                    params.put("photo", "foto");
+                    params.put("cover_foto", getStringImage(decoded));
                     params.put("email", e);
                     params.put("nama", n);
                     params.put("last_name", ln);
@@ -567,8 +571,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     params.put("provinsi", pr);
                     params.put("id_tetap", LID);
                 }else {
-                    params.put("foto", getStringImage(decoded1));
-                    params.put("cover",getStringImage(decoded));
+                    params.put("photo", getStringImage(decoded1));
+                    params.put("cover_foto",getStringImage(decoded));
                     params.put("email", e);
                     params.put("nama", n);
                     params.put("last_name", ln);
