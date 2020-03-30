@@ -222,18 +222,35 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 String nama = dataSnapshot.child("nama").getValue().toString();
                 if (dataSnapshot.child("alamat").exists()){
                     Lalamat = dataSnapshot.child("alamat").getValue().toString();
-                    kotaku = dataSnapshot.child("kota").getValue().toString();
-                    kecamatanku = dataSnapshot.child("kecamatan").getValue().toString();
-                    kelurahanku = dataSnapshot.child("kelurahan").getValue().toString();
-                    provinsiku = dataSnapshot.child("provinsi").getValue().toString();
                 }
                 else {
                     Lalamat = null;
-                    kecamatanku = null;
-                    kelurahanku = null;
+                }
+                if (dataSnapshot.child("kota").exists()){
+                    kotaku = dataSnapshot.child("kota").getValue().toString();
+                }
+                else {
                     kotaku = null;
+                }
+                if (dataSnapshot.child("kecamatan").exists()){
+                    kecamatanku = dataSnapshot.child("kecamatan").getValue().toString();
+                }
+                else {
+                    kecamatanku = null;
+                }
+                if (dataSnapshot.child("kelurahan").exists()){
+                    kelurahanku = dataSnapshot.child("kelurahan").getValue().toString();
+                }
+                else {
+                    kelurahanku = null;
+                }
+                if (dataSnapshot.child("provinsi").exists()){
+                    provinsiku = dataSnapshot.child("provinsi").getValue().toString();
+                }
+                else {
                     provinsiku = null;
                 }
+
                 Log.d("cobaL", "email: " + Lemail + " " + "LID: " + LID);
                 Email.setText(Lemail);
                 NoHp.setText(LNoHP);
