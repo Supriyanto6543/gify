@@ -595,17 +595,17 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 }
             });
 
-//            try{
-//                MimeMessage mimeMessage = new MimeMessage(session);
-//
-//                mimeMessage.setFrom(new InternetAddress("gify.firebase@gmail.com"));
-//                mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
-//                mimeMessage.setSubject(subject);
-//                mimeMessage.setText(String.valueOf(message));
-//                Transport.send(mimeMessage);
-//            }catch (MessagingException m){
-//                m.printStackTrace();
-//            }
+            try{
+                MimeMessage mimeMessage = new MimeMessage(session);
+
+                mimeMessage.setFrom(new InternetAddress("gify.firebase@gmail.com"));
+                mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
+                mimeMessage.setSubject(subject);
+                mimeMessage.setText(String.valueOf(message));
+                Transport.send(mimeMessage);
+            }catch (MessagingException m){
+                m.printStackTrace();
+            }
 
             return null;
         }
@@ -910,7 +910,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                                 "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
                                 + "<p><b> Nama barang: " + namabarangorder + ", " + "Jumlah: " + qtyku + "</p></b>"
                                 + "<p><b> Harga barang: " + format.format(Double.valueOf(replaceNumberOfAmount(hargacost, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
-                                + "<p><b> Biaya Pengiriman: " + ongkir + "</p></b>"
                                 + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
                                 + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
                                 + "<h2>Salam, Gify Team</h2>";
