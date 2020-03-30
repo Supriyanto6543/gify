@@ -203,7 +203,7 @@ public class Login extends AppCompatActivity {
         mDb.child("Users").child(user).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                userID = String.valueOf(dataSnapshot.child("nama depan").getValue());
+                userID = String.valueOf(dataSnapshot.child("nama").getValue());
                 Uemail = String.valueOf(dataSnapshot.child("email").getValue());
                 mDb.child("Users").child(user).child("password").setValue(password);
                 Log.d("namaku", "onDataChange: " + userID);
