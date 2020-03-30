@@ -933,7 +933,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                                 + "<p><b> Nama barang: " + namabarangorder + ", " + "Jumlah: " + qtyku + "</p></b>"
                                 + "<p><b> Harga barang: " + format.format(Double.valueOf(replaceNumberOfAmount(hargacost, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
                                 + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
-                                + "https://api.whatsapp.com/send?phone=6287776295266&text=Halo%20Gify%2C%20Saya%20mau%20konfirmasi%20pembayaran%20dengan%20nomor%20invoice%20=%20" + getDateTime().replace("-", "")+idku
+                                + "https://api.whatsapp.com/send?phone=6287776295266&text=Halo%20Gify%2C%20Saya%20mau%20konfirmasi%20pembayaran%20dengan%20nomor%20invoice%20=%20" + getDateTime().replace("/", "")+idku
                                 + "<h2>Salam, Gify Team</h2>";
 
                         templateConvert = Html.fromHtml(template);

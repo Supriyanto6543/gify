@@ -545,7 +545,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onResponse(String response) {
-                    Log.d("mmakan bang", response + "");
+                    Log.d("mmakangbang", response + "");
                     try {
                         if (response.equals("bisa")) {
                             Log.d("Test", "onResponse: " + ln + n);
@@ -593,7 +593,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onResponse(String response) {
-                    Log.d("mmakan bang", response + "");
+                    Log.d("mmakandbang", response + "");
                     try {
                         if (response.equals("bisa")) {
                             Log.d("Test", "onResponse: " + ln + n);
@@ -620,6 +620,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 @Override
                 protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<>();
+                    params.put("cover_foto",getStringImage(decoded));
                     params.put("email", e);
                     params.put("nama", n);
                     params.put("last_name", ln);
@@ -640,7 +641,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onResponse(String response) {
-                    Log.d("mmakan bang", response + "");
+                    Log.d("mmakansbang", response + "");
                     try {
                         if (response.equals("bisa")) {
                             Log.d("Test", "onResponse: " + ln + n);
@@ -687,10 +688,10 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onResponse(String response) {
-                    Log.d("mmakan bang", response + "");
+                    Log.d("mmakanwbang", response + "");
                     try {
                         if (response.equals("bisa")) {
-                            Log.d("Test", "onResponse: " + ln + n);
+                            Log.d("Testw", "onResponse: " + ln + n);
 
                             Intent intentku = new Intent(getApplication(), MainActivity.class);
                             startActivity(intentku);
