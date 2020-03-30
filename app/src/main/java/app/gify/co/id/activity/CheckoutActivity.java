@@ -497,38 +497,38 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         return original.substring(0, original.length() - 3) + replace;
     }
 
-//    public void pushNotify(Context context){
-//        Intent intent = new Intent(this, PembelianFragment.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-//        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "notify_001");
-//
-//        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
-//        bigText.setBigContentTitle("Pembelian Berhasil");
-//        bigText.setSummaryText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran dengan invoice yang kami kirim ke emailmu");
-//
-//        mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
-//        mBuilder.setContentTitle("Pembelian Berhasil");
-//        mBuilder.setContentText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran dengan invoice yang kami kirim ke emailmu");
-//        mBuilder.setPriority(Notification.PRIORITY_MAX);
-//        mBuilder.setContentIntent(pendingIntent);
-//        mBuilder.setStyle(bigText);
-//
-//        mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-//        {
-//            String channelId = "Your_channel_id";
-//            NotificationChannel channel = new NotificationChannel(
-//                    channelId,
-//                    "Channel human readable title",
-//                    NotificationManager.IMPORTANCE_HIGH);
-//            mNotificationManager.createNotificationChannel(channel);
-//            mBuilder.setChannelId(channelId);
-//        }
-//
-//        mNotificationManager.notify(0, mBuilder.build());
-//    }
+    public void pushNotify(Context context){
+        Intent intent = new Intent(this, PembelianFragment.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "notify_001");
+
+        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+        bigText.setBigContentTitle("Pembelian Berhasil");
+        bigText.setSummaryText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran dengan invoice yang kami kirim ke emailmu");
+
+        mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+        mBuilder.setContentTitle("Pembelian Berhasil");
+        mBuilder.setContentText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran dengan invoice yang kami kirim ke emailmu");
+        mBuilder.setPriority(Notification.PRIORITY_MAX);
+        mBuilder.setContentIntent(pendingIntent);
+        mBuilder.setStyle(bigText);
+
+        mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            String channelId = "Your_channel_id";
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_HIGH);
+            mNotificationManager.createNotificationChannel(channel);
+            mBuilder.setChannelId(channelId);
+        }
+
+        mNotificationManager.notify(0, mBuilder.build());
+    }
 
     private class SenderOrder extends AsyncTask<Void, Void, Void>{
         private String mail, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang,jumlah,berat, ucapan, jumlahbrng;
@@ -614,7 +614,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             dialog.dismiss();
             context.startActivity(new Intent(context, MainActivity.class));
             new CheckoutActivity().sendCart(CheckoutActivity.this, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, jumlah, berat, ucapan, harga);
-//            new CheckoutActivity().pushNotify(context);
+            //new CheckoutActivity().pushNotify(context);
             new CheckoutActivity().deleteallcart(context);
         }
     }

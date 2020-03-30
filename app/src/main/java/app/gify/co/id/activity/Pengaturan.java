@@ -167,27 +167,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_pengaturan);
 
-        NamaDepan = findViewById(R.id.namaDepanPengaturan);
-        NamaBelakang = findViewById(R.id.namaBelakangPengaturan);
-        NoHp = findViewById(R.id.noHpPengaturan);
-        Email = findViewById(R.id.emailPengaturan);
-        CheckList = findViewById(R.id.checklistPengaturan);
-        Back = findViewById(R.id.backPengaturan);
-        changePicture = findViewById(R.id.changePicturePengaturan);
-        /*Kelurahan = findViewById(R.id.kelurahan);
-        Kecamatan = findViewById(R.id.kecamatan);*/
-        GantiAlamat = findViewById(R.id.edittextAlamatPengaturan);
-        ganti = findViewById(R.id.gantiAlamatPengaturan);
-        viewTerserah = findViewById(R.id.viewTerserah);
-        textAlamat = findViewById(R.id.textviewAlamatPengaturan);
-        viewKecamatan = findViewById(R.id.Viewkecamatan);
-        viewKelurahan = findViewById(R.id.Viewkelurahan);
-        editTextKelurahan = findViewById(R.id.edittextkelurahan);
-        editTextKecamatan = findViewById(R.id.edittextkecamatan);
-        profileImage = findViewById(R.id.profileimage);
-        coverImage = findViewById(R.id.photo);
-        changeCover = findViewById(R.id.changeCoverPengaturan);
-
         dialog  = new Dialog(Pengaturan.this);
         inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.loading, null);
@@ -235,7 +214,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 LID = dataSnapshot.getKey();
                 Lemail = dataSnapshot.child("email").getValue().toString();
                 String LNoHP = dataSnapshot.child("noHp").getValue().toString();
-                String nama = dataSnapshot.child("nama").getValue().toString();
+                String nama = dataSnapshot.child("nama depan").getValue().toString();
                 if (dataSnapshot.child("alamat").exists()){
                     Lalamat = dataSnapshot.child("alamat").getValue().toString();
                 }
@@ -303,7 +282,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             /*editor.putString("ln", ln);*/
             editor.apply();
 
-
+            Log.d("setonfclick", "onCreate: " + kelurahan + kecamatan + provinsi + kota + gAlamat);
             dialog.show();
             /*coverku = getRealPathFromURI( cover );
             photoku = getRealPathFromURI( profile );*/
@@ -521,7 +500,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 Log.d("mmakan bang", response + "");
                 try {
                     if (response.equals("bisa")) {
-                        Log.d("Test", "onResponse: " + ln + n);
+                        Log.d("Test", "onResponse: " + ln + n + " s " + e + " s " + no + " s " + a + " s " + kl + " s " + kc + " s " + kt + " s " + pr);
 
                         Intent intentku = new Intent(getApplication(), MainActivity.class);
                         startActivity(intentku);
