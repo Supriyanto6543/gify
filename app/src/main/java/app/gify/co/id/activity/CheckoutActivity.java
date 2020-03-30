@@ -48,7 +48,9 @@ import androidx.core.app.NotificationCompat;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -59,6 +61,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -140,15 +143,18 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     Locale id;
     Random random;
     int lastNumber, quantity;
-    String berat;
+    String berat, Lemail;
     Spanned templateConvert;
     Dialog dialog;
-    String ongkir;
+    String ongkir, email;
     TextView kota, provinsi;
 
     AlertDialog.Builder alert;
     AlertDialog ad;
-
+    SharedPreferences sharedPreferences;
+    LayoutInflater inflater;
+    View layout;
+    ImageView goku;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -170,7 +176,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         ucapan = findViewById(R.id.ucapan);
         berat = getIntent().getStringExtra("berat");
 
-        getEmail();
 
 //        textViewCheckOutAlamat = findViewById(R.id.textviewAlamatCheckout);
 //        NamaPenerima = findViewById(R.id.namaPenerimaCheckout);
@@ -292,15 +297,10 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             lastNumber+=(random.nextInt(10)*Math.pow(10, k));
         }
 
-        template = "<h2> Gify Transaction </h2> " +
-                "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
-                + "<p><b> Nama barang: " + namabarangorder + "</p></b>"
-                + "<p><b> Harga barang: " + format.format(Double.valueOf(replaceNumberOfAmount(idharga, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
-                + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
-                + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
-                + "<h2>Salam, Gify Team</h2>";
 
-        templateConvert = Html.fromHtml(template);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        email = sharedPreferences.getString("email", "");
 
     }
 
@@ -436,11 +436,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
     public void sendCart(Context context, String idtetap, String date, String penerima,String noHp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang,String jumlah, String berat, String ucapan, int harga){
         StringRequest request = new StringRequest(Request.Method.POST, ORDER, response -> {
-            Log.d("bahrus", response + "");
             try {
-                Log.d("bahruss", response + "");
                 if (response.equals("bisa")){
-                    Log.d("jumajumlah", "sendCart: " + jumlah);
                     deleteallcart();
                     context.startActivity(new Intent(context, MainActivity.class));
                     finish();
@@ -469,8 +466,9 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 param.put("nama_barang", namabarang);
                 param.put("jumlah", jumlah);
                 param.put("berat", berat);
-                param.put("ucapan", ucapan);
                 param.put("harga", String.valueOf(harga));
+                param.put("ucapan", ucapan);
+
                 return param;
             }
         };
@@ -492,7 +490,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         }, error ->  {
 
         });
-        RequestQueue queue = Volley.newRequestQueue(CheckoutActivity.this);
+        RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(stringRequest);
     }
 
@@ -503,7 +501,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     public void pushNotify(Context context){
         Intent intent = new Intent(this, PembelianFragment.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "notify_001");
 
         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
@@ -545,7 +543,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
         private ProgressDialog progressDialog;
 
-        public SenderOrder(String mail, String subject, Spanned message, Context context, String idtetap, String date, String penerima,String nohp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang,String jumlah,String berat, String ucapan, int harga) {
+        public SenderOrder(String mail, String subject, Spanned message, Context context, String idtetap, String date, String penerima,String nohp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang,String jumlah,String berat, int harga, String ucapan) {
             this.mail = mail;
             this.subject = subject;
             this.message = message;
@@ -562,17 +560,17 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             this.namabarang = namabarang;
             this.jumlah = jumlah;
             this.berat = berat;
-            this.ucapan = ucapan;
             this.harga = harga;
+            this.ucapan = ucapan;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             dialog  = new Dialog(context);
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View layout = inflater.inflate(R.layout.loading, null);
-            ImageView goku = layout.findViewById(R.id.custom_loading_imageView);
+            inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            layout = inflater.inflate(R.layout.loading, null);
+            goku = layout.findViewById(R.id.custom_loading_imageView);
             goku.animate().rotationBy(3600).setDuration(10000).setInterpolator(new LinearInterpolator()).start();
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
             dialog.setCancelable(false);
@@ -601,7 +599,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 MimeMessage mimeMessage = new MimeMessage(session);
 
                 mimeMessage.setFrom(new InternetAddress("gify.firebase@gmail.com"));
-                mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress("supriyanto150@gmail.com"));
+                mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
                 mimeMessage.setSubject(subject);
                 mimeMessage.setText(String.valueOf(message));
                 Transport.send(mimeMessage);
@@ -615,7 +613,6 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         @Override
         protected void onPostExecute(Void aVoid) {
             dialog.dismiss();
-            Log.d("dismisskupost", "onPostExecute: " + berat + " s " + jumlah);
             context.startActivity(new Intent(context, MainActivity.class));
             new CheckoutActivity().sendCart(CheckoutActivity.this, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, jumlah, berat, ucapan, harga);
             new CheckoutActivity().pushNotify(context);
@@ -908,7 +905,17 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                         provinsi.setText("");
                         kota.setText("");
                         Toast.makeText(CheckoutActivity.this, "Cost: " + "Rp." + cost, Toast.LENGTH_SHORT).show();
-                        new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, ucapanorder, Integer.parseInt(idharga) + Integer.parseInt(ongkir)  + lastNumber ).execute();
+                        String hargacost = String.valueOf(Integer.parseInt(idharga) + Integer.parseInt(cost));
+                        template = "<h2> Gify Transaction </h2> " +
+                                "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
+                                + "<p><b> Nama barang: " + namabarangorder + ", " + "Jumlah: " + qtyku + "</p></b>"
+                                + "<p><b> Harga barang: " + format.format(Double.valueOf(replaceNumberOfAmount(hargacost, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
+                                + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
+                                + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
+                                + "<h2>Salam, Gify Team</h2>";
+
+                        templateConvert = Html.fromHtml(template);
+                        new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, Integer.parseInt(hargacost)  + lastNumber, ucapanorder ).execute();
 
 
                         ((Button) alertLayout.findViewById(R.id.add_destination)).setOnClickListener(new View.OnClickListener() {
@@ -938,21 +945,5 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 Toast.makeText(CheckoutActivity.this, "Message : Error " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void getEmail() {
-        RootRef.child("Users").child(currentUserID)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String Lemail = dataSnapshot.child("email").getValue().toString();
-                        Log.d("Lemail", "Email: " + Lemail);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
     }
 }

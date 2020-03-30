@@ -385,6 +385,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         ProvinsiS = findViewById(R.id.provinsiPengaturan);
     }
 
+
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

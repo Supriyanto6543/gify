@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -113,7 +114,12 @@ public class FavoritFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                filter(editable.toString());
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        filter(editable.toString());
+                    }
+                }, 2000);
             }
         });
 

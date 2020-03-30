@@ -3,6 +3,7 @@ package app.gify.co.id.baseurl;
 public class UrlJson {
 
     public static final String ROOT = "https://www.api.ayokngaji.com/gify/android/";
+    //public static final String ROOT = "http://192.168.43.210/gify/android/";
     public static final String GETBARANG = ROOT + "barangkado.php";
     public static final String GETKATEGORI = ROOT + "kado.php";
     public static final String GETACARA = ROOT + "acara.php";
@@ -26,4 +27,5 @@ public class UrlJson {
     public static final String DELETEFAV = ROOT + "delfav.php";
     public static final String ORDER = ROOT + "order.php";
     public static final String DELETEALLCART = ROOT + "deleteallcart.php";
+    public static final String PROFILEPHOTO = ROOT + "profilenamepoto.php?id_tetap=";
 }

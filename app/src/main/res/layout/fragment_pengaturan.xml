@@ -51,13 +51,6 @@
                 android:padding="3dp"
                 android:src="@drawable/checkmark" />
 
-
-
-
-
-
-
-
         </LinearLayout>
 
     </androidx.appcompat.widget.Toolbar>

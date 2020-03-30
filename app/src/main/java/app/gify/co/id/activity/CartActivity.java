@@ -144,7 +144,6 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
             Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
             intent.putExtra("idharga", String.valueOf(hargaku));
             intent.putExtra("name", namacart);
-            Log.d("kotainante", "onCreate: " + namacart);
             intent.putExtra("qtyku", qtyku);
             intent.putExtra("berat", berat);
             preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

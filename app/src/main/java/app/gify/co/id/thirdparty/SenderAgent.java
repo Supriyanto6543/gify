@@ -81,6 +81,6 @@ public class SenderAgent extends AsyncTask<Void, Void, Void> {
         progressDialog.dismiss();
         context.startActivity(new Intent(context, MainActivity.class));
         //new CheckoutActivity().sendCart(context);
-        new CheckoutActivity().pushNotify(context);
+        //new CheckoutActivity().pushNotify(context);
     }
 }
