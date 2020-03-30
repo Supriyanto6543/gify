@@ -30,4 +30,5 @@ public class UrlJson {
     public static final String ORDER = ROOT + "order.php";
     public static final String DELETEALLCART = ROOT + "deleteallcart.php";
     public static final String PROFILEPHOTO = ROOT + "profilenamepoto.php?id_tetap=";
+    public static final String IDGET = ROOT + "lastid.php";
 }

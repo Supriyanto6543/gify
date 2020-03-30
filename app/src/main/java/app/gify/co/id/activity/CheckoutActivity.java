@@ -61,6 +61,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -106,6 +107,7 @@ import retrofit2.Callback;
 import app.gify.co.id.thirdparty.SenderAgent;
 
 import static app.gify.co.id.baseurl.UrlJson.DELETEALLCART;
+import static app.gify.co.id.baseurl.UrlJson.IDGET;
 import static app.gify.co.id.baseurl.UrlJson.ORDER;
 
 public class CheckoutActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -126,7 +128,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     private ListView mListView;
 
     EditText nama, hp, jalan, kelurahan, kecamatan,  ucapan;
-    String currentUserID, Lnama, LNohp, Lalamat;
+    String currentUserID, Lnama, LNohp, Lalamat, idku;
     ImageView gantiAlamat;
 
     HintArrayAdapter hintArrayAdapter, hintArrayAdapterKu;
@@ -161,6 +163,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.checkout);
 
+        getid();
         RootRef = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
@@ -484,7 +487,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     private void deleteallcart(Context context){
         StringRequest stringRequest = new StringRequest(Request.Method.GET, DELETEALLCART+"?idtetap="+currentUserID, response -> {
             if (response.equals("bisa")){
-                Toast.makeText(CheckoutActivity.this, "cart kosong", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "cart kosong", Toast.LENGTH_SHORT).show();
             }
         }, error ->  {
 
@@ -497,38 +500,38 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         return original.substring(0, original.length() - 3) + replace;
     }
 
-//    public void pushNotify(Context context){
-//        Intent intent = new Intent(this, PembelianFragment.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-//        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "notify_001");
-//
-//        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
-//        bigText.setBigContentTitle("Pembelian Berhasil");
-//        bigText.setSummaryText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran dengan invoice yang kami kirim ke emailmu");
-//
-//        mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
-//        mBuilder.setContentTitle("Pembelian Berhasil");
-//        mBuilder.setContentText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran dengan invoice yang kami kirim ke emailmu");
-//        mBuilder.setPriority(Notification.PRIORITY_MAX);
-//        mBuilder.setContentIntent(pendingIntent);
-//        mBuilder.setStyle(bigText);
-//
-//        mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-//        {
-//            String channelId = "Your_channel_id";
-//            NotificationChannel channel = new NotificationChannel(
-//                    channelId,
-//                    "Channel human readable title",
-//                    NotificationManager.IMPORTANCE_HIGH);
-//            mNotificationManager.createNotificationChannel(channel);
-//            mBuilder.setChannelId(channelId);
-//        }
-//
-//        mNotificationManager.notify(0, mBuilder.build());
-//    }
+    public void pushNotify(Context context){
+        Intent intent = new Intent(this, PembelianFragment.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "notify_001");
+
+        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+        bigText.setBigContentTitle("Pembelian Berhasil");
+        bigText.setSummaryText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran dengan invoice yang kami kirim ke emailmu");
+
+        mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+        mBuilder.setContentTitle("Pembelian Berhasil");
+        mBuilder.setContentText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran dengan invoice yang kami kirim ke emailmu");
+        mBuilder.setPriority(Notification.PRIORITY_MAX);
+        mBuilder.setContentIntent(pendingIntent);
+        mBuilder.setStyle(bigText);
+
+        mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            String channelId = "Your_channel_id";
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_HIGH);
+            mNotificationManager.createNotificationChannel(channel);
+            mBuilder.setChannelId(channelId);
+        }
+
+        mNotificationManager.notify(0, mBuilder.build());
+    }
 
     private class SenderOrder extends AsyncTask<Void, Void, Void>{
         private String mail, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang,jumlah,berat, ucapan, jumlahbrng;
@@ -612,9 +615,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         @Override
         protected void onPostExecute(Void aVoid) {
             dialog.dismiss();
-            context.startActivity(new Intent(context, MainActivity.class));
             new CheckoutActivity().sendCart(CheckoutActivity.this, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, jumlah, berat, ucapan, harga);
-//            new CheckoutActivity().pushNotify(context);
+            new CheckoutActivity().pushNotify(context);
             new CheckoutActivity().deleteallcart(context);
         }
     }
@@ -846,6 +848,26 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
     }
 
+    public void getid(){
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET,IDGET,null, response -> {
+            try {
+                JSONArray array = response.getJSONArray("YukNgaji");
+                for (int a = 0; a < array.length(); a++){
+                    JSONObject object = array.getJSONObject(a);
+                    int idtotal = object.getInt("id") + 1;
+
+                    idku = String.valueOf(idtotal);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, error -> {
+
+        });
+        RequestQueue queue = Volley.newRequestQueue(CheckoutActivity.this);
+        queue.add(objectRequest);
+    }
+
     public void getCoast(String origin,
                          String destination,
                          String weight,
@@ -911,7 +933,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                                 + "<p><b> Nama barang: " + namabarangorder + ", " + "Jumlah: " + qtyku + "</p></b>"
                                 + "<p><b> Harga barang: " + format.format(Double.valueOf(replaceNumberOfAmount(hargacost, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
                                 + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
-                                + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
+                                + "https://api.whatsapp.com/send?phone=6287776295266&text=Halo%20Gify%2C%20Saya%20mau%20konfirmasi%20pembayaran%20dengan%20nomor%20invoice%20=%20" + getDateTime().replace("-", "")+idku
                                 + "<h2>Salam, Gify Team</h2>";
 
                         templateConvert = Html.fromHtml(template);

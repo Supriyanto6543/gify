@@ -156,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         lemparMysql();
 
 
+
         Lemail = sharedPreferences.getString("nama", "");
         String nama_belakang = sharedPreferences.getString("ln", "");
 
