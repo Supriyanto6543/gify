@@ -17,14 +17,11 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
@@ -61,7 +58,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -74,10 +70,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.util.FileUtils;
 import com.google.firebase.database.ValueEventListener;
@@ -162,13 +154,13 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
     Dialog dialog;
     SharedPreferences sharedPreferences;
+    Uri cover, profile;
     RequestQueue queue;
     private NotificationManager mNotificationManager;
     int bitmap_size = 60;
     int max_resolution_image = 800;
     String belomAdaAlamat = "Belum Memasukkan Alamat";
     LayoutInflater inflater;
-    String photo, covers, uid;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -315,10 +307,14 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             dialog.show();
             /*coverku = getRealPathFromURI( cover );
             photoku = getRealPathFromURI( profile );*/
-            AkuGantengBanget(email,noHp,namadepan, namabelakang,gAlamat , kelurahan , kecamatan , kota , provinsi);
-            RootRef.child("Users").child(currentUserID).child("nama").setValue(nama)
+            AkuGantengBanget(email,noHp,namadepan, namabelakang,gAlamat,kelurahan,kecamatan,kota,provinsi);
+            RootRef.child("Users").child(currentUserID).child("nama depan").setValue(namadepan)
                     .addOnCompleteListener(task -> {
                         NamaDepan.setText("");
+                        dialog.dismiss();
+                    });
+            RootRef.child("Users").child(currentUserID).child("nama belakang").setValue(namabelakang)
+                    .addOnCompleteListener(task -> {
                         NamaBelakang.setText("");
                         dialog.dismiss();
                     });
@@ -361,45 +357,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
 
         lemparMysql();
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        uid = sharedPreferences.getString("uid", "");
-
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, UrlJson.PROFILEPHOTO+uid, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                Log.d("munculah", response + "");
-                try {
-                    for (int k = 0; k < response.length(); k++){
-
-                        JSONObject object = response.getJSONObject(k);
-                        photo = object.getString("photo");
-                        covers = object.getString("cover_foto");
-                        if (covers.isEmpty()){
-                            Picasso.get().load(R.drawable.lupa_password_background).into(coverImage);
-                        }else{
-                            getImageDrawer(covers);
-                        }
-                        if (photo == null || photo.isEmpty()){
-                            Picasso.get().load(R.drawable.lupa_password_background).into(profileImage);
-                        }else{
-                            Picasso.get().load(photo).into(profileImage);
-                        }
-
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        RequestQueue queue = Volley.newRequestQueue(Pengaturan.this);
-        queue.add(request);
-
     }
 
     private void callMethos(){
@@ -435,11 +392,11 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == GALLERY_PHOTO && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
-            Uri profile = data.getData();
+            profile = data.getData();
             try {
                 Photo = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), profile);
-                //decoded1 = getResizedBitmap(Photo, 300);
-                profileImage.setImageBitmap(Photo);
+                decoded1 = getResizedBitmap(Photo, 500);
+                profileImage.setImageBitmap(decoded1);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -449,36 +406,36 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         }
 
         if (requestCode == GALLERY_COVER && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
-            Uri cover = data.getData();
+            cover = data.getData();
             try {
                 Cover = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), cover);
-                //decoded = getResizedBitmap(Cover, 300);
-                coverImage.setImageBitmap(Cover);
+                decoded = getResizedBitmap(Cover, 500);
+                coverImage.setImageBitmap(decoded);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            Log.d("susuk", cover + "");
-//            cover.getPath();
-//            if (cover.getScheme().equals("file")) {
-//                coverku =cover.getLastPathSegment();
-//            } else {
-//                Cursor cursor = null;
-//                try {
-//                    cursor = getContentResolver().query(cover, new String[]{
-//                            MediaStore.Images.ImageColumns.DISPLAY_NAME
-//                    }, null, null, null);
-//
-//                    if (cursor != null && cursor.moveToFirst()) {
-//                        coverku = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DISPLAY_NAME));
-//                    }
-//                } finally {
-//
-//                    if (cursor != null) {
-//                        cursor.close();
-//                    }
-//                }
-//            }
+
+            /*cover.getPath();
+            if (cover.getScheme().equals("file")) {
+                coverku =cover.getLastPathSegment();
+            } else {
+                Cursor cursor = null;
+                try {
+                    cursor = getContentResolver().query(cover, new String[]{
+                            MediaStore.Images.ImageColumns.DISPLAY_NAME
+                    }, null, null, null);
+
+                    if (cursor != null && cursor.moveToFirst()) {
+                        coverku = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DISPLAY_NAME));
+                    }
+                } finally {
+
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+            }*/
 
         }
     }
@@ -504,7 +461,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         LID = dataSnapshot.getKey();
-                        LNama = dataSnapshot.child("nama").getValue().toString();
+                        LNama = dataSnapshot.child("nama depan").getValue().toString();
                         LNoHp = dataSnapshot.child("noHp").getValue().toString();
                         dialog.dismiss();
                     }
@@ -556,39 +513,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
         return cursor.getString(column_index);
     }*/
 
-    private void getImageDrawer(String coverfoto){
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Picasso.get().load(coverfoto).memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        coverImage.setBackground(new BitmapDrawable(getResources(), bitmap));
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-                        coverImage.setBackgroundResource(R.drawable.whenloading);
-                    }
-                });
-            }
-        }, 10);
-    }
-
-    private String getBitmap(Bitmap bitmap){
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-        byte[] img = outputStream.toByteArray();
-        String encoding = Base64.encodeToString(img, Base64.DEFAULT);
-        return encoding;
-    }
-
     private void AkuGantengBanget(String e, String no, String n, String ln, String a, String kl, String kc, String kt, String pr){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlJson.IMAGE +"?id_tetap=" + LID, new Response.Listener<String>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -622,9 +546,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 if (decoded == null){
-                    params.put("foto", getBitmap(Photo));
-                    Log.d("fotos", getBitmap(Photo));
-                    params.put("cover", "cover");
+                    params.put("photo", getStringImage(decoded1));
+                    params.put("cover_foto", "cover");
                     params.put("email", e);
                     params.put("nama", n);
                     params.put("last_name", ln);
@@ -636,9 +559,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     params.put("provinsi", pr);
                     params.put("id_tetap", LID);
                 }else if (decoded1 == null){
-                    params.put("foto", "foto");
-                    params.put("cover", getBitmap(Cover));
-                    Log.d("covers", getBitmap(Cover));
+                    params.put("photo", "foto");
+                    params.put("cover_foto", getStringImage(decoded));
                     params.put("email", e);
                     params.put("nama", n);
                     params.put("last_name", ln);
@@ -650,8 +572,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                     params.put("provinsi", pr);
                     params.put("id_tetap", LID);
                 }else {
-                    params.put("foto", getBitmap(Photo));
-                    params.put("cover", getBitmap(Cover));
+                    params.put("photo", getStringImage(decoded1));
+                    params.put("cover_foto",getStringImage(decoded));
                     params.put("email", e);
                     params.put("nama", n);
                     params.put("last_name", ln);
