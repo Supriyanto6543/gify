@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     SharedPreferences.Editor editor;
     LayoutInflater inflater;
     RelativeLayout backgroundHeader;
+    String uid;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -164,17 +165,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nama.setText(Lemail + " " + nama_belakang);
         loadFragment (new HomeFragment());
 
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, UrlJson.PROFILEPHOTO, null, new Response.Listener<JSONArray>() {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        uid = sharedPreferences.getString("uid", "");
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, UrlJson.PROFILEPHOTO+uid, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
+                Log.d("munculah", response + "");
                 try {
                     for (int k = 0; k < response.length(); k++){
 
                         JSONObject object = response.getJSONObject(k);
                         photo = object.getString("photo");
                         covers = object.getString("cover_foto");
-                        getImageDrawer(covers);
-                        Picasso.get().load(photo).into(profile);
+
+                        if (covers.isEmpty()){
+                            Picasso.get().load(R.drawable.lupa_password_background).into(cover);
+                        }else{
+                            getImageDrawer(covers);
+                        }
+                        if (photo == null || photo.isEmpty()){
+                            Picasso.get().load(R.drawable.lupa_password_background).into(profile);
+                        }else{
+                            Picasso.get().load(photo).into(profile);
+                        }
                     }
 
                 } catch (JSONException e) {
@@ -189,7 +203,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
         queue.add(request);
-
     }
 
     private void getImageDrawer(String coverfoto){
@@ -209,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     @Override
                     public void onPrepareLoad(Drawable placeHolderDrawable) {
-                        //backgroundHeader.setBackgroundResource(R.drawable.whenloading);
+                        cover.setBackgroundResource(R.drawable.whenloading);
                     }
                 });
             }

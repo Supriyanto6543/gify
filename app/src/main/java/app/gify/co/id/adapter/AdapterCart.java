@@ -126,6 +126,7 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     intents.putExtra("name", String.valueOf((getName(carts))));
                     intents.putExtra("qty", String.valueOf((getSeperatedquantity(carts))));
                     intents.putExtra("berat", String.valueOf(totalBerat));
+                    intents.putExtra("totalvalueku", String.valueOf(totalharga));
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
             }
         });
@@ -150,6 +151,7 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     intents.putExtra("name", String.valueOf((getName(carts))));
                     intents.putExtra("qty", String.valueOf((getSeperatedquantity(carts))));
                     intents.putExtra("berat", String.valueOf(totalBerat));
+                    intents.putExtra("totalvalueku", String.valueOf(totalharga));
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intents);
 
 
@@ -227,17 +229,6 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         carts.remove(item);
 
         notifyItemRemoved(item);
-    }
-
-    public void restoreItem(MadolCart madolCart, int item){
-        carts.add(item, madolCart);
-
-        notifyItemInserted(item);
-    }
-
-    public void quantityPlus(MadolCart madolCart, int item){
-
-
     }
 
 }
