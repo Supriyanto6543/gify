@@ -157,6 +157,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     LayoutInflater inflater;
     View layout;
     ImageView goku;
+    EditText warna, ukuran;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -169,6 +170,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         currentUserID = mAuth.getCurrentUser().getUid();
 
         // initialization
+        ukuran = findViewById(R.id.ukuran);
+        warna = findViewById(R.id.warna);
         nama = findViewById(R.id.nama);
         hp = findViewById(R.id.hp);
         jalan = findViewById(R.id.jalan);
@@ -437,7 +440,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         queue.add(objectRequest);
     }
 
-    public void sendCart(Context context, String idtetap, String date, String penerima,String noHp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang,String jumlah, String berat, String ucapan, int harga){
+    public void sendCart(Context context, String idtetap, String date, String penerima,String noHp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang,String jumlah, String berat, String ucapan, int harga ,String ukurans, String warnas){
         StringRequest request = new StringRequest(Request.Method.POST, ORDER, response -> {
             try {
                 if (response.equals("bisa")){
@@ -470,7 +473,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 param.put("berat", berat);
                 param.put("harga", String.valueOf(harga));
                 param.put("ucapan", ucapan);
-
+                param.put("ukuran", ukurans);
+                param.put("warna", warnas);
                 return param;
             }
         };
@@ -536,6 +540,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     private class SenderOrder extends AsyncTask<Void, Void, Void>{
         private String mail, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang,jumlah,berat, ucapan, jumlahbrng;
         private String subject;
+        private String warnas, ukurans;
         private Spanned message;
         private int harga;
         Dialog dialog;
@@ -545,7 +550,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
         private ProgressDialog progressDialog;
 
-        public SenderOrder(String mail, String subject, Spanned message, Context context, String idtetap, String date, String penerima,String nohp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang,String jumlah,String berat, int harga, String ucapan) {
+        public SenderOrder(String mail, String subject, Spanned message, Context context, String idtetap, String date, String penerima,String nohp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang,String jumlah,String berat, int harga, String ucapan, String warnas, String ukurans) {
             this.mail = mail;
             this.subject = subject;
             this.message = message;
@@ -564,6 +569,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             this.berat = berat;
             this.harga = harga;
             this.ucapan = ucapan;
+            this.ukurans = ukurans;
+            this.warnas = warnas;
         }
 
         @Override
@@ -615,8 +622,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         @Override
         protected void onPostExecute(Void aVoid) {
             dialog.dismiss();
-            new CheckoutActivity().sendCart(CheckoutActivity.this, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, jumlah, berat, ucapan, harga);
-            new CheckoutActivity().pushNotify(context);
+            new CheckoutActivity().sendCart(CheckoutActivity.this, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, jumlah, berat, ucapan, harga, ukurans, warnas);
+//            new CheckoutActivity().pushNotify(context);
             new CheckoutActivity().deleteallcart(context);
         }
     }
@@ -937,7 +944,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                                 + "<h2>Salam, Gify Team</h2>";
 
                         templateConvert = Html.fromHtml(template);
-                        new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, Integer.parseInt(hargacost)  + lastNumber, ucapanorder ).execute();
+                        new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, Integer.parseInt(hargacost)  + lastNumber, ucapanorder, warna.getText().toString().trim(), ukuran.getText().toString().trim() ).execute();
 
 
                         ((Button) alertLayout.findViewById(R.id.add_destination)).setOnClickListener(new View.OnClickListener() {
