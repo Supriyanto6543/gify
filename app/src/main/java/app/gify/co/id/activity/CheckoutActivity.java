@@ -907,6 +907,17 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                         alert.setView(alertLayout);
                         alert.setCancelable(true);
 
+                        Button home = alertLayout.findViewById(R.id.homeIntent);
+                        home.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+
                         ad = alert.show();
 
                         String cost = response.body().getRajaongkir().getResults().get(0).getCosts().get(1).getCost().get(0).getValue().toString();
