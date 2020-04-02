@@ -444,8 +444,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         StringRequest request = new StringRequest(Request.Method.POST, ORDER, response -> {
             try {
                 if (response.equals("bisa")){
-                    context.startActivity(new Intent(context, MainActivity.class));
-                    finish();
+                    /*context.startActivity(new Intent(context, MainActivity.class));
+                    finish();*/
                 }
             }catch (Exception e){
                 e.printStackTrace();
