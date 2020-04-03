@@ -38,6 +38,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -175,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                         JSONArray array = response.getJSONArray("GIFY");
                                         for (int i = 0; i < array.length(); i++){
                                             JSONObject object = array.getJSONObject(i);
-
+                                            Log.d("totaletags", "onResponse: " + response);
                                             coverku = object.getString("cover_foto");
                                             photoprofile = object.getString("photo");
                                             byte[] imageBytes = Base64.decode(coverku, Base64.DEFAULT);

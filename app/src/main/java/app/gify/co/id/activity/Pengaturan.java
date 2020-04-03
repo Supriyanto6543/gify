@@ -308,11 +308,8 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             kota = KotaS.getText().toString();
             provinsi = ProvinsiS.getText().toString();
             editor = sharedPreferences.edit();
-            editor.remove("nama");
-            editor.remove("email");
             editor.putString("nama", nama);
             editor.putString("email", email);
-            /*editor.putString("ln", ln);*/
             editor.apply();
 
 
@@ -496,7 +493,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                                     JSONObject object = array.getJSONObject(i);
                                     fotoProfil = object.getString("photo");
                                     fotoCover = object.getString("cover_foto");
-                                    emailnama = object.getString("email");
 
                                     dialog.dismiss();
 

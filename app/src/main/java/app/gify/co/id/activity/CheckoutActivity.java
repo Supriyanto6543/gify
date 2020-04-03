@@ -944,7 +944,137 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             try {
                 JSONArray array = response.getJSONArray("YukNgaji");
                 Log.d("totalarray", "cekrek: " + array.length());
-                if (array.length() == 2){
+                if (array.length() == 5){
+                    JSONObject object = array.getJSONObject(0);
+                    JSONObject object2 = array.getJSONObject(1);
+                    JSONObject object3 = array.getJSONObject(2);
+                    JSONObject object4 = array.getJSONObject(3);
+                    JSONObject object5 = array.getJSONObject(4);
+                    String norek = object.getString("no_rekening");
+                    String namarek = object.getString("nama");
+                    String namabank = object.getString("bank");
+                    String norek2 = object2.getString("no_rekening");
+                    String namarek2 = object2.getString("nama");
+                    String namabank2 = object2.getString("bank");
+                    String norek3 = object3.getString("no_rekening");
+                    String namarek3 = object3.getString("nama");
+                    String namabank3 = object3.getString("bank");
+                    String norek4 = object4.getString("no_rekening");
+                    String namarek4 = object4.getString("nama");
+                    String namabank4 = object4.getString("bank");
+                    String norek5 = object5.getString("no_rekening");
+                    String namarek5 = object5.getString("nama");
+                    String namabank5 = object5.getString("bank");
+                    template =
+
+                            "<h2> Helo, </h2>" +
+
+                                    "<h3> Kamu baru saja melakukan pesanan paket kado di Gify dengan detail sebagai berikut : </h3>"
+
+                                    + "<p><b> Nama barang: " + namabarangorder
+                                    + "<p><b> Jumlah: " + qtyku + "</p></b>"
+                                    + "<p><b> Total transfer: " + format.format(Double.valueOf(replaceNumberOfAmount(hargacost, lastNumber))) + " Silahkan transfer dengan tiga digit terakhir yaitu : " + lastNumber + "</p></b>"
+                                    + "<p><b> Silahkan transfer ke:" + " </p></b>"
+                                    + "<p><b> No rekening: " + norek +", Atas nama: " + namarek + " ,Bank: " + namabank + " </p></b>"
+                                    + "<p><b> No rekening: " + norek2 +", Atas nama: " + namarek2 +" ,Bank: " + namabank2 + " </p></b>"
+                                    + "<p><b> No rekening: " + norek3 +", Atas nama: " + namarek3 +" ,Bank: " + namabank3 + " </p></b>"
+                                    + "<p><b> No rekening: " + norek4 +", Atas nama: " + namarek4 +" ,Bank: " + namabank4 + " </p></b>"
+                                    + "<p><b> No rekening: " + norek5 +", Atas nama: " + namarek5 +" ,Bank: " + namabank5 + " </p></b>"
+
+                                    + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini" + " </p></b>"
+
+                                    + "https://api.whatsapp.com/send?phone=6287776295266&text=Halo%20Gify%2C%20Saya%20mau%20konfirmasi%20pembayaran%20dengan%20nomor%20invoice%20=%20" + getDateTime().replace("/", "")+idku
+
+                                    + "<p><b> Note :" + " </p></b>"
+                                    + "<p><b> Total transfer adalah keselurahan harga barang + ongkos kirim" + " </p></b>"
+
+                                    + "<p><b> Salam," + " </p></b>"
+                                    + "<p><b> Tim Billing Gify" + " </p>/<b>";
+
+                    templateConvert = Html.fromHtml(template);
+
+                }else if (array.length() == 4){
+                    JSONObject object = array.getJSONObject(0);
+                    JSONObject object2 = array.getJSONObject(1);
+                    JSONObject object3 = array.getJSONObject(2);
+                    JSONObject object4 = array.getJSONObject(3);
+                    String norek = object.getString("no_rekening");
+                    String namarek = object.getString("nama");
+                    String namabank = object.getString("bank");
+                    String norek2 = object2.getString("no_rekening");
+                    String namarek2 = object2.getString("nama");
+                    String namabank2 = object2.getString("bank");
+                    String norek3 = object3.getString("no_rekening");
+                    String namarek3 = object3.getString("nama");
+                    String namabank3 = object3.getString("bank");
+                    String norek4 = object4.getString("no_rekening");
+                    String namarek4 = object4.getString("nama");
+                    String namabank4 = object4.getString("bank");
+                    template =
+
+                            "<h2> Helo, </h2>" +
+
+                                    "<h3> Kamu baru saja melakukan pesanan paket kado di Gify dengan detail sebagai berikut : </h3>"
+
+                                    + "<p><b> Nama barang: " + namabarangorder
+                                    + "<p><b> Jumlah: " + qtyku + "</p></b>"
+                                    + "<p><b> Total transfer: " + format.format(Double.valueOf(replaceNumberOfAmount(hargacost, lastNumber))) + " Silahkan transfer dengan tiga digit terakhir yaitu : " + lastNumber + "</p></b>"
+                                    + "<p><b> Silahkan transfer ke:" + " </p></b>"
+                                    + "<p><b> No rekening: " + norek +", Atas nama: " + namarek + " ,Bank: " + namabank + " </p></b>"
+                                    + "<p><b> No rekening: " + norek2 +", Atas nama: " + namarek2 +" ,Bank: " + namabank2 + " </p></b>"
+                                    + "<p><b> No rekening: " + norek3 +", Atas nama: " + namarek3 +" ,Bank: " + namabank3 + " </p></b>"
+                                    + "<p><b> No rekening: " + norek4 +", Atas nama: " + namarek4 +" ,Bank: " + namabank4 + " </p></b>"
+
+                                    + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini" + " </p></b>"
+
+                                    + "https://api.whatsapp.com/send?phone=6287776295266&text=Halo%20Gify%2C%20Saya%20mau%20konfirmasi%20pembayaran%20dengan%20nomor%20invoice%20=%20" + getDateTime().replace("/", "")+idku
+
+                                    + "<p><b> Note :" + " </p></b>"
+                                    + "<p><b> Total transfer adalah keselurahan harga barang + ongkos kirim" + " </p></b>"
+
+                                    + "<p><b> Salam," + " </p></b>"
+                                    + "<p><b> Tim Billing Gify" + " </p>/<b>";
+
+                    templateConvert = Html.fromHtml(template);
+                }else if (array.length() == 3){
+                    JSONObject object = array.getJSONObject(0);
+                    JSONObject object2 = array.getJSONObject(1);
+                    JSONObject object3 = array.getJSONObject(2);
+                    String norek = object.getString("no_rekening");
+                    String namarek = object.getString("nama");
+                    String namabank = object.getString("bank");
+                    String norek2 = object2.getString("no_rekening");
+                    String namarek2 = object2.getString("nama");
+                    String namabank2 = object2.getString("bank");
+                    String norek3 = object3.getString("no_rekening");
+                    String namarek3 = object3.getString("nama");
+                    String namabank3 = object3.getString("bank");
+                    template =
+
+                            "<h2> Helo, </h2>" +
+
+                                    "<h3> Kamu baru saja melakukan pesanan paket kado di Gify dengan detail sebagai berikut : </h3>"
+
+                                    + "<p><b> Nama barang: " + namabarangorder
+                                    + "<p><b> Jumlah: " + qtyku + "</p></b>"
+                                    + "<p><b> Total transfer: " + format.format(Double.valueOf(replaceNumberOfAmount(hargacost, lastNumber))) + " Silahkan transfer dengan tiga digit terakhir yaitu : " + lastNumber + "</p></b>"
+                                    + "<p><b> Silahkan transfer ke:" + " </p></b>"
+                                    + "<p><b> No rekening: " + norek +", Atas nama: " + namarek + " ,Bank: " + namabank + " </p></b>"
+                                    + "<p><b> No rekening: " + norek2 +", Atas nama: " + namarek2 +" ,Bank: " + namabank2 + " </p></b>"
+                                    + "<p><b> No rekening: " + norek3 +", Atas nama: " + namarek3 +" ,Bank: " + namabank3 + " </p></b>"
+
+                                    + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini" + " </p></b>"
+
+                                    + "https://api.whatsapp.com/send?phone=6287776295266&text=Halo%20Gify%2C%20Saya%20mau%20konfirmasi%20pembayaran%20dengan%20nomor%20invoice%20=%20" + getDateTime().replace("/", "")+idku
+
+                                    + "<p><b> Note :" + " </p></b>"
+                                    + "<p><b> Total transfer adalah keselurahan harga barang + ongkos kirim" + " </p></b>"
+
+                                    + "<p><b> Salam," + " </p></b>"
+                                    + "<p><b> Tim Billing Gify" + " </p>/<b>";
+
+                    templateConvert = Html.fromHtml(template);
+                }else if (array.length() == 2){
                     JSONObject object = array.getJSONObject(0);
                     JSONObject object2 = array.getJSONObject(1);
                     String norek = object.getString("no_rekening");
@@ -954,15 +1084,28 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                     String namarek2 = object2.getString("nama");
                     String namabank2 = object2.getString("bank");
 
-                    template = "<h2> Gify Transaction </h2> " +
-                            "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
-                            + "<p><b> Nama barang: " + namabarangorder + ", " + "Jumlah: " + qtyku + "</p></b>"
-                            + "<p><b> Harga barang: " + format.format(Double.valueOf(replaceNumberOfAmount(hargacost, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
-                            + "<p><b> Silahkan trasfer ke no rekening: " + norek + ", " + "Atas nama: " + namarek + " ,Bank: " + namabank + " </p></b>"
-                            + "<p><b> Atau trasfer ke no rekening: " + norek2 + ", " + "Atas nama: " + namarek2 + " ,Bank: " + namabank2 + " </p></b>"
-                            + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
+                    template =
+
+                            "<h2> Helo, </h2>" +
+
+                            "<h3> Kamu baru saja melakukan pesanan paket kado di Gify dengan detail sebagai berikut : </h3>"
+
+                            + "<p><b> Nama barang: " + namabarangorder
+                            + "<p><b> Jumlah: " + qtyku + "</p></b>"
+                            + "<p><b> Total transfer: " + format.format(Double.valueOf(replaceNumberOfAmount(hargacost, lastNumber))) + " Silahkan transfer dengan tiga digit terakhir yaitu : " + lastNumber + "</p></b>"
+                            + "<p><b> Silahkan transfer ke:" + " </p></b>"
+                            + "<p><b> No rekening: " + norek +", Atas nama: " + namarek + " ,Bank: " + namabank + " </p></b>"
+                            + "<p><b> No rekening: " + norek2 +", Atas nama: " + namarek2 +" ,Bank: " + namabank2 + " </p></b>"
+
+                            + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini" + " </p></b>"
+
                             + "https://api.whatsapp.com/send?phone=6287776295266&text=Halo%20Gify%2C%20Saya%20mau%20konfirmasi%20pembayaran%20dengan%20nomor%20invoice%20=%20" + getDateTime().replace("/", "")+idku
-                            + "<h2>Salam, Gify Team</h2>";
+
+                            + "<p><b> Note :" + " </p></b>"
+                            + "<p><b> Total transfer adalah keselurahan harga barang + ongkos kirim" + " </p></b>"
+
+                            + "<p><b> Salam," + " </p></b>"
+                            + "<p><b> Tim Billing Gify" + " </p>/<b>";
 
                     templateConvert = Html.fromHtml(template);
                     new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, Integer.parseInt(hargacost)  + lastNumber, ucapanorder, warna.getText().toString().trim(), ukuran.getText().toString().trim() ).execute();
@@ -971,14 +1114,27 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                     String norek = object.getString("no_rekening");
                     String namarek = object.getString("nama");
                     String namabank = object.getString("bank");
-                    template = "<h2> Gify Transaction </h2> " +
-                            "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
-                            + "<p><b> Nama barang: " + namabarangorder + ", " + "Jumlah: " + qtyku + "</p></b>"
-                            + "<p><b> Harga barang: " + format.format(Double.valueOf(replaceNumberOfAmount(hargacost, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
-                            + "<p><b> Silahkan trasfer ke no rekening: " + norek + ", " + "Atas nama: " + namarek + " Bank: " + namabank + " </p></b>"
-                            + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
-                            + "https://api.whatsapp.com/send?phone=6287776295266&text=Halo%20Gify%2C%20Saya%20mau%20konfirmasi%20pembayaran%20dengan%20nomor%20invoice%20=%20" + getDateTime().replace("/", "")+idku
-                            + "<h2>Salam, Gify Team</h2>";
+                    template =
+
+                            "<h2> Helo, </h2>" +
+
+                                    "<h3> Kamu baru saja melakukan pesanan paket kado di Gify dengan detail sebagai berikut : </h3>"
+
+                                    + "<p><b> Nama barang: " + namabarangorder
+                                    + "<p><b> Jumlah: " + qtyku + "</p></b>"
+                                    + "<p><b> Total transfer: " + format.format(Double.valueOf(replaceNumberOfAmount(hargacost, lastNumber))) + " Silahkan transfer dengan tiga digit terakhir yaitu : " + lastNumber + "</p></b>"
+                                    + "<p><b> Silahkan transfer ke:" + " </p></b>"
+                                    + "<p><b> No rekening: " + norek +", Atas nama: " + namarek + " ,Bank: " + namabank + " </p></b>"
+                                    + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini" + " </p></b>"
+
+                                    + "https://api.whatsapp.com/send?phone=6287776295266&text=Halo%20Gify%2C%20Saya%20mau%20konfirmasi%20pembayaran%20dengan%20nomor%20invoice%20=%20" + getDateTime().replace("/", "")+idku
+
+                                    + "<p><b> Note :" + " </p></b>"
+                                    + "<p><b> Total transfer adalah keselurahan harga barang + ongkos kirim" + " </p></b>"
+
+                                    + "<p><b> Salam," + " </p></b>"
+                                    + "<p><b> Tim Billing Gify" + " </p>/<b>";
+
                     templateConvert = Html.fromHtml(template);
                     new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, Integer.parseInt(hargacost)  + lastNumber, ucapanorder, warna.getText().toString().trim(), ukuran.getText().toString().trim() ).execute();
                 }
