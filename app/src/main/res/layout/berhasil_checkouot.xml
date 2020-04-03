@@ -30,9 +30,19 @@
                 android:text="Selamat order kamu berhasil, silahkan cek email untuk melakukan pembayaran"
                 android:textSize="20dp"
                 android:textColor="#838181"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="20dp"
                 android:layout_marginTop="10dp"
                 android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/homeIntent"
+                android:text="HOME"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:background="@drawable/tombol"
+                android:layout_marginBottom="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

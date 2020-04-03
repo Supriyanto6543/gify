@@ -445,8 +445,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         StringRequest request = new StringRequest(Request.Method.POST, ORDER, response -> {
             try {
                 if (response.equals("bisa")){
-                    context.startActivity(new Intent(context, MainActivity.class));
-                    finish();
+                    /*context.startActivity(new Intent(context, MainActivity.class));
+                    finish();*/
                 }
             }catch (Exception e){
                 e.printStackTrace();
@@ -906,6 +906,17 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                         alert = new AlertDialog.Builder(CheckoutActivity.this);
                         alert.setView(alertLayout);
                         alert.setCancelable(true);
+
+                        Button home = alertLayout.findViewById(R.id.homeIntent);
+                        home.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
 
                         ad = alert.show();
 
