@@ -492,6 +492,10 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     private void deleteallcart(Context context){
         StringRequest stringRequest = new StringRequest(Request.Method.GET, DELETEALLCART+"?idtetap="+currentUserID, response -> {
             if (response.equals("bisa")){
+                LayoutInflater inflater = (LayoutInflater) CheckoutActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View alertLayout = inflater.inflate(R.layout.berhasil_checkouot, null);
+                Button home = alertLayout.findViewById(R.id.homeIntent);
+                home.setVisibility(View.VISIBLE);
                 Toast.makeText(context, "cart kosong", Toast.LENGTH_SHORT).show();
             }
         }, error ->  {
@@ -905,7 +909,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                         View alertLayout = inflater.inflate(R.layout.berhasil_checkouot, null);
                         alert = new AlertDialog.Builder(CheckoutActivity.this);
                         alert.setView(alertLayout);
-                        alert.setCancelable(true);
+                        alert.setCancelable(false);
 
                         Button home = alertLayout.findViewById(R.id.homeIntent);
                         home.setOnClickListener(new View.OnClickListener() {
