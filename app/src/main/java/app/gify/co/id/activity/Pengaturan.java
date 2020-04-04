@@ -126,7 +126,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     LinearLayout changePicture, changeCover;
     TextView Kelurahan, Kecamatan, Email,nama_depan, nama_belakang, No_hp, E_mail, textAlamat;
     String  cobaAgar, province, namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat2, gAlamat, kota, provinsi, Lemail, LID, namaUser, emailnama, kotaku, kelurahanku, kecamatanku, provinsiku, alamatku,
-    LNama, LEmail2, Lalamat, LNoHp, Ltanggal, fotoProfil, fotoCover;
+            LNama, LEmail2, Lalamat, LNoHp, Ltanggal, fotoProfil, fotoCover;
     ImageView CheckList, ganti,profileImage, coverImage;
     ImageView Back;
     String coverku, photoku;

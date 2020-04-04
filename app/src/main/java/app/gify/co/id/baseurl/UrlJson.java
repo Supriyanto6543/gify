@@ -1,10 +1,6 @@
 package app.gify.co.id.baseurl;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.android.volley.toolbox.JsonObjectRequest;
-
-public class UrlJson extends AppCompatActivity {
+public class UrlJson {
 
     public static final String ROOT = "http://www.api.gify.my.id/";
     //public static final String ROOT = "http://192.168.43.210/gify/android/";

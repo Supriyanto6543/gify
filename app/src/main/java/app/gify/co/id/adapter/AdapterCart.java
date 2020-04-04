@@ -231,4 +231,8 @@ public class AdapterCart extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyItemRemoved(item);
     }
 
+    public void removeall(int cast){
+        carts.remove(cast);
+    }
+
 }
