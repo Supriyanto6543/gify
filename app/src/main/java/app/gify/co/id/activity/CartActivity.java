@@ -141,19 +141,26 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
         recyclerView.setLayoutManager(glm);
 
         Checkout.setOnClickListener(view -> {
-            Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
-            intent.putExtra("idharga", String.valueOf(hargaku));
-            intent.putExtra("name", namacart);
-            intent.putExtra("qtyku", qtyku);
-            intent.putExtra("berat", berat);
-            preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            editor = preferences.edit();
-            editor.remove("range");
-            editor.remove("acara");
-            editor.remove("buat");
-            editor.apply();
-            startActivity(intent);
-
+            if (madolCarts.isEmpty()){
+                Toast.makeText(CartActivity.this, "Cart kamu kosong", Toast.LENGTH_SHORT).show();
+            }else {
+                Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
+                intent.putExtra("idharga", String.valueOf(hargaku));
+                intent.putExtra("name", namacart);
+                intent.putExtra("qtyku", qtyku);
+                intent.putExtra("berat", berat);
+                for (int a = 0; a < adapterCart.getItemCount(); a++){
+                    Log.d("hitungjari", "onCreate: ");
+                    adapterCart.removeall(a);
+                }
+                preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                editor = preferences.edit();
+                editor.remove("range");
+                editor.remove("acara");
+                editor.remove("buat");
+                editor.apply();
+                startActivity(intent);
+            }
         });
 
         LocalBroadcastManager.getInstance(this).registerReceiver(passValue, new IntentFilter("message_subject_intent"));
@@ -213,6 +220,10 @@ public class CartActivity extends AppCompatActivity implements RecyclerTouchDele
             }
         }, error -> {
             Log.d("getcart", "getCart: " + error.getMessage());
+            if (error.getMessage() == null){
+                dialog.dismiss();
+                Toast.makeText(CartActivity.this, "Tidak ada Barang", Toast.LENGTH_SHORT).show();
+            }
         });
         RequestQueue queue = Volley.newRequestQueue(CartActivity.this);
         queue.add(objectRequest);
