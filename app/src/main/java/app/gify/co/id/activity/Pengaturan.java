@@ -126,7 +126,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
     LinearLayout changePicture, changeCover;
     TextView Kelurahan, Kecamatan, Email,nama_depan, nama_belakang, No_hp, E_mail, textAlamat;
     String  cobaAgar, province, namadepan, namabelakang, noHp, email, currentUserID, nama, alamat, kelurahan, kecamatan, gAlamat2, gAlamat, kota, provinsi, Lemail, LID, namaUser, emailnama, kotaku, kelurahanku, kecamatanku, provinsiku, alamatku,
-    LNama, LEmail2, Lalamat, LNoHp, Ltanggal, fotoProfil, fotoCover;
+            LNama, LEmail2, Lalamat, LNoHp, Ltanggal, fotoProfil, fotoCover;
     ImageView CheckList, ganti,profileImage, coverImage;
     ImageView Back;
     String coverku, photoku;
@@ -220,6 +220,13 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 Lemail = dataSnapshot.child("email").getValue().toString();
                 String LNoHP = dataSnapshot.child("noHp").getValue().toString();
                 String nama = dataSnapshot.child("nama").getValue().toString();
+                if (dataSnapshot.child("nama belakang").exists()){
+                    namabelakang = dataSnapshot.child("nama belakang").getValue().toString();
+                    NamaBelakang.setText(namabelakang);
+                }else {
+                    namabelakang = null;
+                }
+
                 if (dataSnapshot.child("alamat").exists()){
                     Lalamat = dataSnapshot.child("alamat").getValue().toString();
                 }
@@ -255,6 +262,7 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                 Email.setText(Lemail);
                 NoHp.setText(LNoHP);
                 NamaDepan.setText(nama);
+
                 GantiAlamat.setText(Lalamat);
                 editTextKecamatan.setText(kecamatanku);
                 editTextKelurahan.setText(kelurahanku);
@@ -308,11 +316,9 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
             kota = KotaS.getText().toString();
             provinsi = ProvinsiS.getText().toString();
             editor = sharedPreferences.edit();
-            editor.remove("nama");
-            editor.remove("email");
-            editor.putString("nama", nama);
+            editor.putString("nama", namadepan);
+            editor.putString("namabelakang", namabelakang);
             editor.putString("email", email);
-            /*editor.putString("ln", ln);*/
             editor.apply();
 
 
@@ -496,7 +502,6 @@ public class Pengaturan extends AppCompatActivity implements AdapterView.OnItemS
                                     JSONObject object = array.getJSONObject(i);
                                     fotoProfil = object.getString("photo");
                                     fotoCover = object.getString("cover_foto");
-                                    emailnama = object.getString("email");
 
                                     dialog.dismiss();
 

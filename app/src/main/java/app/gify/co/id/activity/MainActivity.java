@@ -38,6 +38,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -144,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         Lemail = sharedPreferences.getString("nama", "");
-        String nama_belakang = sharedPreferences.getString("ln", "");
+        String nama_belakang = sharedPreferences.getString("namabelakang", "");
 
         String email = sharedPreferences.getString("email", "");
         navigationheademail.setText(email);
@@ -158,69 +159,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private void lemparMysql(){
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA  + nama.getText().toString(), null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_IMAGE  + currentUserID, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray array = response.getJSONArray("GIFY");
+                    Log.d("idkussss", "onResponse: " + response);
                     for (int i = 0; i < array.length(); i++){
                         JSONObject object = array.getJSONObject(i);
-
-                        String goku = object.getString("id_tetap");
-                        if (goku != null){
-                            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_IMAGE  + goku, null, new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    try {
-                                        JSONArray array = response.getJSONArray("GIFY");
-                                        for (int i = 0; i < array.length(); i++){
-                                            JSONObject object = array.getJSONObject(i);
-
-                                            coverku = object.getString("cover_foto");
-                                            photoprofile = object.getString("photo");
-                                            byte[] imageBytes = Base64.decode(coverku, Base64.DEFAULT);
-                                            Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-                                            byte[] imageBytesku = Base64.decode(photoprofile, Base64.DEFAULT);
-                                            Bitmap decodedImageku = BitmapFactory.decodeByteArray(imageBytesku, 0, imageBytesku.length);
-                                            if (coverku.equals("cover")){
-                                                cover.setImageResource(R.drawable.login_image);
-                                            }else{
-                                                /*Picasso.get().load(coverku).into(cover);*/
+                        Log.d("totaletags", "onResponse: " + response);
+                        coverku = object.getString("cover_foto");
+                        photoprofile = object.getString("photo");
+                        byte[] imageBytes = Base64.decode(coverku, Base64.DEFAULT);
+                        Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                        byte[] imageBytesku = Base64.decode(photoprofile, Base64.DEFAULT);
+                        Bitmap decodedImageku = BitmapFactory.decodeByteArray(imageBytesku, 0, imageBytesku.length);
+                        if (coverku.equals("cover")){
+                            cover.setImageResource(R.drawable.login_image);
+                        }else{
+                            /*Picasso.get().load(coverku).into(cover);*/
                                                 /*Glide.with(getApplicationContext())  //2
                                                         .load(coverku) //3
                                                         .centerCrop()
                                                         .into(cover);*/
-                                                cover.setImageBitmap(decodedImage);
-                                            }
-                                            if (photoprofile.equals("photo")){
-                                                profile.setImageResource(R.drawable.backgroundprofile);
-                                            }else{
-                                                /*Picasso.get().load(photoprofile).fit().into(profile);*/
+                            cover.setImageBitmap(decodedImage);
+                        }
+                        if (photoprofile.equals("photo")){
+                            profile.setImageResource(R.drawable.backgroundprofile);
+                        }else{
+                            /*Picasso.get().load(photoprofile).fit().into(profile);*/
                                                 /*Glide.with(getApplicationContext())  //2
                                                         .load(photoprofile) //3
                                                         .centerCrop()
                                                         .into(profile);*/
-                                                profile.setImageBitmap(decodedImageku);
-                                            }
-
-                                            /*dialog.dismiss();*/
-
-
-                                        }
-                                    }catch (Exception e){
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }, new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-
-                                }
-                            });
-                            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                            requestQueue.add(request);
+                            profile.setImageBitmap(decodedImageku);
                         }
-                        Log.d("goky", goku + " ");
+
+                        /*dialog.dismiss();*/
 
 
                     }
