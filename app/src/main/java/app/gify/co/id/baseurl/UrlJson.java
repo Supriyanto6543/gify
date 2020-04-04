@@ -6,7 +6,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 public class UrlJson extends AppCompatActivity {
 
-    public static final String ROOT = "https://www.api.ayokngaji.com/gify/android/";
+    public static final String ROOT = "http://www.api.gify.my.id/";
     //public static final String ROOT = "http://192.168.43.210/gify/android/";
     public static final String GETBARANG = ROOT + "barangkado.php";
     public static final String GETKATEGORI = ROOT + "kado.php";
