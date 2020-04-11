@@ -61,6 +61,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -106,6 +107,8 @@ import retrofit2.Callback;
 import app.gify.co.id.thirdparty.SenderAgent;
 
 import static app.gify.co.id.baseurl.UrlJson.DELETEALLCART;
+import static app.gify.co.id.baseurl.UrlJson.GETREKENING;
+import static app.gify.co.id.baseurl.UrlJson.IDGET;
 import static app.gify.co.id.baseurl.UrlJson.ORDER;
 
 public class CheckoutActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -126,7 +129,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     private ListView mListView;
 
     EditText nama, hp, jalan, kelurahan, kecamatan,  ucapan;
-    String currentUserID, Lnama, LNohp, Lalamat;
+    String currentUserID, Lnama, LNohp, Lalamat, idku;
     ImageView gantiAlamat;
 
     HintArrayAdapter hintArrayAdapter, hintArrayAdapterKu;
@@ -155,17 +158,21 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     LayoutInflater inflater;
     View layout;
     ImageView goku;
+    EditText warna, ukuran;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.checkout);
 
+        getid();
         RootRef = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
 
         // initialization
+        ukuran = findViewById(R.id.ukuran);
+        warna = findViewById(R.id.warna);
         nama = findViewById(R.id.nama);
         hp = findViewById(R.id.hp);
         jalan = findViewById(R.id.jalan);
@@ -297,16 +304,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             lastNumber+=(random.nextInt(10)*Math.pow(10, k));
         }
 
-        template = "<h2> Gify Transaction </h2> " +
-                "<h3> Kamu baru saja melakukan pesanan dengan detail sebagai berikut </h3>"
-                + "<p><b> Nama barang: " + namabarangorder + ", " + "Jumlah: " + qtyku + "</p></b>"
-                + "<p><b> Harga barang: " + format.format(Double.valueOf(replaceNumberOfAmount(idharga, lastNumber))) + ". Silahkan transfer dengan tiga digit terakhir yaitu :" + lastNumber + "</p></b>"
-                + "<p><b> Biaya Pengiriman: " + ongkir + "</p></b>"
-                + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini </p></b>"
-                + "https://api.whatsapp.com/send?phone=082325328732&text=Confirmation%20Text"
-                + "<h2>Salam, Gify Team</h2>";
 
-        templateConvert = Html.fromHtml(template);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         email = sharedPreferences.getString("email", "");
@@ -443,13 +441,12 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         queue.add(objectRequest);
     }
 
-    public void sendCart(Context context, String idtetap, String date, String penerima,String noHp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang,String jumlah, String berat, String ucapan, int harga){
+    public void sendCart(Context context, String idtetap, String date, String penerima,String noHp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang,String jumlah, String berat, String ucapan, int harga ,String ukurans, String warnas){
         StringRequest request = new StringRequest(Request.Method.POST, ORDER, response -> {
             try {
                 if (response.equals("bisa")){
-                    deleteallcart();
-                    context.startActivity(new Intent(context, MainActivity.class));
-                    finish();
+                    /*context.startActivity(new Intent(context, MainActivity.class));
+                    finish();*/
                 }
             }catch (Exception e){
                 e.printStackTrace();
@@ -477,7 +474,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 param.put("berat", berat);
                 param.put("harga", String.valueOf(harga));
                 param.put("ucapan", ucapan);
-
+                param.put("ukuran", ukurans);
+                param.put("warna", warnas);
                 return param;
             }
         };
@@ -491,10 +489,11 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         return dateFormat.format(date);
     }
 
-    private void deleteallcart(){
+    private void deleteallcart(Context context, Button home){
         StringRequest stringRequest = new StringRequest(Request.Method.GET, DELETEALLCART+"?idtetap="+currentUserID, response -> {
             if (response.equals("bisa")){
-                Toast.makeText(CheckoutActivity.this, "cart kosong", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "cart kosong", Toast.LENGTH_SHORT).show();
+                home.setVisibility(View.VISIBLE);
             }
         }, error ->  {
 
@@ -510,7 +509,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     public void pushNotify(Context context){
         Intent intent = new Intent(this, PembelianFragment.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(CheckoutActivity.this, 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "notify_001");
 
         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
@@ -521,7 +520,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         mBuilder.setContentTitle("Pembelian Berhasil");
         mBuilder.setContentText("tekan notifikasi ini untuk melanjutkan, dan silahkan lakukan pembayaran dengan invoice yang kami kirim ke emailmu");
         mBuilder.setPriority(Notification.PRIORITY_MAX);
-//        mBuilder.setContentIntent(pendingIntent);
+        mBuilder.setContentIntent(pendingIntent);
         mBuilder.setStyle(bigText);
 
         mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -543,6 +542,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
     private class SenderOrder extends AsyncTask<Void, Void, Void>{
         private String mail, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang,jumlah,berat, ucapan, jumlahbrng;
         private String subject;
+        private String warnas, ukurans;
         private Spanned message;
         private int harga;
         Dialog dialog;
@@ -552,7 +552,7 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
         private ProgressDialog progressDialog;
 
-        public SenderOrder(String mail, String subject, Spanned message, Context context, String idtetap, String date, String penerima,String nohp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang,String jumlah,String berat, int harga, String ucapan) {
+        public SenderOrder(String mail, String subject, Spanned message, Context context, String idtetap, String date, String penerima,String nohp, String alamat, String kelurahan, String kecamatan, String kota, String provinsi, String namabarang,String jumlah,String berat, int harga, String ucapan, String warnas, String ukurans) {
             this.mail = mail;
             this.subject = subject;
             this.message = message;
@@ -571,6 +571,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
             this.berat = berat;
             this.harga = harga;
             this.ucapan = ucapan;
+            this.ukurans = ukurans;
+            this.warnas = warnas;
         }
 
         @Override
@@ -622,9 +624,8 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
         @Override
         protected void onPostExecute(Void aVoid) {
             dialog.dismiss();
-            context.startActivity(new Intent(context, MainActivity.class));
-            new CheckoutActivity().sendCart(CheckoutActivity.this, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, jumlah, berat, ucapan, harga);
-            new CheckoutActivity().pushNotify(context);
+            new CheckoutActivity().sendCart(CheckoutActivity.this, idtetap, date, penerima,nohp, alamat, kelurahan, kecamatan, kota, provinsi, namabarang, jumlah, berat, ucapan, harga, ukurans, warnas);
+//            new CheckoutActivity().pushNotify(context);
         }
     }
 
@@ -855,6 +856,26 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
     }
 
+    public void getid(){
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET,IDGET,null, response -> {
+            try {
+                JSONArray array = response.getJSONArray("YukNgaji");
+                for (int a = 0; a < array.length(); a++){
+                    JSONObject object = array.getJSONObject(a);
+                    int idtotal = object.getInt("id") + 1;
+
+                    idku = String.valueOf(idtotal);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, error -> {
+
+        });
+        RequestQueue queue = Volley.newRequestQueue(CheckoutActivity.this);
+        queue.add(objectRequest);
+    }
+
     public void getCoast(String origin,
                          String destination,
                          String weight,
@@ -881,49 +902,34 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
 
                     if (statusCode == 200){
                         LayoutInflater inflater = (LayoutInflater) CheckoutActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        View alertLayout = inflater.inflate(R.layout.rajaongkir_popup_cost, null);
+                        View alertLayout = inflater.inflate(R.layout.berhasil_checkouot, null);
                         alert = new AlertDialog.Builder(CheckoutActivity.this);
-                        alert.setTitle("Result Cost");
-                        alert.setMessage("this result your search");
                         alert.setView(alertLayout);
-                        alert.setCancelable(true);
+                        alert.setCancelable(false);
+
+                        Button home = alertLayout.findViewById(R.id.homeIntent);
+                        deleteallcart(CheckoutActivity.this, home);
+                        home.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
 
                         ad = alert.show();
-
-                        final TextView tv_origin = (TextView) alertLayout.findViewById(R.id.tv_origin);
-                        TextView tv_destination = (TextView) alertLayout.findViewById(R.id.tv_destination);
-                        TextView tv_expedisi = (TextView) alertLayout.findViewById(R.id.tv_expedisi);
-                        TextView tv_coast = (TextView) alertLayout.findViewById(R.id.tv_coast);
-                        TextView tv_time = (TextView) alertLayout.findViewById(R.id.tv_time);
-
-                        tv_origin.setText(response.body().getRajaongkir().getOriginDetails().getCityName()+" (Postal Code : "+
-                                response.body().getRajaongkir().getOriginDetails().getPostalCode()+")");
-
-                        tv_destination.setText(response.body().getRajaongkir().getDestinationDetails().getCityName()+" (Postal Code : "+
-                                response.body().getRajaongkir().getDestinationDetails().getPostalCode()+")");
-
-                        tv_expedisi.setText(response.body().getRajaongkir().getResults().get(0).getCosts().get(0).getDescription()+" ("+
-                                response.body().getRajaongkir().getResults().get(0).getName()+") ");
-
-                        tv_coast.setText("Rp. "+response.body().getRajaongkir().getResults().get(0).getCosts().get(1).getCost().get(0).getValue().toString());
-
-                        tv_time.setText(response.body().getRajaongkir().getResults().get(0).getCosts().get(0).getCost().get(0).getEtd()+" (Days)");
 
                         String cost = response.body().getRajaongkir().getResults().get(0).getCosts().get(1).getCost().get(0).getValue().toString();
                         ongkir = cost;
                         provinsi.setText("");
                         kota.setText("");
                         Toast.makeText(CheckoutActivity.this, "Cost: " + "Rp." + cost, Toast.LENGTH_SHORT).show();
-                        new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, Integer.parseInt(idharga) + Integer.parseInt(ongkir)  + lastNumber, ucapanorder ).execute();
+                        String hargacost = String.valueOf(Integer.parseInt(idharga) + Integer.parseInt(cost));
 
+                        cekrek(hargacost);
 
-                        ((Button) alertLayout.findViewById(R.id.add_destination)).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent intent = new Intent(CheckoutActivity.this, PembelianFragment.class);
-                                startActivity(intent);
-                            }
-                        });
                     } else {
 
                         String message = response.body().getRajaongkir().getStatus().getDescription();
@@ -944,5 +950,184 @@ public class CheckoutActivity extends AppCompatActivity implements AdapterView.O
                 Toast.makeText(CheckoutActivity.this, "Message : Error " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    private void cekrek (String hargacost){
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETREKENING , null, response -> {
+            try {
+                JSONArray array = response.getJSONArray("YukNgaji");
+                Log.d("totalarray", "cekrek: " + array.length());
+                if (array.length() == 5){
+                    JSONObject object = array.getJSONObject(0);
+                    JSONObject object2 = array.getJSONObject(1);
+                    JSONObject object3 = array.getJSONObject(2);
+                    JSONObject object4 = array.getJSONObject(3);
+                    JSONObject object5 = array.getJSONObject(4);
+                    String norek = object.getString("no_rekening");
+                    String namarek = object.getString("nama");
+                    String namabank = object.getString("bank");
+                    String norek2 = object2.getString("no_rekening");
+                    String namarek2 = object2.getString("nama");
+                    String namabank2 = object2.getString("bank");
+                    String norek3 = object3.getString("no_rekening");
+                    String namarek3 = object3.getString("nama");
+                    String namabank3 = object3.getString("bank");
+                    String norek4 = object4.getString("no_rekening");
+                    String namarek4 = object4.getString("nama");
+                    String namabank4 = object4.getString("bank");
+                    String norek5 = object5.getString("no_rekening");
+                    String namarek5 = object5.getString("nama");
+                    String namabank5 = object5.getString("bank");
+                    template =
+
+                            "<h2> Helo, </h2>" +
+                                    "<h3> Kamu baru saja melakukan pesanan paket kado di Gify dengan detail sebagai berikut : </h3>"
+                                    + "<p><b> Nama barang: " + namabarangorder
+                                    + "<p><b> Jumlah: " + qtyku + "</p></b>"
+                                    + "<p><b> Total transfer: " + format.format(Double.valueOf(replaceNumberOfAmount(hargacost, lastNumber))) + " Silahkan transfer dengan tiga digit terakhir yaitu : " + lastNumber + "</p></b>"
+                                    + "<p><b> Silahkan transfer ke:" + " </p></b>"
+                                    + "<p><b> No rekening: " + norek +", Atas nama: " + namarek + " ,Bank: " + namabank + " </p></b>"
+                                    + "<p><b> No rekening: " + norek2 +", Atas nama: " + namarek2 +" ,Bank: " + namabank2 + " </p></b>"
+                                    + "<p><b> No rekening: " + norek3 +", Atas nama: " + namarek3 +" ,Bank: " + namabank3 + " </p></b>"
+                                    + "<p><b> No rekening: " + norek4 +", Atas nama: " + namarek4 +" ,Bank: " + namabank4 + " </p></b>"
+                                    + "<p><b> No rekening: " + norek5 +", Atas nama: " + namarek5 +" ,Bank: " + namabank5 + " </p></b>"
+                                    + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini" + " </p></b>"
+                                    + "https://api.whatsapp.com/send?phone=6287776295266&text=Halo%20Gify%2C%20Saya%20mau%20konfirmasi%20pembayaran%20dengan%20nomor%20invoice%20=%20" + getDateTime().replace("/", "")+idku
+                                    + "<p><b> Note :" + " </p></b>"
+                                    + "<p><b> Total transfer adalah keselurahan harga barang + ongkos kirim" + " </p></b>"
+                                    + "<p><b> Salam," + " </p></b>"
+                                    + "<p><b> Tim Billing Gify" + " </p>/<b>";
+                    templateConvert = Html.fromHtml(template);
+                    new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, Integer.parseInt(hargacost)  + lastNumber, ucapanorder, warna.getText().toString().trim(), ukuran.getText().toString().trim() ).execute();
+                }else if (array.length() == 4){
+                    JSONObject object = array.getJSONObject(0);
+                    JSONObject object2 = array.getJSONObject(1);
+                    JSONObject object3 = array.getJSONObject(2);
+                    JSONObject object4 = array.getJSONObject(3);
+                    String norek = object.getString("no_rekening");
+                    String namarek = object.getString("nama");
+                    String namabank = object.getString("bank");
+                    String norek2 = object2.getString("no_rekening");
+                    String namarek2 = object2.getString("nama");
+                    String namabank2 = object2.getString("bank");
+                    String norek3 = object3.getString("no_rekening");
+                    String namarek3 = object3.getString("nama");
+                    String namabank3 = object3.getString("bank");
+                    String norek4 = object4.getString("no_rekening");
+                    String namarek4 = object4.getString("nama");
+                    String namabank4 = object4.getString("bank");
+                    template =
+
+                            "<h2> Helo, </h2>" +
+                                    "<h3> Kamu baru saja melakukan pesanan paket kado di Gify dengan detail sebagai berikut : </h3>"
+                                    + "<p><b> Nama barang: " + namabarangorder
+                                    + "<p><b> Jumlah: " + qtyku + "</p></b>"
+                                    + "<p><b> Total transfer: " + format.format(Double.valueOf(replaceNumberOfAmount(hargacost, lastNumber))) + " Silahkan transfer dengan tiga digit terakhir yaitu : " + lastNumber + "</p></b>"
+                                    + "<p><b> Silahkan transfer ke:" + " </p></b>"
+                                    + "<p><b> No rekening: " + norek +", Atas nama: " + namarek + " ,Bank: " + namabank + " </p></b>"
+                                    + "<p><b> No rekening: " + norek2 +", Atas nama: " + namarek2 +" ,Bank: " + namabank2 + " </p></b>"
+                                    + "<p><b> No rekening: " + norek3 +", Atas nama: " + namarek3 +" ,Bank: " + namabank3 + " </p></b>"
+                                    + "<p><b> No rekening: " + norek4 +", Atas nama: " + namarek4 +" ,Bank: " + namabank4 + " </p></b>"
+                                    + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini" + " </p></b>"
+                                    + "https://api.whatsapp.com/send?phone=6287776295266&text=Halo%20Gify%2C%20Saya%20mau%20konfirmasi%20pembayaran%20dengan%20nomor%20invoice%20=%20" + getDateTime().replace("/", "")+idku
+                                    + "<p><b> Note :" + " </p></b>"
+                                    + "<p><b> Total transfer adalah keselurahan harga barang + ongkos kirim" + " </p></b>"
+                                    + "<p><b> Salam," + " </p></b>"
+                                    + "<p><b> Tim Billing Gify" + " </p>/<b>";
+
+                    templateConvert = Html.fromHtml(template);
+                    new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, Integer.parseInt(hargacost)  + lastNumber, ucapanorder, warna.getText().toString().trim(), ukuran.getText().toString().trim() ).execute();
+                }else if (array.length() == 3){
+                    JSONObject object = array.getJSONObject(0);
+                    JSONObject object2 = array.getJSONObject(1);
+                    JSONObject object3 = array.getJSONObject(2);
+                    String norek = object.getString("no_rekening");
+                    String namarek = object.getString("nama");
+                    String namabank = object.getString("bank");
+                    String norek2 = object2.getString("no_rekening");
+                    String namarek2 = object2.getString("nama");
+                    String namabank2 = object2.getString("bank");
+                    String norek3 = object3.getString("no_rekening");
+                    String namarek3 = object3.getString("nama");
+                    String namabank3 = object3.getString("bank");
+                    template =
+
+                            "<h2> Helo, </h2>" +
+                                    "<h3> Kamu baru saja melakukan pesanan paket kado di Gify dengan detail sebagai berikut : </h3>"
+                                    + "<p><b> Nama barang: " + namabarangorder
+                                    + "<p><b> Jumlah: " + qtyku + "</p></b>"
+                                    + "<p><b> Total transfer: " + format.format(Double.valueOf(replaceNumberOfAmount(hargacost, lastNumber))) + " Silahkan transfer dengan tiga digit terakhir yaitu : " + lastNumber + "</p></b>"
+                                    + "<p><b> Silahkan transfer ke:" + " </p></b>"
+                                    + "<p><b> No rekening: " + norek +", Atas nama: " + namarek + " ,Bank: " + namabank + " </p></b>"
+                                    + "<p><b> No rekening: " + norek2 +", Atas nama: " + namarek2 +" ,Bank: " + namabank2 + " </p></b>"
+                                    + "<p><b> No rekening: " + norek3 +", Atas nama: " + namarek3 +" ,Bank: " + namabank3 + " </p></b>"
+                                    + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini" + " </p></b>"
+                                    + "https://api.whatsapp.com/send?phone=6287776295266&text=Halo%20Gify%2C%20Saya%20mau%20konfirmasi%20pembayaran%20dengan%20nomor%20invoice%20=%20" + getDateTime().replace("/", "")+idku
+                                    + "<p><b> Note :" + " </p></b>"
+                                    + "<p><b> Total transfer adalah keselurahan harga barang + ongkos kirim" + " </p></b>"
+                                    + "<p><b> Salam," + " </p></b>"
+                                    + "<p><b> Tim Billing Gify" + " </p>/<b>";
+
+                    templateConvert = Html.fromHtml(template);
+                    new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, Integer.parseInt(hargacost)  + lastNumber, ucapanorder, warna.getText().toString().trim(), ukuran.getText().toString().trim() ).execute();
+                }else if (array.length() == 2){
+                    JSONObject object = array.getJSONObject(0);
+                    JSONObject object2 = array.getJSONObject(1);
+                    String norek = object.getString("no_rekening");
+                    String namarek = object.getString("nama");
+                    String namabank = object.getString("bank");
+                    String norek2 = object2.getString("no_rekening");
+                    String namarek2 = object2.getString("nama");
+                    String namabank2 = object2.getString("bank");
+
+                    template =
+
+                            "<h2> Helo, </h2>" +
+                                    "<h3> Kamu baru saja melakukan pesanan paket kado di Gify dengan detail sebagai berikut : </h3>"
+                                    + "<p><b> Nama barang: " + namabarangorder
+                                    + "<p><b> Jumlah: " + qtyku + "</p></b>"
+                                    + "<p><b> Total transfer: " + format.format(Double.valueOf(replaceNumberOfAmount(hargacost, lastNumber))) + " Silahkan transfer dengan tiga digit terakhir yaitu : " + lastNumber + "</p></b>"
+                                    + "<p><b> Silahkan transfer ke:" + " </p></b>"
+                                    + "<p><b> No rekening: " + norek +", Atas nama: " + namarek + " ,Bank: " + namabank + " </p></b>"
+                                    + "<p><b> No rekening: " + norek2 +", Atas nama: " + namarek2 +" ,Bank: " + namabank2 + " </p></b>"
+                                    + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini" + " </p></b>"
+                                    + "https://api.whatsapp.com/send?phone=6287776295266&text=Halo%20Gify%2C%20Saya%20mau%20konfirmasi%20pembayaran%20dengan%20nomor%20invoice%20=%20" + getDateTime().replace("/", "")+idku
+                                    + "<p><b> Note :" + " </p></b>"
+                                    + "<p><b> Total transfer adalah keselurahan harga barang + ongkos kirim" + " </p></b>"
+                                    + "<p><b> Salam," + " </p></b>"
+                                    + "<p><b> Tim Billing Gify" + " </p>/<b>";
+                    templateConvert = Html.fromHtml(template);
+                    new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, Integer.parseInt(hargacost)  + lastNumber, ucapanorder, warna.getText().toString().trim(), ukuran.getText().toString().trim() ).execute();
+                }else if (array.length() == 1){
+                    JSONObject object = array.getJSONObject(0);
+                    String norek = object.getString("no_rekening");
+                    String namarek = object.getString("nama");
+                    String namabank = object.getString("bank");
+                    template =
+                            "<h2> Helo, </h2>" +
+                                    "<h3> Kamu baru saja melakukan pesanan paket kado di Gify dengan detail sebagai berikut : </h3>"
+                                    + "<p><b> Nama barang: " + namabarangorder
+                                    + "<p><b> Jumlah: " + qtyku + "</p></b>"
+                                    + "<p><b> Total transfer: " + format.format(Double.valueOf(replaceNumberOfAmount(hargacost, lastNumber))) + " Silahkan transfer dengan tiga digit terakhir yaitu : " + lastNumber + "</p></b>"
+                                    + "<p><b> Silahkan transfer ke:" + " </p></b>"
+                                    + "<p><b> No rekening: " + norek +", Atas nama: " + namarek + " ,Bank: " + namabank + " </p></b>"
+                                    + "<p><b> Jika sudah melakukan pembayaran, silahkan konfirmasi disini" + " </p></b>"
+                                    + "https://api.whatsapp.com/send?phone=6287776295266&text=Halo%20Gify%2C%20Saya%20mau%20konfirmasi%20pembayaran%20dengan%20nomor%20invoice%20=%20" + getDateTime().replace("/", "")+idku
+                                    + "<p><b> Note :" + " </p></b>"
+                                    + "<p><b> Total transfer adalah keselurahan harga barang + ongkos kirim" + " </p></b>"
+                                    + "<p><b> Salam," + " </p></b>"
+                                    + "<p><b> Tim Billing Gify" + " </p>/<b>";
+                    templateConvert = Html.fromHtml(template);
+                    new SenderOrder("gify.firebase@gmail.com", "Confirmation Transaction Gify", templateConvert, CheckoutActivity.this,idtetaporder,getDateTime(), penerimaorder,hpku, alamatorder, kelurahanorder, kecamatanorder, kotaorder, provinsiorder, namabarangorder,qtyku, berat, Integer.parseInt(hargacost)  + lastNumber, ucapanorder, warna.getText().toString().trim(), ukuran.getText().toString().trim() ).execute();
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.d("excepcekout", "cekrek: " + e.getMessage());
+            }
+        }, error -> {
+            Log.d("erordku", "cekrek: " + error.getMessage());
+        });
+        RequestQueue queue = Volley.newRequestQueue(CheckoutActivity.this);
+        queue.add(objectRequest);
     }
 }

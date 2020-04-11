@@ -11,7 +11,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
@@ -24,7 +23,6 @@ import android.view.Window;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,8 +38,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
@@ -56,14 +54,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.JsonObject;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.security.KeyManagementException;
@@ -80,8 +73,6 @@ import app.gify.co.id.Fragment.pembelian.PembelianFragment;
 import app.gify.co.id.baseurl.UrlJson;
 import app.gify.co.id.sessions.SessionManager;
 import de.hdodenhof.circleimageview.CircleImageView;
-import retrofit2.Call;
-import retrofit2.Callback;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -91,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ImageView navFragmentHome,cover;
     private long bakPressedTime;
     CircleImageView profile;
-    String Lemail, LID, coverku, photoprofile, Lalamat, LNoHp, currentUserID, namaku, last_nameku, photo, covers;
+    String Lemail, LID, coverku, photoprofile, Lalamat, LNoHp, currentUserID, namaku, last_nameku;
     TextView navigationheademail;
     TextView nama;
     Toolbar toolbar;
@@ -102,8 +93,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     SessionManager sessionManager;
     SharedPreferences.Editor editor;
     LayoutInflater inflater;
-    RelativeLayout backgroundHeader;
-    String uid;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -120,10 +109,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        dialog.setContentView(layout);
 //        dialog.show();
 
-        backgroundHeader = findViewById(R.id.backgroundHeader);
         mAuth = FirebaseAuth.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
         currentUserID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+
 
         try {
             ProviderInstaller.installIfNeeded(getApplicationContext());
@@ -156,42 +145,61 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         Lemail = sharedPreferences.getString("nama", "");
-        String nama_belakang = sharedPreferences.getString("ln", "");
+        String nama_belakang = sharedPreferences.getString("namabelakang", "");
 
         String email = sharedPreferences.getString("email", "");
         navigationheademail.setText(email);
 
         Log.d("TAG," ,"onCreate: " + Lemail +  " s " + nama_belakang);
         nama.setText(Lemail + " " + nama_belakang);
+        lemparMysql();
         loadFragment (new HomeFragment());
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        uid = sharedPreferences.getString("uid", "");
+    }
 
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, UrlJson.PROFILEPHOTO+uid, null, new Response.Listener<JSONArray>() {
+
+    private void lemparMysql(){
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_IMAGE  + currentUserID, null, new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(JSONArray response) {
-                Log.d("munculah", response + "");
+            public void onResponse(JSONObject response) {
                 try {
-                    for (int k = 0; k < response.length(); k++){
-
-                        JSONObject object = response.getJSONObject(k);
-                        photo = object.getString("photo");
-                        covers = object.getString("cover_foto");
-
-                        if (covers.isEmpty()){
-                            Picasso.get().load(R.drawable.lupa_password_background).into(cover);
+                    JSONArray array = response.getJSONArray("GIFY");
+                    Log.d("idkussss", "onResponse: " + response);
+                    for (int i = 0; i < array.length(); i++){
+                        JSONObject object = array.getJSONObject(i);
+                        Log.d("totaletags", "onResponse: " + response);
+                        coverku = object.getString("cover_foto");
+                        photoprofile = object.getString("photo");
+                        byte[] imageBytes = Base64.decode(coverku, Base64.DEFAULT);
+                        Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                        byte[] imageBytesku = Base64.decode(photoprofile, Base64.DEFAULT);
+                        Bitmap decodedImageku = BitmapFactory.decodeByteArray(imageBytesku, 0, imageBytesku.length);
+                        if (coverku.equals("cover")){
+                            cover.setImageResource(R.drawable.login_image);
                         }else{
-                            getImageDrawer(covers);
+                            /*Picasso.get().load(coverku).into(cover);*/
+                                                /*Glide.with(getApplicationContext())  //2
+                                                        .load(coverku) //3
+                                                        .centerCrop()
+                                                        .into(cover);*/
+                            cover.setImageBitmap(decodedImage);
                         }
-                        if (photo == null || photo.isEmpty()){
-                            Picasso.get().load(R.drawable.lupa_password_background).into(profile);
+                        if (photoprofile.equals("photo")){
+                            profile.setImageResource(R.drawable.backgroundprofile);
                         }else{
-                            Picasso.get().load(photo).into(profile);
+                            /*Picasso.get().load(photoprofile).fit().into(profile);*/
+                                                /*Glide.with(getApplicationContext())  //2
+                                                        .load(photoprofile) //3
+                                                        .centerCrop()
+                                                        .into(profile);*/
+                            profile.setImageBitmap(decodedImageku);
                         }
+
+                        /*dialog.dismiss();*/
+
+
                     }
-
-                } catch (JSONException e) {
+                }catch (Exception e){
                     e.printStackTrace();
                 }
             }
@@ -201,114 +209,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
-        RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-        queue.add(request);
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(request);
     }
-
-    private void getImageDrawer(String coverfoto){
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Picasso.get().load(coverfoto).memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        cover.setBackground(new BitmapDrawable(getResources(), bitmap));
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-                        cover.setBackgroundResource(R.drawable.whenloading);
-                    }
-                });
-            }
-        }, 10);
-    }
-
-//    private void lemparMysql(){
-//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_NAMA  + nama.getText().toString(), null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                try {
-//                    JSONArray array = response.getJSONArray("GIFY");
-//                    for (int i = 0; i < array.length(); i++){
-//                        JSONObject object = array.getJSONObject(i);
-//
-//                        String goku = object.getString("id_tetap");
-//                        if (goku != null){
-//                            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlJson.AMBIL_IMAGE  + goku, null, new Response.Listener<JSONObject>() {
-//                                @Override
-//                                public void onResponse(JSONObject response) {
-//                                    try {
-//                                        JSONArray array = response.getJSONArray("GIFY");
-//                                        for (int i = 0; i < array.length(); i++){
-//                                            JSONObject object = array.getJSONObject(i);
-//
-//                                            coverku = object.getString("cover_foto");
-//                                            photoprofile = object.getString("photo");
-//                                            byte[] imageBytes = Base64.decode(coverku, Base64.DEFAULT);
-//                                            Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-//                                            byte[] imageBytesku = Base64.decode(photoprofile, Base64.DEFAULT);
-//                                            Bitmap decodedImageku = BitmapFactory.decodeByteArray(imageBytesku, 0, imageBytesku.length);
-//                                            if (coverku.equals("cover")){
-//                                                cover.setImageResource(R.drawable.login_image);
-//                                            }else{
-//                                                /*Picasso.get().load(coverku).into(cover);*/
-//                                                /*Glide.with(getApplicationContext())  //2
-//                                                        .load(coverku) //3
-//                                                        .centerCrop()
-//                                                        .into(cover);*/
-//                                                cover.setImageBitmap(decodedImage);
-//                                            }
-//                                            if (photoprofile.equals("photo")){
-//                                                profile.setImageResource(R.drawable.backgroundprofile);
-//                                            }else{
-//                                                /*Picasso.get().load(photoprofile).fit().into(profile);*/
-//                                                /*Glide.with(getApplicationContext())  //2
-//                                                        .load(photoprofile) //3
-//                                                        .centerCrop()
-//                                                        .into(profile);*/
-//                                                profile.setImageBitmap(decodedImageku);
-//                                            }
-//
-//                                            /*dialog.dismiss();*/
-//
-//
-//                                        }
-//                                    }catch (Exception e){
-//                                        e.printStackTrace();
-//                                    }
-//                                }
-//                            }, new Response.ErrorListener() {
-//                                @Override
-//                                public void onErrorResponse(VolleyError error) {
-//
-//                                }
-//                            });
-//                            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-//                            requestQueue.add(request);
-//                        }
-//                        Log.d("goky", goku + " ");
-//
-//
-//                    }
-//                }catch (Exception e){
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//
-//            }
-//        });
-//        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-//        requestQueue.add(request);
-//    }
 
 
     /*public void cekprofile(){
@@ -429,5 +332,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return loadFragment(f);
     }
+
 
 }

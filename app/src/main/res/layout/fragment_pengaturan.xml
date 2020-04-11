@@ -391,7 +391,6 @@
                     android:layout_height="2.5dp"/>
 
                 <LinearLayout
-                    android:id="@+id/pilihKelurahanPengaturan"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
@@ -436,7 +435,6 @@
                     android:layout_height="2.5dp"/>
 
                 <LinearLayout
-                    android:id="@+id/pilihKecamatanPengaturan"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:weightSum="100"
@@ -481,7 +479,6 @@
                     android:layout_height="2.5dp"/>
 
                 <LinearLayout
-                    android:id="@+id/pilihKotaPengaturan"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:weightSum="100"
@@ -500,7 +497,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
 
-                    <EditText
+                    <TextView
                         android:focusable="false"
                         android:id="@+id/kotaPengaturan"
                         android:text="-- pilih --"
@@ -523,7 +520,6 @@
                     android:layout_height="2.5dp"/>
 
                 <LinearLayout
-                    android:id="@+id/pilihProvinsiPengaturan"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:weightSum="100"
@@ -542,7 +538,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
 
-                    <EditText
+                    <TextView
                         android:focusable="false"
                         android:id="@+id/provinsiPengaturan"
                         android:text="-- pilih --"
