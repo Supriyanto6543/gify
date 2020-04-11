@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -43,9 +44,12 @@ public class AdapterFavorit extends RecyclerView.Adapter<RecyclerView.ViewHolder
     Context context;
     SharedPreferences preferences;
     String uid, id_barang;
+    private NameFilter nameFilter;
+    private ArrayList<MadolFavorit> filterArrayList;
 
     public AdapterFavorit(ArrayList<MadolFavorit> kados, Context context) {
         this.kados = kados;
+        this.filterArrayList = kados;
         this.context = context;
     }
 
@@ -96,10 +100,8 @@ public class AdapterFavorit extends RecyclerView.Adapter<RecyclerView.ViewHolder
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         });
-        getFav(position, holder);
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         uid = preferences.getString("uid", "");
-        Log.d("uidkua", "onBindViewHolder: " + id_barang + " s " + kados.get(position).getId_barang());
 
     }
 
@@ -108,32 +110,68 @@ public class AdapterFavorit extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return kados.size();
     }
 
-    public void filterList(ArrayList<MadolFavorit> filteredList){
-        kados = filteredList;
-        notifyDataSetChanged();
+    public Filter getFilter() {
+        if (nameFilter == null) {
+            nameFilter = new NameFilter();
+        }
+        return nameFilter;
     }
 
-    private void getFav(int position, RecyclerView.ViewHolder holder){
-        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETFAV, null, response -> {
-            try {
-                JSONArray array = response.getJSONArray("YukNgaji");
-                for (int a = 0; a < array.length(); a++){
-                    JSONObject object = array.getJSONObject(a);
-                    String idtetap = object.getString("id_tetap");
-                    if (uid.contains(idtetap)){
-                        int idbarang = object.getInt("id_barang");
-                        if (kados.get(position).getId_barang().equalsIgnoreCase(String.valueOf(idbarang))){
-                            ((MyFav)holder).favorit.setVisibility(View.VISIBLE);
-                        }
-                    }
+    private class NameFilter extends Filter {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            constraint = constraint.toString().toLowerCase();
+            FilterResults result = new FilterResults();
+            if (constraint.toString().length() > 0) {
+                ArrayList<MadolFavorit> filteredItems = new ArrayList<>();
+
+                for (int i = 0, l = filterArrayList.size(); i < l; i++) {
+                    String nameList = filterArrayList.get(i).getNama();
+                    if (nameList.toLowerCase().contains(constraint))
+                        filteredItems.add(filterArrayList.get(i));
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
+                result.count = filteredItems.size();
+                result.values = filteredItems;
+            } else {
+                synchronized (this) {
+                    result.values = filterArrayList;
+                    result.count = filterArrayList.size();
+                }
             }
-        }, error -> {
+            return result;
+        }
 
-        });
-        RequestQueue queue = Volley.newRequestQueue(context);
-        queue.add(objectRequest);
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            kados = (ArrayList<MadolFavorit>) filterResults.values;
+            notifyDataSetChanged();
+        }
     }
+
+//    private void getFav(int position, RecyclerView.ViewHolder holder){
+//        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETFAV, null, response -> {
+//            try {
+//                JSONArray array = response.getJSONArray("YukNgaji");
+//                for (int a = 0; a < array.length(); a++){
+//                    JSONObject object = array.getJSONObject(a);
+//                    String idtetap = object.getString("id_tetap");
+//                    if (uid.contains(idtetap)){
+//                        int idbarang = object.getInt("id_barang");
+//                        if (kados.get(position).getId_barang().equalsIgnoreCase(String.valueOf(idbarang))){
+//                            ((MyFav)holder).favorit.setVisibility(View.VISIBLE);
+//                        }
+//                    }
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }, error -> {
+//
+//        });
+//        RequestQueue queue = Volley.newRequestQueue(context);
+//        queue.add(objectRequest);
+//    }
 }

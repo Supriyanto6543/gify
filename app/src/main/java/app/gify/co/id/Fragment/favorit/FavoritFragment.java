@@ -70,7 +70,6 @@ public class FavoritFragment extends Fragment {
     NavigationView navigationView;
     Dialog dialog;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -114,12 +113,13 @@ public class FavoritFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        filter(editable.toString());
-                    }
-                }, 2000);
+                if (adapterFavorit != null) {
+
+                        adapterFavorit.getFilter().filter(editable);
+                        adapterFavorit.notifyDataSetChanged();
+
+                }
+
             }
         });
 
@@ -236,23 +236,5 @@ public class FavoritFragment extends Fragment {
         });
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(objectRequest);
-    }
-
-    private void filter(String text){
-        ArrayList<MadolFavorit> filterKu = new ArrayList<>();
-        for (MadolFavorit item : kados){
-            if (item.getNama().toLowerCase().contains(text.toLowerCase()))
-                filterKu.add(item);
-        }
-        if (adapterFavorit == null ){
-            Toast.makeText(getContext(), "Kado tidak ditemukan", Toast.LENGTH_SHORT).show();
-            dialog.dismiss();
-        }else if (searchViews.getText().toString().length() == 0){
-            dialog.dismiss();
-        }else{
-            adapterFavorit.filterList(filterKu);
-            dialog.dismiss();
-
-        }
     }
 }

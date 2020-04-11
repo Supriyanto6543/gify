@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -39,13 +40,16 @@ import static app.gify.co.id.baseurl.UrlJson.GETFAV;
 public class AdapterListKado extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     ArrayList<MadolKado> kados;
+    private ArrayList<MadolKado> filterArrayList;
     View view;
     Context context;
     SharedPreferences preferences;
     String uid, id_barang;
+    private NameFilter nameFilter;
 
     public AdapterListKado(ArrayList<MadolKado> kados, Context context) {
         this.kados = kados;
+        this.filterArrayList = kados;
         this.context = context;
     }
 
@@ -101,8 +105,8 @@ public class AdapterListKado extends RecyclerView.Adapter<RecyclerView.ViewHolde
         });
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         uid = preferences.getString("uid", "");
-        getFavorit(position, holder);
-        Log.d("uidkua", "onBindViewHolder: " + id_barang + " s " + kados.get(position).getId_barang());
+
+
 
     }
 
@@ -111,35 +115,44 @@ public class AdapterListKado extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return kados.size();
     }
 
-    private void getFavorit(int Position, RecyclerView.ViewHolder holder){
-        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, GETFAV,null, response -> {
-            try {
-                JSONArray array = response.getJSONArray("YukNgaji");
-                for (int a = 0; a < array.length(); a++){
-                    JSONObject object = array.getJSONObject(a);
-                    String id_tetap = object.getString("id_tetap");
-                    Log.d("idbarangfor", "getFavorit: " + id_tetap + " s " + uid);
-                    if (id_tetap.contains(uid)){
-                        id_barang = object.getString("id_barang");
-                        Log.d("idbarangku", "getFavorit: " + id_tetap + uid);
-                        if (kados.get(Position).getId_barang().equalsIgnoreCase(id_barang)){
-                            ((MyKado)holder).favorit.setVisibility(View.VISIBLE);
-                            Log.d("kados", "getFavorit: " + id_barang + kados.get(Position).getId_barang().equalsIgnoreCase(id_barang));
-                        }
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }, error -> {
-            Log.d("adapterlist", "getFavorit: " + error.getMessage());
-        });
-        RequestQueue queue = Volley.newRequestQueue(context);
-        queue.add(objectRequest);
+    public Filter getFilter() {
+        if (nameFilter == null) {
+            nameFilter = new NameFilter();
+        }
+        return nameFilter;
     }
 
-    public void filterList(ArrayList<MadolKado> filteredList){
-        kados = filteredList;
-        notifyDataSetChanged();
+    private class NameFilter extends Filter {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            constraint = constraint.toString().toLowerCase();
+            FilterResults result = new FilterResults();
+            if (constraint.toString().length() > 0) {
+                ArrayList<MadolKado> filteredItems = new ArrayList<>();
+
+                for (int i = 0, l = filterArrayList.size(); i < l; i++) {
+                    String nameList = filterArrayList.get(i).getNama();
+                    if (nameList.toLowerCase().contains(constraint))
+                        filteredItems.add(filterArrayList.get(i));
+                }
+                result.count = filteredItems.size();
+                result.values = filteredItems;
+            } else {
+                synchronized (this) {
+                    result.values = filterArrayList;
+                    result.count = filterArrayList.size();
+                }
+            }
+            return result;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            kados = (ArrayList<MadolKado>) filterResults.values;
+            notifyDataSetChanged();
+        }
     }
 }

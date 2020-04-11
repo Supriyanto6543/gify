@@ -106,12 +106,12 @@ public class List_Kado extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        filter(editable.toString());
-                    }
-                }, 2000);
+                if (adapterListKado != null) {
+
+                        adapterListKado.getFilter().filter(editable);
+                        adapterListKado.notifyDataSetChanged();
+
+                }
             }
         });
 
@@ -193,20 +193,5 @@ public class List_Kado extends AppCompatActivity {
         });
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         queue.add(objectRequest);
-    }
-
-    private void filter(String text){
-        ArrayList<MadolKado> filterKu = new ArrayList<>();
-        for (MadolKado item : madolKados){
-            if (item.getNama().toLowerCase().contains(text.toLowerCase()))
-                filterKu.add(item);
-        }
-
-        if (adapterListKado == null){
-            Toast.makeText(getApplicationContext(), "Kado tidak ditemukan", Toast.LENGTH_SHORT).show();
-            dialog.dismiss();
-        }else{
-            adapterListKado.filterList(filterKu);
-        }
     }
 }
