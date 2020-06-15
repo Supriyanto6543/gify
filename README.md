@@ -14,3 +14,5 @@ Inside app user can see, edit, buy, and see history bought
 
 ### Account
 
+Thanks
+
