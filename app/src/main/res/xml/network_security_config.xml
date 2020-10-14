@@ -1,6 +1,5 @@
 <network-security-config xmlns:android="http://schemas.android.com/apk/res/android">
-    <domain-config cleartextTrafficPermitted="true">
+    <domain-config cleartextTrafficPermitted="false">
         <domain includeSubdomains="true">api.gify.my.id</domain>
-        <domain includeSubdomains="true">192.168.43.57</domain>
     </domain-config>
 </network-security-config>
